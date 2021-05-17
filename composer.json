@@ -1,0 +1,54 @@
+{
+    "name": "kraenkvisuell/nova-cms-portfolio",
+    "description": "Portfolio Package for Laravel Nova CMS",
+    "keywords": [
+        "laravel",
+        "nova",
+        "portfolio",
+        "cms"
+    ],
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3.0|^8.0",
+        "kraenkvisuell/belongs-to-many-field": "^2.0",
+        "manogi/nova-tiptap": "^1.0",
+        "optimistdigital/nova-multiselect-field": "^2.1",
+        "optimistdigital/nova-sortable": "^2.2",
+        "owenmelbz/nova-radio-field": "^1.0",
+        "timothyasp/nova-color-field": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kraenkvisuell\\NovaCmsPortfolio\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kraenkvisuell\\NovaCmsPortfolio\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "laravel/nova": "~3.0",
+        "kraenkvisuell/nova-cms": "*",
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.2"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Kraenkvisuell\\NovaCmsPortfolio\\NovaCmsPortfolioServiceProvider"
+            ]
+        }
+    }
+}

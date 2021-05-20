@@ -17,6 +17,11 @@ class Work extends Model implements Sortable
         'sort_when_creating' => true,
         'sort_on_has_many' => true,
     ];
+
+    protected $casts = [
+        'represents_artist_in_discipline' => 'array',
+        'represents_artist_in_discipline_category' => 'array',
+    ];
     
     protected $guarded = [];
 

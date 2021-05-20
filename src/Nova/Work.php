@@ -11,6 +11,7 @@ use Kraenkvisuell\NovaCmsMedia\API;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\BooleanGroup;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 class Work extends Resource
@@ -54,6 +55,31 @@ class Work extends Resource
             Text::make(__('nova-cms::pages.title'), 'title'),
 
             Boolean::make(__('nova-cms-portfolio::works.is_artist_portfolio_image'), 'is_artist_portfolio_image'),
+
+            BooleanGroup::make(
+                __('nova-cms-portfolio::works.represents_artist_in_discipline'),
+                'represents_artist_in_discipline'
+            )
+                ->options(function () {
+                    return optional(optional(optional($this->slideshow)->artist)->disciplines)->pluck('title', 'id');
+                })
+                ->onlyOnForms(),
+
+            BooleanGroup::make(
+                __('nova-cms-portfolio::works.represents_artist_in_discipline_category'),
+                'represents_artist_in_discipline_category'
+            )
+                ->options(function () {
+                    $disciplineId = optional(optional($this->slideshow)->getDiscipline())->id;
+                    $options = [];
+
+                    foreach (optional($this->slideshow)->categories ?: [] as $category) {
+                        $options[$disciplineId.'_'.$category->id] = $category->title;
+                    }
+
+                    return $options;
+                })
+                ->onlyOnForms(),
         ];
     }
 

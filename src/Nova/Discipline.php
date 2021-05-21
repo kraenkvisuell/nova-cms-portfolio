@@ -5,6 +5,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 use Eminiarts\Tabs\Tabs;
 use Manogi\Tiptap\Tiptap;
 use Laravel\Nova\Resource;
+use Timothyasp\Color\Color;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Text;
@@ -55,6 +56,10 @@ class Discipline extends Resource
                 ->translatable()
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->onlyOnForms(),
+
+            Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
+                ->sketch()
+                ->hideFromDetail(),
         ];
 
         $tabs[__('nova-cms::pages.content')] = [

@@ -1,7 +1,11 @@
 <template>
     <card class="flex flex-col h-20">
         <label 
-            class="block p-8 h-full text-center cursor-pointer"
+            class="
+                block p-8 h-full 
+                text-center cursor-pointer 
+                uppercase text-sm font-bold
+            "
             :class="{
                 'pointer-events-none' : uploading
             }"

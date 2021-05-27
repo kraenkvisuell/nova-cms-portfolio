@@ -8,13 +8,14 @@ use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use OwenMelbz\RadioField\RadioButton;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
 use Kraenkvisuell\NovaCmsPortfolio\QuickWorksCard;
-use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCmsPortfolio\SlideshowArtistCard;
+use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 class Slideshow extends Resource
@@ -62,6 +63,12 @@ class Slideshow extends Resource
                 ->rules('required')
                 ->creationRules('unique:'.config('nova-cms-portfolio.db_prefix').'slideshows,slug')
                 ->updateRules('unique:'.config('nova-cms-portfolio.db_prefix').'slideshows,slug,{{resourceId}}')
+                ->onlyOnForms(),
+
+            Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
+                ->onlyOnForms(),
+
+            Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview')), 'is_visible_in_overview')
                 ->onlyOnForms(),
 
             BelongsToManyField::make(__('nova-cms-portfolio::categories.categories'), 'categories', Category::class)

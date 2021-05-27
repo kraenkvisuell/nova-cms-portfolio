@@ -9,4 +9,5 @@ return [
     'slideshows' => 'Bildstrecken',
     'slideshow' => 'Bildstrecke',
     'title' => 'Titel',
+    'visible_in_artist_overview' => 'Sichtbar in Künstler-Überblick',
 ];

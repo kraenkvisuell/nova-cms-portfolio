@@ -10,4 +10,5 @@ return [
     'slideshows' => 'image sets',
     'slideshow' => 'image set',
     'title' => 'title',
+    'visible_in_artist_overview' => 'visible in artist overview',
 ];

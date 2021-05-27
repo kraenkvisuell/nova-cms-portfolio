@@ -4,7 +4,7 @@
         "dev": "mix",
         "watch": "mix watch",
         "hot": "mix watch --hot",
-        "prod": "mix --production",
+        "production": "mix --production",
         "format": "prettier --write 'resources/**/*.{css,js,vue}'"
     },
     "devDependencies": {

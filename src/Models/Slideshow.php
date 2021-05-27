@@ -9,10 +9,12 @@ use Spatie\Translatable\HasTranslations;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\SlideshowFactory;
+use Kraenkvisuell\NovaCmsPortfolio\Traits\Publishable;
 
 class Slideshow extends Model implements Sortable
 {
     use HasFactory;
+    use Publishable;
     use SortableTrait;
     use HasTranslations;
 

@@ -66,7 +66,7 @@ class Artist extends Model
     public function portfolioImage()
     {
         if ($this->portfolio_image) {
-            return nova_cms_image($this->portfolio_image);
+            return $this->portfolio_image;
         }
 
         if ($this->works->count()) {
@@ -81,7 +81,7 @@ class Artist extends Model
             }
 
             if ($markedWork) {
-                return nova_cms_image($markedWork->file);
+                return $markedWork->file;
             }
         }
 

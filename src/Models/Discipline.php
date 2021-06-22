@@ -9,12 +9,14 @@ use Spatie\Translatable\HasTranslations;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\DisciplineFactory;
+use Kraenkvisuell\NovaCmsPortfolio\Traits\QueryableBySlug;
 
 class Discipline extends Model implements Sortable
 {
     use HasFactory;
     use SortableTrait;
     use HasTranslations;
+    use QueryableBySlug;
 
     public $sortable = [
         'order_column_name' => 'sort_order',

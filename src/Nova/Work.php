@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Boolean;
 use Kraenkvisuell\NovaCmsMedia\API;
+use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\BooleanGroup;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistDisciplineImage;
 
 class Work extends Resource
 {
@@ -29,6 +31,13 @@ class Work extends Resource
     public static $displayInNavigation = false;
 
     public static $perPageViaRelationship = 1000;
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        $query = parent::indexQuery($request, $query);
+
+        return $query->with(['slideshow.categories', 'slideshow.artist']);
+    }
 
     public static function label()
     {
@@ -51,18 +60,34 @@ class Work extends Resource
                     return API::getOriginalName($this->file);
                 })->asBase(),
             ]),
+
+            Stack::make('Settings', [
+                Line::make('', function () {
+                    if ($this->is_artist_portfolio_image) {
+                        return '<span class="text-sm font-bold uppercase">'
+                        . __('nova-cms-portfolio::works.is_artist_portfolio_image')
+                        . '</span>';
+                    }
+                    return '';
+                })->asHtml(),
+
+                Line::make('', function () {
+                    if ($this->is_artist_discipline_image) {
+                        return '<span class="text-sm font-bold uppercase">'
+                        . __('nova-cms-portfolio::works.is_artist_discipline_image')
+                        . '</span>';
+                    }
+                    return '';
+                })->asHtml(),
+            ]),
             
-            Text::make(__('nova-cms::pages.title'), 'title'),
+            Text::make(__('nova-cms::pages.title'), 'title')
+                ->onlyOnForms(),
 
-            Boolean::make(__('nova-cms-portfolio::works.is_artist_portfolio_image'), 'is_artist_portfolio_image'),
+            Boolean::make(__('nova-cms-portfolio::works.is_artist_portfolio_image'), 'is_artist_portfolio_image')
+                ->onlyOnForms(),
 
-            BooleanGroup::make(
-                __('nova-cms-portfolio::works.represents_artist_in_discipline'),
-                'represents_artist_in_discipline'
-            )
-                ->options(function () {
-                    return optional(optional(optional($this->slideshow)->artist)->disciplines)->pluck('title', 'id');
-                })
+            Boolean::make(__('nova-cms-portfolio::works.is_artist_discipline_image'), 'is_artist_discipline_image')
                 ->onlyOnForms(),
 
             BooleanGroup::make(
@@ -91,5 +116,18 @@ class Work extends Resource
     public static function redirectAfterCreate(NovaRequest $request, $resource)
     {
         return '/resources/slideshows/'.$resource->slideshow_id;
+    }
+
+    public function actions(Request $request)
+    {
+        return [
+            ToggleArtistPortfolioImage::make()
+                ->onlyOnTableRow()
+                ->withoutConfirmation(),
+
+            ToggleArtistDisciplineImage::make()
+                ->onlyOnTableRow()
+                ->withoutConfirmation(),
+        ];
     }
 }

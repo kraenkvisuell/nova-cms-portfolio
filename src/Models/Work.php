@@ -19,7 +19,6 @@ class Work extends Model implements Sortable
     ];
 
     protected $casts = [
-        'represents_artist_in_discipline' => 'array',
         'represents_artist_in_discipline_category' => 'array',
     ];
     

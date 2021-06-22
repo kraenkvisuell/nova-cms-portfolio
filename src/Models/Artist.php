@@ -113,7 +113,7 @@ class Artist extends Model
     public function workForDiscipline($disciplineId)
     {
         $markedWork = $this->works()
-            ->where('represents_artist_in_discipline->'.$disciplineId, true)
+            ->where('is_artist_discipline_image', true)
             ->first();
 
         if ($markedWork) {

@@ -2,10 +2,10 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
-use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
+use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Translatable\HasTranslations;
 
 class Work extends Model implements Sortable
 {
@@ -21,7 +21,7 @@ class Work extends Model implements Sortable
     protected $casts = [
         'represents_artist_in_discipline_category' => 'array',
     ];
-    
+
     protected $guarded = [];
 
     public function getTable()

@@ -11,6 +11,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -33,12 +34,9 @@ class Work extends Resource
 
     public static $perPageViaRelationship = 1000;
 
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        $query = parent::indexQuery($request, $query);
-
-        return $query->with(['slideshow.categories', 'slideshow.artist']);
-    }
+    public static $orderBy = [
+        'sort_order' => 'asc',
+    ];
 
     public static function label()
     {
@@ -104,6 +102,13 @@ class Work extends Resource
                 ->onlyOnForms(),
 
             Boolean::make(__('nova-cms-portfolio::works.is_artist_discipline_image'), 'is_artist_discipline_image')
+                ->onlyOnForms(),
+
+            Select::make(__('nova-cms-portfolio::works.width_in_overview'), 'width_in_overview')
+                ->options([
+                    'regular' => 'Regular',
+                    'double' => 'Double',
+                ])
                 ->onlyOnForms(),
 
             BooleanGroup::make(

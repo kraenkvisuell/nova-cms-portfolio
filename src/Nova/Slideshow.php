@@ -2,26 +2,27 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
-use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Slug;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
-use OwenMelbz\RadioField\RadioButton;
+use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
 use Kraenkvisuell\NovaCmsPortfolio\QuickWorksCard;
 use Kraenkvisuell\NovaCmsPortfolio\SlideshowArtistCard;
-use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Slug;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Resource;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
+use OwenMelbz\RadioField\RadioButton;
 
 class Slideshow extends Resource
 {
     use HasSortableRows;
-    
+
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow::class;
 
     public static $title = 'title';
@@ -33,7 +34,6 @@ class Slideshow extends Resource
     public static $displayInNavigation = false;
 
     public static $perPageViaRelationship = 1000;
-
 
     public static function label()
     {
@@ -74,6 +74,15 @@ class Slideshow extends Resource
             BelongsToManyField::make(__('nova-cms-portfolio::categories.categories'), 'categories', Category::class)
                 ->optionsLabel('title'),
 
+            Select::make(__('nova-cms-portfolio::works.title_position'), 'title_position')
+                ->options([
+                    'bottom_left' => 'bottom left',
+                    'bottom_right' => 'bottom right',
+                    'top_left' => 'top left',
+                    'top_right' => 'top right',
+                ])
+                ->onlyOnForms(),
+
             Stack::make('', [
                 Line::make($workLabel, function () use ($workLabel, $workSingularLabel) {
                     return '<button
@@ -92,10 +101,10 @@ class Slideshow extends Resource
         ];
 
         $artist = $this->artist;
-        if (!$artist) {
+        if (! $artist) {
             $artist = $request->viaResourceId ? Artist::find($request->viaResourceId) : null;
         }
-        
+
         if ($artist && $artist->disciplines->count() > 1) {
             $options = $artist->disciplines->pluck('title', 'id')->toArray();
             $fields[] = RadioButton::make(ucfirst(__('nova-cms-portfolio::disciplines.discipline')), 'discipline_id')

@@ -2,24 +2,25 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
-use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\Boolean;
 use Kraenkvisuell\NovaCmsMedia\API;
-use Laravel\Nova\Fields\BooleanGroup;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
-use OptimistDigital\NovaSortable\Traits\HasSortableRows;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistDisciplineImage;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\BooleanGroup;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Resource;
+use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 class Work extends Resource
 {
     use HasSortableRows;
-    
+
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Work::class;
 
     public static $title = 'title';
@@ -54,7 +55,7 @@ class Work extends Resource
         return [
             MediaLibrary::make(__('nova-cms::content_blocks.file'), 'file')
                 ->uploadOnly(),
-                
+
             Stack::make('Details', [
                 Line::make('', function () {
                     return API::getOriginalName($this->file);
@@ -63,25 +64,40 @@ class Work extends Resource
 
             Stack::make('Settings', [
                 Line::make('', function () {
+                    if ($this->show_in_overview) {
+                        return '<span class="text-sm font-bold uppercase">'
+                        .__('nova-cms-portfolio::works.show_in_overview')
+                        .'</span>';
+                    }
+
+                    return '';
+                })->asHtml(),
+
+                Line::make('', function () {
                     if ($this->is_artist_portfolio_image) {
                         return '<span class="text-sm font-bold uppercase">'
-                        . __('nova-cms-portfolio::works.is_artist_portfolio_image')
-                        . '</span>';
+                        .__('nova-cms-portfolio::works.is_artist_portfolio_image')
+                        .'</span>';
                     }
+
                     return '';
                 })->asHtml(),
 
                 Line::make('', function () {
                     if ($this->is_artist_discipline_image) {
                         return '<span class="text-sm font-bold uppercase">'
-                        . __('nova-cms-portfolio::works.is_artist_discipline_image')
-                        . '</span>';
+                        .__('nova-cms-portfolio::works.is_artist_discipline_image')
+                        .'</span>';
                     }
+
                     return '';
                 })->asHtml(),
             ]),
-            
+
             Text::make(__('nova-cms::pages.title'), 'title')
+                ->onlyOnForms(),
+
+            Boolean::make(__('nova-cms-portfolio::works.show_in_overview'), 'show_in_overview')
                 ->onlyOnForms(),
 
             Boolean::make(__('nova-cms-portfolio::works.is_artist_portfolio_image'), 'is_artist_portfolio_image')
@@ -121,6 +137,10 @@ class Work extends Resource
     public function actions(Request $request)
     {
         return [
+            ToggleShowInOverview::make()
+                ->onlyOnTableRow()
+                ->withoutConfirmation(),
+
             ToggleArtistPortfolioImage::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),

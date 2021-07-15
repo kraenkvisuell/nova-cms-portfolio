@@ -117,11 +117,4 @@ class Slideshow extends Model implements Sortable
 
         return $markedWork;
     }
-
-    public function workForDisciplineUrl($disciplineId)
-    {
-        $work = $this->workForDiscipline($disciplineId);
-
-        return $work && $work->file ? nova_cms_image($work->file) : null;
-    }
 }

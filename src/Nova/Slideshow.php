@@ -61,8 +61,6 @@ class Slideshow extends Resource
 
             Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
                 ->rules('required')
-                ->creationRules('unique:'.config('nova-cms-portfolio.db_prefix').'slideshows,slug')
-                ->updateRules('unique:'.config('nova-cms-portfolio.db_prefix').'slideshows,slug,{{resourceId}}')
                 ->onlyOnForms(),
 
             Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')

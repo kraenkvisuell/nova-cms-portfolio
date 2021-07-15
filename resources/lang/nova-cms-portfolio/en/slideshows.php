@@ -11,4 +11,5 @@ return [
     'slideshow' => 'image set',
     'title' => 'title',
     'visible_in_artist_overview' => 'visible in artist overview',
+    'zip_update_projects' => 'projects upload as ZIP',
 ];

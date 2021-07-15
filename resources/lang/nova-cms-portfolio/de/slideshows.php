@@ -10,4 +10,5 @@ return [
     'slideshow' => 'Bildstrecke',
     'title' => 'Titel',
     'visible_in_artist_overview' => 'Sichtbar in Künstler-Überblick',
+    'zip_update_projects' => 'Projekte-Schnellupload als ZIP',
 ];

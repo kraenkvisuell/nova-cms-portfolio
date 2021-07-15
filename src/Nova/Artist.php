@@ -3,20 +3,21 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
-use Manogi\Tiptap\Tiptap;
-use Timothyasp\Color\Color;
-use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Slug;
-use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\TabsOnEdit;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\HasMany;
+use Illuminate\Http\Request;
+use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
-use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
+use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Slug;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Text;
+use Manogi\Tiptap\Tiptap;
+use Timothyasp\Color\Color;
 
 class Artist extends Resource
 {
@@ -29,9 +30,13 @@ class Artist extends Resource
     public static $perPageOptions = [100, 200];
 
     public static $orderBy = [
-        'name' => 'asc'
+        'name' => 'asc',
     ];
-    
+
+    public static $search = [
+        'name', 'slug',
+    ];
+
     public static function label()
     {
         return __(config('nova-cms-portfolio.custom_artists_label'))
@@ -115,6 +120,13 @@ class Artist extends Resource
             ->onlyOnIndex(),
 
             HasMany::make($slideshowLabel, 'slideshows', Slideshow::class),
+        ];
+    }
+
+    public function cards(Request $request)
+    {
+        return [
+            (new ZipUpdateProjectsCard())->addMeta($request->resourceId)->onlyOnDetail(),
         ];
     }
 }

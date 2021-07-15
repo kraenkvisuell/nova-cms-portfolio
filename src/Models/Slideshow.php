@@ -2,14 +2,14 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
-use Kraenkvisuell\NovaCmsMedia\API;
-use Spatie\EloquentSortable\Sortable;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
-use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Kraenkvisuell\NovaCmsMedia\API;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\SlideshowFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\Publishable;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Translatable\HasTranslations;
 
 class Slideshow extends Model implements Sortable
 {
@@ -23,7 +23,7 @@ class Slideshow extends Model implements Sortable
         'sort_when_creating' => true,
         'sort_on_has_many' => true,
     ];
-    
+
     protected $guarded = [];
 
     public function getTable()
@@ -87,6 +87,7 @@ class Slideshow extends Model implements Sortable
             $filenames[] = API::getOriginalName($work->file);
         }
         ray($filenames);
+
         return $filenames;
     }
 
@@ -102,5 +103,25 @@ class Slideshow extends Model implements Sortable
             ->whereHas('works', function ($q) {
                 $q->where('show_in_overview', true);
             });
+    }
+
+    public function workForNews()
+    {
+        $markedWork = $this->works()
+            ->where('show_in_overview', true)
+            ->first();
+
+        if (! $markedWork) {
+            $markedWork = $this->works()->first();
+        }
+
+        return $markedWork;
+    }
+
+    public function workForDisciplineUrl($disciplineId)
+    {
+        $work = $this->workForDiscipline($disciplineId);
+
+        return $work && $work->file ? nova_cms_image($work->file) : null;
     }
 }

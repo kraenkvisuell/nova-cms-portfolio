@@ -15,6 +15,7 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 use OwenMelbz\RadioField\RadioButton;
@@ -47,6 +48,11 @@ class Slideshow extends Resource
             ?: ucfirst(__('nova-cms-portfolio::slideshows.slideshow'));
     }
 
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return $query->with(['works']);
+    }
+
     public function fields(Request $request)
     {
         $workLabel = __(config('nova-cms-portfolio.custom_works_label'))
@@ -59,30 +65,39 @@ class Slideshow extends Resource
             Text::make(__('nova-cms::pages.title'), 'title')
                 ->rules('required'),
 
-            Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
-                ->rules('required')
-                ->onlyOnForms(),
-
-            Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
-                ->onlyOnForms(),
-
-            Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview')), 'is_visible_in_overview')
-                ->onlyOnForms(),
-
             BelongsToManyField::make(__('nova-cms-portfolio::categories.categories'), 'categories', Category::class)
                 ->optionsLabel('title'),
 
-            Select::make(__('nova-cms-portfolio::works.title_position'), 'title_position')
-                ->options([
-                    'bottom_left' => 'bottom left',
-                    'bottom_right' => 'bottom right',
-                    'top_left' => 'top left',
-                    'top_right' => 'top right',
-                ])
-                ->onlyOnForms(),
+            Stack::make($workLabel, [
+                Line::make('', function () {
+                    $html = '<a
+                        href="/nova/resources/slideshows/'.$this->id.'"
+                        class=""
+                    >';
+                    foreach ($this->works->take(3) as $work) {
+                        if (nova_cms_mime($work->file) == 'video') {
+                            $html .= '<video
+                                autoplay muted loop playsinline
+                                class="w-auto h-12 mr-1 inline-block"
+                            >
+                                <source src="'.nova_cms_file($work->file).'" type="video/'.nova_cms_extension($work->file).'">
+                            </video>';
+                        } else {
+                            $html .= '<img 
+                                class="w-auto h-12 mr-1 inline-block"
+                                src="'.nova_cms_image($work->file, 'thumb').'" 
+                            />';
+                        }
+                    }
+                    $html .= '</a>';
+
+                    return $html;
+                })->asHtml(),
+            ])
+            ->onlyOnIndex(),
 
             Stack::make('', [
-                Line::make($workLabel, function () use ($workLabel, $workSingularLabel) {
+                Line::make('', function () use ($workLabel, $workSingularLabel) {
                     return '<button
                         onclick="window.location.href=\'/nova/resources/slideshows/'.$this->id.'\'"
                         class="btn btn-xs 
@@ -94,6 +109,25 @@ class Slideshow extends Resource
                 })->asHtml(),
             ])
             ->onlyOnIndex(),
+
+            Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
+                ->rules('required')
+                ->onlyOnForms(),
+
+            Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
+                ->onlyOnForms(),
+
+            Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview')), 'is_visible_in_overview')
+                ->onlyOnForms(),
+
+            Select::make(__('nova-cms-portfolio::works.title_position'), 'title_position')
+                ->options([
+                    'bottom_left' => 'bottom left',
+                    'bottom_right' => 'bottom right',
+                    'top_left' => 'top left',
+                    'top_right' => 'top right',
+                ])
+                ->onlyOnForms(),
 
             HasMany::make($workLabel, 'works', Work::class),
         ];

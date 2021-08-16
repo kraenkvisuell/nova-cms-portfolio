@@ -14,6 +14,7 @@ use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
@@ -91,6 +92,12 @@ class Work extends Resource
                     return '';
                 })->asHtml(),
             ]),
+
+            Textarea::make(__('nova-cms-portfolio::works.embed_code'), 'embed_code')
+                ->onlyOnForms(),
+
+            Text::make(__('nova-cms-portfolio::works.embed_code_ratio'), 'embed_code_ratio')
+                ->onlyOnForms(),
 
             Text::make(__('nova-cms::pages.title'), 'title')
                 ->onlyOnForms(),

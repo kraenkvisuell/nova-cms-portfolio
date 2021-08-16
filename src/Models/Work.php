@@ -43,4 +43,25 @@ class Work extends Model implements Sortable
     {
         return static::query()->where('slideshow_id', $this->slideshow_id);
     }
+
+    public function embedRatio()
+    {
+        $defaultRatio = (9 / 16) * 100;
+
+        if (! $this->embed_code_ratio) {
+            return $defaultRatio;
+        }
+
+        $arr = explode(':', $this->embed_code_ratio);
+
+        if (count($arr) < 2) {
+            return $defaultRatio;
+        }
+
+        $width = intval($arr[0]) ?: 16;
+
+        $height = intval($arr[1]) ?: 9;
+
+        return ($height / $width) * 100;
+    }
 }

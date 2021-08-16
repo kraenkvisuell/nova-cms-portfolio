@@ -2,8 +2,8 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
-use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -11,9 +11,18 @@ class Category extends Resource
 {
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Category::class;
 
-    public static $sortable = false;
+    // public static $sortable = false;
 
-    public static $searchable = false;
+    public static function orderBy()
+    {
+        return [
+            'title->'.app()->getLocale() => 'asc',
+        ];
+    }
+
+    //public static $searchable = false;
+
+    public static $perPageOptions = [100, 200];
 
     public function title()
     {

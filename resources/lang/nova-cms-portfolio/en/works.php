@@ -2,6 +2,8 @@
 
 return [
     'caption' => 'caption',
+    'embed_code' => 'embed code (Youtube, Vimeo etc.)',
+    'embed_code_ratio' => 'embed code ratio (f.e "16:9")',
     'is_artist_discipline_image' => 'represents artist in discipline',
     'is_artist_portfolio_image' => 'is artist portfolio image',
     'represents_artist_in_discipline_category' => 'represents artist in category',

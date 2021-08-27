@@ -2,10 +2,11 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Spatie\EloquentSortable\SortableTrait;
 
 class Work extends Model implements Sortable
 {
@@ -20,6 +21,7 @@ class Work extends Model implements Sortable
 
     protected $casts = [
         'represents_artist_in_discipline_category' => 'array',
+        'show_in_overview_category' => 'array',
     ];
 
     protected $guarded = [];
@@ -63,5 +65,40 @@ class Work extends Model implements Sortable
         $height = intval($arr[1]) ?: 9;
 
         return ($height / $width) * 100;
+    }
+
+    public function overviewCategorySlugs()
+    {
+        $slugs = [];
+
+        if (!is_array($this->show_in_overview_category) || !$this->show_in_overview_category) {
+            return [];
+        }
+
+        foreach ($this->show_in_overview_category as $categoryId => $bool) {
+            if ($bool) {
+                $slugs[] = optional($this->slideshow->categories->firstWhere('id', $categoryId))->slug;
+            }
+        }
+
+        return $slugs;
+    }
+
+    public function representationCategorySlugs()
+    {
+        $slugs = [];
+
+        if (!is_array($this->represents_artist_in_discipline_category) || !$this->represents_artist_in_discipline_category) {
+            return [];
+        }
+
+        foreach ($this->represents_artist_in_discipline_category as $categoryId => $bool) {
+            if ($bool) {
+                $categoryId = Str::afterLast($categoryId, '_');
+                $slugs[] = optional($this->slideshow->categories->firstWhere('id', $categoryId))->slug;
+            }
+        }
+
+        return $slugs;
     }
 }

@@ -17,7 +17,7 @@
     "require": {
         "php": "^7.3.0|^8.0",
         "kraenkvisuell/belongs-to-many-field": "^2.0",
-        "manogi/nova-tiptap": "^1.0",
+        "manogi/nova-tiptap": "^2.0",
         "optimistdigital/nova-multiselect-field": "^2.1",
         "optimistdigital/nova-sortable": "^2.2",
         "owenmelbz/nova-radio-field": "^1.0",
@@ -40,7 +40,6 @@
     "prefer-stable": true,
     "require-dev": {
         "laravel/nova": "~3.0",
-        "kraenkvisuell/nova-cms": "*",
         "orchestra/testbench": "^6.0",
         "phpunit/phpunit": "^9.2"
     },

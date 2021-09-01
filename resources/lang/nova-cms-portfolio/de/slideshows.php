@@ -2,6 +2,7 @@
 
 return [
     'add_slide' => 'Werk hinzufügen',
+    'break_after_in_overviews' => 'Umbruch nach Ende in Überblick',
     'caption' => 'Caption',
     'quick_upload' => 'Werke-Schnellupload',
     'slide' => 'Werk',

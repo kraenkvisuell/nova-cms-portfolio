@@ -9,4 +9,10 @@ return [
     'custom_works_label' => '',
     'custom_work_label' => '',
     'artists_have_custom_bg' => false,
+    'break_sizes' => [
+        'large' => 'large',
+        'regular' => 'regular',
+        'small' => 'small',
+        'none' => 'none',
+    ],
 ];

@@ -129,6 +129,10 @@ class Slideshow extends Resource
                 ])
                 ->onlyOnForms(),
 
+            Select::make(__('nova-cms-portfolio::slideshows.break_after_in_overviews'), 'break_after_in_overviews')
+                ->options(config('nova-cms-portfolio.break_sizes'))
+                ->onlyOnForms(),
+
             HasMany::make($workLabel, 'works', Work::class),
         ];
 

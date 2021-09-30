@@ -4,6 +4,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -51,6 +52,9 @@ class Category extends Resource
                 ->rules('required')
                 ->translatable()
                 ->help(__('nova-cms-portfolio::artists.slug_explanation')),
+
+            Boolean::make(__('nova-cms-portfolio::categories.show_in_home_navi'), 'show_in_home_navi')
+                ->onlyOnForms(),
         ];
     }
 

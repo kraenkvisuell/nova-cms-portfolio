@@ -15,7 +15,7 @@ return new class extends Migration {
         $prefix = config('nova-cms-portfolio.db_prefix');
 
         Schema::table($prefix.'slideshows', function (Blueprint $table) {
-            $table->string('break_after_in_overviews', 20)->default('regular');
+            $table->string('break_after_in_overviews', 20)->default('none');
         });
     }
 

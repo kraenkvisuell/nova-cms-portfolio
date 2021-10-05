@@ -23,6 +23,11 @@
         "owenmelbz/nova-radio-field": "^1.0",
         "timothyasp/nova-color-field": "^1.0"
     },
+    "require-dev": {
+        "laravel/nova": "~3.0",
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.2"
+    },
     "autoload": {
         "psr-4": {
             "Kraenkvisuell\\NovaCmsPortfolio\\": "src/"
@@ -38,11 +43,6 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "require-dev": {
-        "laravel/nova": "~3.0",
-        "orchestra/testbench": "^6.0",
-        "phpunit/phpunit": "^9.2"
-    },
     "extra": {
         "laravel": {
             "providers": [

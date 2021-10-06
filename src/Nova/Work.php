@@ -139,10 +139,11 @@ class Work extends Resource
                 __('nova-cms-portfolio::works.show_in_overview_category'),
                 'show_in_overview_category'
             )
-                ->options(function () {
+                ->options(function () use ($request) {
+                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
                     $options = [];
 
-                    foreach (optional($this->slideshow)->categories ?: [] as $category) {
+                    foreach (optional($slideshow)->categories ?: [] as $category) {
                         $options[$category->id] = $category->title;
                     }
 
@@ -161,17 +162,22 @@ class Work extends Resource
                     'regular' => 'Regular',
                     'double' => 'Double',
                 ])
-                ->onlyOnForms(),
+                ->onlyOnForms()
+                ->default('regular')
+                ->required(),
 
             BooleanGroup::make(
                 __('nova-cms-portfolio::works.represents_artist_in_discipline_category'),
                 'represents_artist_in_discipline_category'
             )
-                ->options(function () {
-                    $disciplineId = optional(optional($this->slideshow)->getDiscipline())->id;
+                ->options(function () use ($request) {
+                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
+                    
+                    $disciplineId = optional(optional($slideshow)->getDiscipline())->id;
+                    
                     $options = [];
 
-                    foreach (optional($this->slideshow)->categories ?: [] as $category) {
+                    foreach (optional($slideshow)->categories ?: [] as $category) {
                         $options[$disciplineId.'_'.$category->id] = $category->title;
                     }
 

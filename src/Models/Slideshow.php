@@ -84,10 +84,12 @@ class Slideshow extends Model implements Sortable
     {
         $filenames = [];
         foreach ($this->works as $work) {
-            $filenames[] = API::getOriginalName($work->file);
+            $originalName = trim(API::getOriginalName($work->file));
+            if ($originalName) {
+                $filenames[] = $originalName;
+            }
         }
-        ray($filenames);
-
+        
         return $filenames;
     }
 

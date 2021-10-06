@@ -127,10 +127,14 @@ class Slideshow extends Resource
                     'top_left' => 'top left',
                     'top_right' => 'top right',
                 ])
+                ->default('bottom_left')
+                ->required()
                 ->onlyOnForms(),
 
             Select::make(__('nova-cms-portfolio::slideshows.break_after_in_overviews'), 'break_after_in_overviews')
                 ->options(config('nova-cms-portfolio.break_sizes'))
+                ->default('none')
+                ->required()
                 ->onlyOnForms(),
 
             HasMany::make($workLabel, 'works', Work::class),

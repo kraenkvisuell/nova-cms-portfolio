@@ -2,26 +2,26 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
-use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Textarea;
-use Kraenkvisuell\NovaCmsMedia\API;
 use Illuminate\Support\Facades\Cache;
-use Laravel\Nova\Fields\BooleanGroup;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Kraenkvisuell\NovaCmsMedia\API;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
-use OptimistDigital\NovaSortable\Traits\HasSortableRows;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistDisciplineImage;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleRepresentsArtistInCategory;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverviewCategory;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\BooleanGroup;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Resource;
+use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 class Work extends Resource
 {
@@ -77,7 +77,6 @@ class Work extends Resource
                 })->asHtml(),
 
                 Line::make('', function () {
-                    
                     if (is_array($this->overviewCategorySlugs()) && $this->overviewCategorySlugs()) {
                         return '<span class="text-xs uppercase">'
                         .__('nova-cms-portfolio::works.overview_categories')
@@ -90,7 +89,6 @@ class Work extends Resource
                 })->asHtml(),
 
                 Line::make('', function () {
-                    
                     if (is_array($this->representationCategorySlugs()) && $this->representationCategorySlugs()) {
                         return '<span class="text-xs uppercase">'
                         .__('nova-cms-portfolio::works.representation_categories')
@@ -159,8 +157,18 @@ class Work extends Resource
 
             Select::make(__('nova-cms-portfolio::works.width_in_overview'), 'width_in_overview')
                 ->options([
-                    'regular' => 'Regular',
-                    'double' => 'Double',
+                    'regular' => 'one column',
+                    'double' => 'two columns',
+                ])
+                ->onlyOnForms()
+                ->default('regular')
+                ->required(),
+
+            Select::make(__('nova-cms-portfolio::works.width_in_frame'), 'width_in_frame')
+                ->options([
+                    'full' => 'full width',
+                    'two_thirds' => 'two thirds',
+                    'half' => 'half',
                 ])
                 ->onlyOnForms()
                 ->default('regular')
@@ -172,9 +180,9 @@ class Work extends Resource
             )
                 ->options(function () use ($request) {
                     $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
-                    
+
                     $disciplineId = optional(optional($slideshow)->getDiscipline())->id;
-                    
+
                     $options = [];
 
                     foreach (optional($slideshow)->categories ?: [] as $category) {
@@ -212,28 +220,25 @@ class Work extends Resource
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
         ];
-        
-        if($request->viaResourceId) {
-            $categoryIds = Cache::remember('novaSlideshowCategoryIds.'.$request->viaResourceId, now()->addSeconds(15), function() use ($request) {
+
+        if ($request->viaResourceId) {
+            $categoryIds = Cache::remember('novaSlideshowCategoryIds.'.$request->viaResourceId, now()->addSeconds(15), function () use ($request) {
                 return Slideshow::find($request->viaResourceId)->categories->pluck('id');
             });
             session(['lastNovaSlideshowCategoryIds' => $categoryIds]);
         }
 
-        foreach(session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
+        foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
             $sendActions[] = ToggleShowInOverviewCategory::make($categoryId)
             ->onlyOnTableRow()
             ->withoutConfirmation();
         }
 
-        foreach(session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
+        foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
             $sendActions[] = ToggleRepresentsArtistInCategory::make($categoryId)
             ->onlyOnTableRow()
             ->withoutConfirmation();
         }
-            
-
-        
 
         return $sendActions;
     }

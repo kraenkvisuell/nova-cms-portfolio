@@ -10,6 +10,7 @@ return [
     'slides' => 'works',
     'slideshows' => 'image sets',
     'slideshow' => 'image set',
+    'starts_right' => 'starts right in artist overview',
     'title' => 'title',
     'visible_in_artist_overview' => 'visible in artist overview',
     'zip_update_projects' => 'projects upload as ZIP',

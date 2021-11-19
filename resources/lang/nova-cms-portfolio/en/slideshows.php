@@ -6,6 +6,7 @@ return [
     'caption' => 'caption',
     'quick_upload' => 'quick upload',
     'quick_wildcard_upload' => 'quick :works upload',
+    'show_title' => 'show title',
     'slide' => 'work',
     'slides' => 'works',
     'slideshows' => 'image sets',

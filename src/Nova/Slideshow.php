@@ -123,6 +123,9 @@ class Slideshow extends Resource
             Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.starts_right')), 'starts_right')
                 ->onlyOnForms(),
 
+            Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.show_title')), 'show_title')
+                ->onlyOnForms(),
+
             Select::make(__('nova-cms-portfolio::works.title_position'), 'title_position')
                 ->options([
                     'bottom_left' => 'bottom left',

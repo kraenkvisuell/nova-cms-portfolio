@@ -20,7 +20,6 @@ class Slideshow extends Model implements Sortable
 
     public $sortable = [
         'order_column_name' => 'sort_order',
-        'sort_when_creating' => true,
         'sort_on_has_many' => true,
     ];
 
@@ -89,7 +88,7 @@ class Slideshow extends Model implements Sortable
                 $filenames[] = $originalName;
             }
         }
-        
+
         return $filenames;
     }
 

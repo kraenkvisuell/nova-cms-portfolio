@@ -171,7 +171,7 @@ class Work extends Resource
                     'half' => 'half',
                 ])
                 ->onlyOnForms()
-                ->default('regular')
+                ->default('full')
                 ->required(),
 
             BooleanGroup::make(

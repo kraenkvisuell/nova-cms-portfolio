@@ -5,6 +5,7 @@ return [
     'break_after_in_overviews' => 'Umbruch nach Ende in Überblick',
     'caption' => 'Caption',
     'quick_upload' => 'Werke-Schnellupload',
+    'show_title' => 'Titel zeigen',
     'slide' => 'Werk',
     'slides' => 'Werke',
     'slideshows' => 'Bildstrecken',

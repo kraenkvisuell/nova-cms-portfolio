@@ -65,6 +65,30 @@ class Work extends Resource
                 })->asBase(),
             ]),
 
+            Stack::make('Display', [
+                Line::make('', function () {
+                    $html = '';
+                    if ($this->width_in_overview) {
+                        $html .= '<div class="text-xs">'
+                        .__('nova-cms-portfolio::works.width_in_overview').':<br>'
+                        .'<span class="font-bold">'
+                        .__('nova-cms-portfolio::width_in_overview.'.$this->width_in_overview)
+                        .'</span>'
+                        .'</div>';
+                    }
+                    if ($this->width_in_frame) {
+                        $html .= '<div class="text-xs">'
+                        .__('nova-cms-portfolio::works.width_in_frame').':<br>'
+                        .'<span class="font-bold">'
+                        .__('nova-cms-portfolio::width_in_frame.'.$this->width_in_frame)
+                        .'</span>'
+                        .'</div>';
+                    }
+
+                    return $html;
+                })->asHtml(),
+            ]),
+
             Stack::make('Settings', [
                 Line::make('', function () {
                     if ($this->show_in_overview) {
@@ -157,8 +181,8 @@ class Work extends Resource
 
             Select::make(__('nova-cms-portfolio::works.width_in_overview'), 'width_in_overview')
                 ->options([
-                    'regular' => 'one column',
-                    'double' => 'two columns',
+                    'regular' => __('nova-cms-portfolio::width_in_overview.regular'),
+                    'double' => __('nova-cms-portfolio::width_in_overview.double'),
                 ])
                 ->onlyOnForms()
                 ->default('regular')
@@ -166,9 +190,9 @@ class Work extends Resource
 
             Select::make(__('nova-cms-portfolio::works.width_in_frame'), 'width_in_frame')
                 ->options([
-                    'full' => 'full width',
-                    'two_thirds' => 'two thirds',
-                    'half' => 'half',
+                    'full' => __('nova-cms-portfolio::width_in_frame.full'),
+                    'two_thirds' => __('nova-cms-portfolio::width_in_frame.two_thirds'),
+                    'half' => __('nova-cms-portfolio::width_in_frame.half'),
                 ])
                 ->onlyOnForms()
                 ->default('full')

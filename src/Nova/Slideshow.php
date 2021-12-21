@@ -88,6 +88,10 @@ class Slideshow extends Resource
             ])
             ->onlyOnIndex(),
 
+            Text::make(__('nova-cms::pages.title'), 'title')
+                ->rules('required')
+                ->onlyOnForms(),
+
             BelongsToManyField::make(__('nova-cms-portfolio::categories.categories'), 'categories', Category::class)
                 ->optionsLabel('title')
                 ->onlyOnForms(),

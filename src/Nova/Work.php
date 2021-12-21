@@ -231,7 +231,7 @@ class Work extends Resource
 
     public function actions(Request $request)
     {
-        $sendActions = [
+        $actions = [
             ToggleShowInOverview::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
@@ -253,17 +253,17 @@ class Work extends Resource
         }
 
         foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
-            $sendActions[] = ToggleShowInOverviewCategory::make($categoryId)
+            $actions[] = ToggleShowInOverviewCategory::make($categoryId)
             ->onlyOnTableRow()
             ->withoutConfirmation();
         }
 
         foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
-            $sendActions[] = ToggleRepresentsArtistInCategory::make($categoryId)
+            $actions[] = ToggleRepresentsArtistInCategory::make($categoryId)
             ->onlyOnTableRow()
             ->withoutConfirmation();
         }
 
-        return $sendActions;
+        return $actions;
     }
 }

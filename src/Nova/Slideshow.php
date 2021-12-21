@@ -5,6 +5,8 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 use Illuminate\Http\Request;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleSlideshowIsPublished;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleVisibilityInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
 use Kraenkvisuell\NovaCmsPortfolio\QuickWorksCard;
 use Kraenkvisuell\NovaCmsPortfolio\SlideshowArtistCard;
@@ -50,7 +52,7 @@ class Slideshow extends Resource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->with(['works']);
+        return $query->with(['works', 'categories']);
     }
 
     public function fields(Request $request)
@@ -62,11 +64,33 @@ class Slideshow extends Resource
         ?: __('nova-cms-portfolio::works.work');
 
         $fields = [
-            Text::make(__('nova-cms::pages.title'), 'title')
-                ->rules('required'),
+            Stack::make('Details', [
+                Line::make('', function () {
+                    $html = '<div class="font-bold leading-tight mb-1 whitespace-normal">'.$this->title.'</div>';
+
+                    $html .= '<div class="whitespace-normal mb-1">';
+                    foreach ($this->categories as $n => $category) {
+                        ray($category->title);
+
+                        $html .= '<div class="inline-block mr-1 leading-tight text-80 uppercase text-xs border border-80 px-1  pt-1 pb-px">'.$category->title.'</div>';
+                    }
+                    $html .= '</div>';
+
+                    if (! $this->is_published) {
+                        $html .= '<div class="font-bold text-xs text-danger uppercase">not published</div>';
+                    }
+                    if (! $this->is_visible_in_overview) {
+                        $html .= '<div class="font-bold text-xs text-danger uppercase">hidden from artist overview</div>';
+                    }
+
+                    return $html;
+                })->asHtml(),
+            ])
+            ->onlyOnIndex(),
 
             BelongsToManyField::make(__('nova-cms-portfolio::categories.categories'), 'categories', Category::class)
-                ->optionsLabel('title'),
+                ->optionsLabel('title')
+                ->onlyOnForms(),
 
             Stack::make($workLabel, [
                 Line::make('', function () {
@@ -186,6 +210,19 @@ class Slideshow extends Resource
         return [
             (new QuickWorksCard)->addMeta($request->resourceId)->onlyOnDetail(),
             (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail(),
+        ];
+    }
+
+    public function actions(Request $request)
+    {
+        return [
+            ToggleSlideshowIsPublished::make()
+                ->onlyOnTableRow()
+                ->withoutConfirmation(),
+
+            ToggleVisibilityInOverview::make()
+                ->onlyOnTableRow()
+                ->withoutConfirmation(),
         ];
     }
 }

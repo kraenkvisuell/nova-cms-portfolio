@@ -12,6 +12,8 @@ return [
     'slideshow' => 'Bildstrecke',
     'starts_right' => 'Startet rechts in Übersicht',
     'title' => 'Titel',
+    'toggle_is_published' => 'AN/AUS Veröffentlicht',
+    'toggle_visibility_in_artist_overview' => 'AN/AUS Sichtbarkein in Künstler-Überblick',
     'visible_in_artist_overview' => 'Sichtbar in Künstler-Überblick',
     'zip_update_projects' => 'Projekte-Schnellupload als ZIP',
 ];

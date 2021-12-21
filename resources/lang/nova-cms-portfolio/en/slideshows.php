@@ -13,6 +13,8 @@ return [
     'slideshow' => 'image set',
     'starts_right' => 'starts right in artist overview',
     'title' => 'title',
+    'toggle_is_published' => 'ON/OFF published',
+    'toggle_visibility_in_artist_overview' => 'ON/OFF visible in artist overview',
     'visible_in_artist_overview' => 'visible in artist overview',
     'zip_update_projects' => 'projects upload as ZIP',
 ];

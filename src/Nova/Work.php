@@ -61,8 +61,8 @@ class Work extends Resource
 
             Stack::make('Details', [
                 Line::make('', function () {
-                    return API::getOriginalName($this->file);
-                })->asBase(),
+                    return '<div class="whitespace-normal">'.$this->title.'</div>';
+                })->asHtml(),
             ]),
 
             Stack::make('Display', [

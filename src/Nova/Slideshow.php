@@ -69,7 +69,7 @@ class Slideshow extends Resource
         ?: __('nova-cms-portfolio::works.work');
 
         $fields = [
-            Html::make('Some Title')
+            Html::make('')
                 ->html(function () {
                     $html = '<div class="px-8 pt-6 pb-6 border-b border-40">'
                     .'<a href="/nova/resources/slideshows/'
@@ -109,7 +109,7 @@ class Slideshow extends Resource
 
             Text::make(__('nova-cms::pages.title'), 'title')
                 ->rules('required')
-                ->onlyOnForms(),
+                ->hideFromIndex(),
 
             BelongsToManyField::make(__('nova-cms-portfolio::categories.categories'), 'categories', Category::class)
                 ->optionsLabel('title')
@@ -233,8 +233,7 @@ class Slideshow extends Resource
         return [
             (new QuickWorksCard)->addMeta($request->resourceId)->onlyOnDetail(),
             (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail(),
-            (new EditSlideshowCard)->addMeta($request->resourceId)->onlyOnDetail(),
-            // (new ImagesCard)->addMeta($request->resourceId)->onlyOnForms(),
+            // (new EditSlideshowCard)->addMeta($request->resourceId)->onlyOnDetail(),
         ];
     }
 

@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": "^7.3.0|^8.0",
+        "joshmoreno/nova-html-field": "^0.1.0",
         "kraenkvisuell/belongs-to-many-field": "^2.0",
         "manogi/nova-tiptap": "^2.0",
         "optimistdigital/nova-multiselect-field": "^2.1",

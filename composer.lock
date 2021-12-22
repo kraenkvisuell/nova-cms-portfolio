@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a2cfac18bbd0666e9ff49da1f410cf1",
+    "content-hash": "9e17bb0215ae796a40514b1c43d4a62d",
     "packages": [
         {
             "name": "brick/math",
@@ -967,6 +967,59 @@
                 }
             ],
             "time": "2021-11-21T21:41:47+00:00"
+        },
+        {
+            "name": "joshmoreno/nova-html-field",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JoshMoreno/nova-html-field.git",
+                "reference": "9ca4b160d102ac5a4019347a18266d7465113355"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JoshMoreno/nova-html-field/zipball/9ca4b160d102ac5a4019347a18266d7465113355",
+                "reference": "9ca4b160d102ac5a4019347a18266d7465113355",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JoshMoreno\\Html\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JoshMoreno\\Html\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Moreno",
+                    "email": "josh@joshmoreno.com"
+                }
+            ],
+            "description": "A Laravel Nova field for rendering custom html on index, detail, and forms.",
+            "keywords": [
+                "field",
+                "html",
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/JoshMoreno/nova-html-field/issues",
+                "source": "https://github.com/JoshMoreno/nova-html-field/tree/v0.1.0"
+            },
+            "time": "2020-03-20T16:24:28+00:00"
         },
         {
             "name": "kraenkvisuell/belongs-to-many-field",

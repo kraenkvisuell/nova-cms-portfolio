@@ -4,6 +4,7 @@ return [
     'add_slide' => 'add work',
     'break_after_in_overviews' => 'Break behind in overview',
     'caption' => 'caption',
+    'edit_wildcard' => 'edit :slideshow',
     'quick_upload' => 'quick upload',
     'quick_wildcard_upload' => 'quick :works upload',
     'show_title' => 'show title',

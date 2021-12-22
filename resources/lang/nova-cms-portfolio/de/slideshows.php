@@ -4,6 +4,7 @@ return [
     'add_slide' => 'Werk hinzufügen',
     'break_after_in_overviews' => 'Umbruch nach Ende in Überblick',
     'caption' => 'Caption',
+    'edit_wildcard' => ':slideshow bearbeiten',
     'quick_upload' => 'Werke-Schnellupload',
     'show_title' => 'Titel zeigen',
     'slide' => 'Werk',

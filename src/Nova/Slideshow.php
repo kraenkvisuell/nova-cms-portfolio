@@ -3,7 +3,10 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
+use JoshMoreno\Html\Html;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
+use Kraenkvisuell\NovaCmsPortfolio\EditSlideshowCard;
+use Kraenkvisuell\NovaCmsPortfolio\ImagesCard;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleSlideshowIsPublished;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleVisibilityInOverview;
@@ -12,12 +15,14 @@ use Kraenkvisuell\NovaCmsPortfolio\QuickWorksCard;
 use Kraenkvisuell\NovaCmsPortfolio\SlideshowArtistCard;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use Laravel\Nova\Resource;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 use OwenMelbz\RadioField\RadioButton;
@@ -64,6 +69,20 @@ class Slideshow extends Resource
         ?: __('nova-cms-portfolio::works.work');
 
         $fields = [
+            Html::make('Some Title')
+                ->html(function () {
+                    $html = '<div class="px-8 pt-6 pb-6 border-b border-40">'
+                    .'<a href="/nova/resources/slideshows/'
+                    .$this->id
+                    .'" class="font-bold text-90 uppercase no-underline">'
+                    .(config('nova-cms-portfolio.custom_works_label') ?: __('nova-cms-portfolio::works.works'))
+                    .'&nbsp;&larr;'
+                    .'</a>'
+                    .'</div>';
+
+                    return $html;
+                })->onlyOnForms(),
+
             Stack::make('Details', [
                 Line::make('', function () {
                     $html = '<div class="font-bold leading-tight mb-1 whitespace-normal">'.$this->title.'</div>';
@@ -214,6 +233,8 @@ class Slideshow extends Resource
         return [
             (new QuickWorksCard)->addMeta($request->resourceId)->onlyOnDetail(),
             (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail(),
+            (new EditSlideshowCard)->addMeta($request->resourceId)->onlyOnDetail(),
+            // (new ImagesCard)->addMeta($request->resourceId)->onlyOnForms(),
         ];
     }
 

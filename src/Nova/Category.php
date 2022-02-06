@@ -55,6 +55,9 @@ class Category extends Resource
 
             Boolean::make(__('nova-cms-portfolio::categories.show_in_home_navi'), 'show_in_home_navi')
                 ->onlyOnForms(),
+
+            Boolean::make(__('nova-cms-portfolio::categories.show_in_main_menu'), 'show_in_main_menu')
+                ->onlyOnForms(),
         ];
     }
 

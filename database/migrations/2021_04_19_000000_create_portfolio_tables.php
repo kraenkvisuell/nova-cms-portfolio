@@ -46,10 +46,11 @@ return new class extends Migration {
         });
 
         Schema::create($prefix.'artist_discipline', function (Blueprint $table) {
+            $table->id('doid');
             $table->unsignedBigInteger('artist_id');
             $table->unsignedBigInteger('discipline_id');
             $table->unsignedBigInteger('work_id')->nullable();
-            $table->primary(['artist_id', 'discipline_id']);
+            $table->index(['artist_id', 'discipline_id']);
         });
 
         Schema::create($prefix.'categories', function (Blueprint $table) {
@@ -68,25 +69,27 @@ return new class extends Migration {
             $table->integer('sort_order')->nullable();
             $table->json('description')->nullable();
             $table->json('slides')->nullable();
-            
+
             $table->json('meta_description')->nullable();
             $table->json('browser_title')->nullable();
             $table->json('robots')->nullable();
             $table->unsignedInteger('og_image')->nullable();
-            
+
             $table->timestamps();
         });
 
         Schema::create($prefix.'category_slideshow', function (Blueprint $table) {
+            $table->id('doid');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('slideshow_id');
-            $table->primary(['category_id', 'slideshow_id']);
+            $table->index(['category_id', 'slideshow_id']);
         });
 
         Schema::create($prefix.'category_overview_work', function (Blueprint $table) {
+            $table->id('doid');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('work_id');
-            $table->primary(['category_id', 'work_id']);
+            $table->index(['category_id', 'work_id']);
         });
 
         Schema::create($prefix.'works', function (Blueprint $table) use ($prefix) {

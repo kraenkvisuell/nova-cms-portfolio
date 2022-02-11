@@ -4,14 +4,14 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
+use Spatie\Translatable\HasTranslations;
 
 class Artist extends Model
 {
     use HasFactory;
     use HasTranslations;
-    
+
     protected $guarded = [];
 
     public function getTable()
@@ -71,12 +71,12 @@ class Artist extends Model
 
         if ($this->works->count()) {
             $markedWork = $this->works->where('is_artist_portfolio_image', true)->first();
-            
-            if (!$markedWork) {
+
+            if (! $markedWork) {
                 $markedWork = $this->works->where('show_in_overview', true)->first();
             }
 
-            if (!$markedWork) {
+            if (! $markedWork) {
                 $markedWork = $this->works->first();
             }
 
@@ -85,7 +85,6 @@ class Artist extends Model
             }
         }
 
-        return null;
     }
 
     public function categoriesForDiscipline($disciplineId)
@@ -94,7 +93,7 @@ class Artist extends Model
 
         if ($disciplineId) {
             $slidewhows = $slidewhows->filter(function ($slideshow) use ($disciplineId) {
-                return !$slideshow->disciplines
+                return ! $slideshow->disciplines
                     || $slideshow->disciplines->pluck('id')->contains($disciplineId);
             });
         }
@@ -106,7 +105,7 @@ class Artist extends Model
                 $categories->push($category);
             }
         }
-        
+
         return $categories->unique('id')->sortBy('title');
     }
 
@@ -125,7 +124,7 @@ class Artist extends Model
             ->has('works')
             ->first();
 
-        if (!$slideshow) {
+        if (! $slideshow) {
             $slideshow = $this->slideshows()
                 ->has('works')
                 ->first();
@@ -136,10 +135,10 @@ class Artist extends Model
                 ->where('show_in_overview', true)
                 ->first();
 
-            if (!$markedWork) {
+            if (! $markedWork) {
                 $markedWork = $slideshow->works()->first();
             }
-            
+
             return $markedWork;
         }
 
@@ -180,8 +179,6 @@ class Artist extends Model
                 $q->where('id', $categoryId);
             });
         })->limit(2)->get();
-
-        
 
         return $works;
     }

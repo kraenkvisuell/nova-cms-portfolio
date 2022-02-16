@@ -7,15 +7,19 @@ use Eminiarts\Tabs\TabsOnEdit;
 use Illuminate\Http\Request;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Kraenkvisuell\NovaCmsBlocks\Blocks;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
 use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Manogi\Tiptap\Tiptap;
 use Timothyasp\Color\Color;
 
@@ -73,14 +77,18 @@ class Artist extends Resource
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->onlyOnForms(),
 
+            Boolean::make(__('Veröffentlicht'), 'is_published'),
+
             BelongsToManyField::make(__('nova-cms-portfolio::disciplines.disciplines'), 'disciplines', Discipline::class)
             ->optionsLabel('title')
             ->hideFromDetail(),
-
-            Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
-            ->sketch()
-            ->hideFromDetail(),
         ];
+
+        if (config('nova-cms-portfolio.artists_have_custom_bg')) {
+            $tabs[__('nova-cms::pages.content')][] = Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
+                ->sketch()
+                ->hideFromDetail();
+        }
 
         $tabs[__('nova-cms::pages.content')] = [
             TipTap::make(__('nova-cms-portfolio::artists.description'), 'description')
@@ -93,6 +101,17 @@ class Artist extends Resource
             MediaLibrary::make(__('nova-cms-portfolio::artists.portrait_image'), 'portrait_image')
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms(),
+
+            Blocks::make('Testimonials', 'testimonials')
+                ->addLayout('Testimonial', 'testimonial', [
+                    Textarea::make('Text', 'text')
+                        ->translatable(),
+                    Text::make('Kunde', 'client'),
+                ])
+                ->useAsTitle(['testimonial' => 'client'])
+                ->button('Testimonial hinzufügen')
+                ->collapsed()
+                ->stacked(),
         ];
 
         $tabs[__('nova-cms::seo.seo')] = Seo::make();
@@ -129,6 +148,13 @@ class Artist extends Resource
     {
         return [
             (new ZipUpdateProjectsCard())->addMeta($request->resourceId)->onlyOnDetail(),
+        ];
+    }
+
+    public function filters(Request $request)
+    {
+        return [
+            new Published,
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
 use Spatie\Translatable\HasTranslations;
 
@@ -28,6 +29,7 @@ class Artist extends Model
 
     protected $casts = [
         'robots' => 'array',
+        'testimonials' => BlocksCast::class,
     ];
 
     protected static function newFactory()

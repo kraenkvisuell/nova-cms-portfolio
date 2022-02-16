@@ -8,7 +8,7 @@ return [
     'custom_slideshow_label' => '',
     'custom_works_label' => '',
     'custom_work_label' => '',
-    'artists_have_custom_bg' => false,
+    'artists_have_custom_bg' => true,
     'media' => [
         'only_upload' => true,
     ],

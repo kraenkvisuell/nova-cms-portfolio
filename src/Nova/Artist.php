@@ -59,6 +59,8 @@ class Artist extends Resource
 
         $tabs = [];
 
+        $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
+
         $tabs[__('nova-cms::settings.settings')] = [
             Text::make(__('nova-cms-portfolio::artists.title'), 'name')
                 ->rules('required')
@@ -85,11 +87,11 @@ class Artist extends Resource
             ->onlyOnForms(),
 
             MediaLibrary::make(__('nova-cms-portfolio::artists.portfolio_image'), 'portfolio_image')
-                ->uploadOnly()
+                ->uploadOnly($uploadOnly)
                 ->onlyOnForms(),
 
             MediaLibrary::make(__('nova-cms-portfolio::artists.portrait_image'), 'portrait_image')
-                ->uploadOnly()
+                ->uploadOnly($uploadOnly)
                 ->onlyOnForms(),
         ];
 

@@ -2,10 +2,10 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\CategoryFactory;
+use Spatie\Translatable\HasTranslations;
 
 class Category extends Model
 {
@@ -27,6 +27,10 @@ class Category extends Model
     public $translatable = [
         'title',
         'slug',
+        'browser_title',
+        'description',
+        'meta_description',
+        'meta_keywords',
     ];
 
     public function getTitleForDropdownAttribute()

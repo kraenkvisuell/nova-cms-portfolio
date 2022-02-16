@@ -55,9 +55,11 @@ class Work extends Resource
 
     public function fields(Request $request)
     {
+        $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
+
         return [
             MediaLibrary::make(__('nova-cms::content_blocks.file'), 'file')
-                ->uploadOnly(),
+                ->uploadOnly($uploadOnly),
 
             Stack::make('Details', [
                 Line::make('', function () {

@@ -23,6 +23,7 @@ class Artist extends Model
         'description',
         'browser_title',
         'meta_description',
+        'meta_keywords',
     ];
 
     protected $casts = [
@@ -84,7 +85,6 @@ class Artist extends Model
                 return $markedWork->file;
             }
         }
-
     }
 
     public function categoriesForDiscipline($disciplineId)

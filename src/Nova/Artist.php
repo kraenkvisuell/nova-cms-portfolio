@@ -92,7 +92,8 @@ class Artist extends Resource
 
         $tabs[__('nova-cms::pages.content')] = [
             TipTap::make(__('nova-cms-portfolio::artists.description'), 'description')
-            ->onlyOnForms(),
+                ->translatable()
+                ->onlyOnForms(),
 
             MediaLibrary::make(__('nova-cms-portfolio::artists.portfolio_image'), 'portfolio_image')
                 ->uploadOnly($uploadOnly)

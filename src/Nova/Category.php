@@ -7,6 +7,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Manogi\Tiptap\Tiptap;
 
 class Category extends Resource
 {
@@ -45,13 +46,15 @@ class Category extends Resource
         return [
 
             Text::make(__('nova-cms-portfolio::portfolio.title'), 'title')
-                ->rules('required')
                 ->translatable(),
 
             Text::make(__('nova-cms::pages.slug'), 'slug')
-                ->rules('required')
                 ->translatable()
                 ->help(__('nova-cms-portfolio::artists.slug_explanation')),
+
+            TipTap::make(__('nova-cms-portfolio::categories.description'), 'description')
+                ->translatable()
+                ->onlyOnForms(),
 
             Boolean::make(__('nova-cms-portfolio::categories.show_in_home_navi'), 'show_in_home_navi')
                 ->onlyOnForms(),

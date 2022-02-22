@@ -21,17 +21,21 @@ use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Manogi\Tiptap\Tiptap;
+use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 use Timothyasp\Color\Color;
 
 class Artist extends Resource
 {
     use TabsOnEdit;
+    use HasSortableRows;
 
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Artist::class;
 
     public static $title = 'name';
 
-    public static $perPageOptions = [100, 200];
+    public static $sortable = false;
+
+    public static $perPageOptions = [200, 400];
 
     public static $orderBy = [
         'name' => 'asc',

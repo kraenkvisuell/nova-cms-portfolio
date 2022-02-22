@@ -6,14 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
 
-class Artist extends Model
+class Artist extends Model implements Sortable
 {
     use HasFactory;
     use HasTranslations;
+    use SortableTrait;
 
     protected $guarded = [];
+
+    public $sortable = [
+        'order_column_name' => 'sort_order',
+    ];
 
     public function getTable()
     {

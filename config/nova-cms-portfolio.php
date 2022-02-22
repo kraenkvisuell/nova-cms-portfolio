@@ -9,6 +9,7 @@ return [
     'custom_works_label' => '',
     'custom_work_label' => '',
     'artists_have_custom_bg' => true,
+    'artists_are_sortable' => false,
     'media' => [
         'only_upload' => true,
     ],

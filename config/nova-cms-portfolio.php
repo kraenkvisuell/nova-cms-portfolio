@@ -10,6 +10,8 @@ return [
     'custom_work_label' => '',
     'artists_have_custom_bg' => true,
     'artists_are_sortable' => false,
+    'has_quick_upload' => true,
+    'max_thumbnails' => 3,
     'media' => [
         'only_upload' => true,
     ],

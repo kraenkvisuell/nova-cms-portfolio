@@ -59,7 +59,28 @@ class Work extends Resource
 
         return [
             MediaLibrary::make(__('nova-cms::content_blocks.file'), 'file')
-                ->uploadOnly($uploadOnly),
+                ->uploadOnly($uploadOnly)
+                ->onlyOnForms(),
+
+                Line::make('', function () {
+                    $html = '';
+
+                    if (nova_cms_mime($this->file) == 'video') {
+                        $html .= '<video
+                                autoplay muted loop playsinline
+                                class="w-auto h-12 mr-1 inline-block"
+                            >
+                                <source src="'.nova_cms_file($this->file).'" type="video/'.nova_cms_extension($this->file).'">
+                            </video>';
+                    } else {
+                        $html .= '<img 
+                                class="w-auto h-12 mr-1 inline-block"
+                                src="'.nova_cms_image($this->file, 'thumb').'" 
+                            />';
+                    }
+
+                    return $html;
+                })->asHtml(),
 
             Stack::make('Details', [
                 Line::make('', function () {

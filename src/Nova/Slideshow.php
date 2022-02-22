@@ -112,12 +112,12 @@ class Slideshow extends Resource
                 ->onlyOnForms(),
 
             Stack::make($workLabel, [
-                Line::make('', function () {
+                Text::make('', function () {
                     $html = '<a
                         href="/nova/resources/slideshows/'.$this->id.'"
-                        class=""
+                        class="block whitespace-normal"
                     >';
-                    foreach ($this->works->take(3) as $work) {
+                    foreach ($this->works->take(config('nova-cms-portfolio.max_thumbnails') ?: 3) as $work) {
                         if (nova_cms_mime($work->file) == 'video') {
                             $html .= '<video
                                 autoplay muted loop playsinline
@@ -226,11 +226,15 @@ class Slideshow extends Resource
 
     public function cards(Request $request)
     {
-        return [
-            (new QuickWorksCard)->addMeta($request->resourceId)->onlyOnDetail(),
-            (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail(),
-            // (new EditSlideshowCard)->addMeta($request->resourceId)->onlyOnDetail(),
-        ];
+        $cards = [];
+
+        if (config('nova-cms-portfolio.has_quick_upload')) {
+            $cards[] = (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail();
+        }
+
+        $cards[] = (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail();
+
+        return $cards;
     }
 
     public function actions(Request $request)

@@ -89,12 +89,16 @@ class Artist extends Model
         }
     }
 
-    public function categoriesForDiscipline($disciplineId)
+    public function categoriesForDiscipline($disciplineId = null)
     {
-        $slidewhows = $this->slideshows;
+        if (! $disciplineId) {
+            $disciplineId = Discipline::first()?->id;
+        }
 
+        $slideshows = $this->slideshows;
+        ray($this->id);
         if ($disciplineId) {
-            $slidewhows = $slidewhows->filter(function ($slideshow) use ($disciplineId) {
+            $slideshows = $slideshows->filter(function ($slideshow) use ($disciplineId) {
                 return ! $slideshow->disciplines
                     || $slideshow->disciplines->pluck('id')->contains($disciplineId);
             });
@@ -102,7 +106,7 @@ class Artist extends Model
 
         $categories = collect([]);
 
-        foreach ($slidewhows as $slidewhow) {
+        foreach ($slideshows as $slidewhow) {
             foreach ($slidewhow->categories as $category) {
                 $categories->push($category);
             }

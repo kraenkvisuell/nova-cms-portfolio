@@ -4,6 +4,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kraenkvisuell\NovaCms\Facades\ContentParser;
 use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
 use Spatie\EloquentSortable\Sortable;
@@ -195,5 +196,18 @@ class Artist extends Model implements Sortable
         })->limit(2)->get();
 
         return $works;
+    }
+
+    public function socialLinks()
+    {
+        $socialLinks = collect([]);
+
+        $this->social_links->each(function ($item) use (&$socialLinks) {
+            $socialLinks->push(
+                ContentParser::produceAttributes($item->getAttributes())
+            );
+        });
+
+        return $socialLinks;
     }
 }

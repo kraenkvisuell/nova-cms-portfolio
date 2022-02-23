@@ -82,7 +82,8 @@ class Artist extends Resource
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->onlyOnForms(),
 
-            Boolean::make(__('Veröffentlicht'), 'is_published'),
+            Boolean::make(__('Veröffentlicht'), 'is_published')
+                ->hideFromDetail(),
 
             BelongsToManyField::make(__('nova-cms-portfolio::disciplines.disciplines'), 'disciplines', Discipline::class)
                 ->optionsLabel('title')
@@ -102,7 +103,8 @@ class Artist extends Resource
                     Code::make(__('nova-cms::content_blocks.svg_tag'), 'svg_tag')->language('xml'),
                 ])
                 ->button(__('nova-cms::content_blocks.add_social_link'))
-                ->stacked(),
+                ->stacked()
+                ->onlyOnForms(),
         ];
 
         if (config('nova-cms-portfolio.artists_have_custom_bg')) {
@@ -133,7 +135,8 @@ class Artist extends Resource
                 ->useAsTitle(['testimonial' => 'client'])
                 ->button('Testimonial hinzufügen')
                 ->collapsed()
-                ->stacked(),
+                ->stacked()
+                ->onlyOnForms(),
         ];
 
         $tabs[__('nova-cms::seo.seo')] = Seo::make();

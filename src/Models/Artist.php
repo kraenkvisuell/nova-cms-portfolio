@@ -37,6 +37,7 @@ class Artist extends Model implements Sortable
     protected $casts = [
         'robots' => 'array',
         'testimonials' => BlocksCast::class,
+        'social_links' => BlocksCast::class,
     ];
 
     protected static function newFactory()
@@ -103,7 +104,7 @@ class Artist extends Model implements Sortable
         }
 
         $slideshows = $this->slideshows;
-        ray($this->id);
+
         if ($disciplineId) {
             $slideshows = $slideshows->filter(function ($slideshow) use ($disciplineId) {
                 return ! $slideshow->disciplines

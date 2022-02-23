@@ -14,6 +14,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
 use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Slug;
@@ -84,8 +85,24 @@ class Artist extends Resource
             Boolean::make(__('Veröffentlicht'), 'is_published'),
 
             BelongsToManyField::make(__('nova-cms-portfolio::disciplines.disciplines'), 'disciplines', Discipline::class)
-            ->optionsLabel('title')
-            ->hideFromDetail(),
+                ->optionsLabel('title')
+                ->hideFromDetail(),
+
+            Blocks::make(__('nova-cms::content_blocks.social_links'), 'social_links')
+                ->addLayout(__('nova-cms::content_blocks.link'), 'link', [
+                    Text::make(__('nova-cms::content_blocks.link_title'), 'link_title')->translatable(),
+
+                    Text::make(__('nova-cms::content_blocks.link_url'), 'link_url')->translatable(),
+
+                    Text::make(__('nova-cms::content_blocks.id'), 'slug'),
+
+                    MediaLibrary::make(__('nova-cms::content_blocks.link_icon'), 'link_icon')
+                        ->types(['Image']),
+
+                    Code::make(__('nova-cms::content_blocks.svg_tag'), 'svg_tag')->language('xml'),
+                ])
+                ->button(__('nova-cms::content_blocks.add_social_link'))
+                ->stacked(),
         ];
 
         if (config('nova-cms-portfolio.artists_have_custom_bg')) {

@@ -10,7 +10,7 @@ class ToggleShowInOverview extends Action
 {
     public function name()
     {
-        return __('nova-cms-portfolio::works.toggle_show_in_overview');
+        return __('AN/AUS "In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist"');
     }
 
     public function handle(ActionFields $fields, Collection $models)

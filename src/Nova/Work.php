@@ -116,7 +116,7 @@ class Work extends Resource
                 Line::make('', function () {
                     if ($this->show_in_overview) {
                         return '<span class="text-xs font-bold uppercase">'
-                        .__('nova-cms-portfolio::works.show_in_overview')
+                        .__('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist')
                         .'</span>';
                     }
 

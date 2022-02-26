@@ -2,10 +2,10 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova\Actions;
 
-use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
-use Laravel\Nova\Fields\ActionFields;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
+use Laravel\Nova\Actions\Action;
+use Laravel\Nova\Fields\ActionFields;
 
 class ToggleShowInOverviewCategory extends Action
 {
@@ -19,7 +19,8 @@ class ToggleShowInOverviewCategory extends Action
     public function name()
     {
         $category = Category::find($this->categoryId);
-        return __('nova-cms-portfolio::works.toggle_show_in_overview_category').': '.$category->title;
+
+        return __('AN/AUS "In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist"').': '.$category->title;
     }
 
     public function handle(ActionFields $fields, Collection $models)
@@ -27,11 +28,11 @@ class ToggleShowInOverviewCategory extends Action
         $work = $models->first();
         $categories = $work->show_in_overview_category;
 
-        if (!$categories) {
+        if (! $categories) {
             $categories = [];
         }
 
-        if (!isset($categories[$this->categoryId])) {
+        if (! isset($categories[$this->categoryId])) {
             $categories[$this->categoryId] = true;
         } else {
             $categories[$this->categoryId] = ! $categories[$this->categoryId];

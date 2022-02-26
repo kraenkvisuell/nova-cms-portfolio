@@ -20,7 +20,7 @@ class ToggleRepresentsArtistInCategory extends Action
     {
         $category = Category::find($this->categoryId);
 
-        return __('nova-cms-portfolio::works.toggle_represents_artist_in_discipline_category').': '.$category->title;
+        return __('AN/AUS "repräsentiert Künstler in Kategorie"').': '.$category->title;
     }
 
     public function handle(ActionFields $fields, Collection $models)

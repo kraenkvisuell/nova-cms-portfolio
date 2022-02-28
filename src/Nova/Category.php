@@ -3,6 +3,7 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
+use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Text;
@@ -43,6 +44,8 @@ class Category extends Resource
 
     public function fields(Request $request)
     {
+        $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
+
         return [
 
             Text::make(__('nova-cms-portfolio::portfolio.title'), 'title')
@@ -51,6 +54,9 @@ class Category extends Resource
             Text::make(__('nova-cms::pages.slug'), 'slug')
                 ->translatable()
                 ->help(__('nova-cms-portfolio::artists.slug_explanation')),
+
+            MediaLibrary::make(__('nova-cms-portfolio::categories.main_image'), 'main_image')
+                ->uploadOnly($uploadOnly),
 
             TipTap::make(__('nova-cms-portfolio::categories.description'), 'description')
                 ->translatable()

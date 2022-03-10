@@ -40,6 +40,7 @@ class Category extends Model
 
     public function slideshows()
     {
-        return $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow');
+        return $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
+            ->withPivot(['sort_order']);
     }
 }

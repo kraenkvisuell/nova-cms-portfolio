@@ -175,6 +175,13 @@ class Work extends Resource
                 ->onlyOnForms(),
 
             Text::make(__('nova-cms::pages.title'), 'title')
+                ->translatable()
+                ->nullable()
+                ->onlyOnForms(),
+
+            Textarea::make(__('nova-cms-portfolio::portfolio.description'), 'description')
+                ->translatable()
+                ->nullable()
                 ->onlyOnForms(),
 
             Boolean::make(__('nova-cms-portfolio::works.show_in_overview'), 'show_in_overview')

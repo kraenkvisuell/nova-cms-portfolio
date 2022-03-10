@@ -2,11 +2,11 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\EloquentSortable\Sortable;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Translatable\HasTranslations;
 
 class Work extends Model implements Sortable
 {
@@ -34,6 +34,7 @@ class Work extends Model implements Sortable
     public $translatable = [
         'title',
         'slug',
+        'description',
     ];
 
     public function slideshow()
@@ -71,7 +72,7 @@ class Work extends Model implements Sortable
     {
         $slugs = [];
 
-        if (!is_array($this->show_in_overview_category) || !$this->show_in_overview_category) {
+        if (! is_array($this->show_in_overview_category) || ! $this->show_in_overview_category) {
             return [];
         }
 
@@ -88,7 +89,7 @@ class Work extends Model implements Sortable
     {
         $slugs = [];
 
-        if (!is_array($this->represents_artist_in_discipline_category) || !$this->represents_artist_in_discipline_category) {
+        if (! is_array($this->represents_artist_in_discipline_category) || ! $this->represents_artist_in_discipline_category) {
             return [];
         }
 

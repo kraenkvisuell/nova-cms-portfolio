@@ -62,7 +62,9 @@ class Slideshow extends Model implements Sortable
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix').'category_slideshow');
+        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
+            ->withPivot(['sort_order'])
+            ->using(CategorySlideshow::class);
     }
 
     public function getDiscipline()

@@ -9,6 +9,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow as SlideshowModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Work as WorkModel;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\CategorySlideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Slideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Work;
@@ -39,6 +40,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
             Work::class,
             Artist::class,
             Category::class,
+            CategorySlideshow::class,
             Slideshow::class,
             Discipline::class,
         ]);

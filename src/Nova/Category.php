@@ -4,8 +4,10 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Manogi\Tiptap\Tiptap;
@@ -46,6 +48,12 @@ class Category extends Resource
     {
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
 
+        $slideshowLabel = __(config('nova-cms-portfolio.custom_slideshows_label'))
+                       ?: __('nova-cms-portfolio::slideshows.slideshows');
+
+        $slideshowSingularLabel = __(config('nova-cms-portfolio.custom_slideshow_label'))
+        ?: __('nova-cms-portfolio::slideshows.slideshow');
+
         return [
 
             Text::make(__('nova-cms-portfolio::portfolio.title'), 'title')
@@ -53,10 +61,26 @@ class Category extends Resource
 
             Text::make(__('nova-cms::pages.slug'), 'slug')
                 ->translatable()
-                ->help(__('nova-cms-portfolio::artists.slug_explanation')),
+                ->help(__('nova-cms-portfolio::artists.slug_explanation'))
+                ->hideFromDetail(),
 
             MediaLibrary::make(__('nova-cms-portfolio::categories.main_image'), 'main_image')
-                ->uploadOnly($uploadOnly),
+                ->uploadOnly($uploadOnly)
+                ->hideFromDetail(),
+
+            Stack::make('', [
+                Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
+                    return '<button
+                        onclick="window.location.href=\'/nova/resources/categories/'.$this->id.'\'"
+                        class="btn btn-xs 
+                        '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
+                        "
+                        >'
+                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        .'</button>';
+                })->asHtml(),
+            ])
+            ->onlyOnIndex(),
 
             TipTap::make(__('nova-cms-portfolio::categories.description'), 'description')
                 ->translatable()
@@ -67,6 +91,8 @@ class Category extends Resource
 
             Boolean::make(__('nova-cms-portfolio::categories.show_in_main_menu'), 'show_in_main_menu')
                 ->onlyOnForms(),
+
+            BelongsToMany::make($slideshowLabel, 'slideshows', CategorySlideshow::class),
         ];
     }
 

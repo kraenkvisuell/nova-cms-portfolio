@@ -184,11 +184,11 @@ class Work extends Resource
                 ->nullable()
                 ->onlyOnForms(),
 
-            Boolean::make(__('nova-cms-portfolio::works.show_in_overview'), 'show_in_overview')
+            Boolean::make(__('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist'), 'show_in_overview')
                 ->onlyOnForms(),
 
             BooleanGroup::make(
-                __('nova-cms-portfolio::works.show_in_overview_category'),
+                __('In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist'),
                 'show_in_overview_category'
             )
                 ->options(function () use ($request) {
@@ -229,7 +229,7 @@ class Work extends Resource
                 ->required(),
 
             BooleanGroup::make(
-                __('nova-cms-portfolio::works.represents_artist_in_discipline_category'),
+                __('In allgemeiner Kategorie-Übersicht zeigen'),
                 'represents_artist_in_discipline_category'
             )
                 ->options(function () use ($request) {

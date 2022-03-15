@@ -14,7 +14,7 @@ return [
     'title_position' => 'Position des Titels',
     'title' => 'Titel',
     'toggle_artist_portfolio_image' => 'AN/AUS "ist Künstler-Portfolio-Bild"',
-    'toggle_represents_artist_in_discipline_category' => 'AN/AUS "repräsentiert Künstler in Kategorie"',
+    'toggle_represents_artist_in_discipline_category' => 'AN/AUS "In allgemeiner Kategorie-Übersicht zeigen"',
     'toggle_represents_in_discipline' => 'AN/AUS "In allgemeiner Kategorie-Übersicht zeigen"',
     'toggle_show_in_overview_category' => 'AN/AUS "In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist"',
     'toggle_show_in_overview' => 'AN/AUS "In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist"',

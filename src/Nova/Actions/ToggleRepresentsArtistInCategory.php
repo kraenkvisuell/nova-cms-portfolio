@@ -20,7 +20,7 @@ class ToggleRepresentsArtistInCategory extends Action
     {
         $category = Category::find($this->categoryId);
 
-        return __('AN/AUS "repräsentiert Künstler in Kategorie"').': '.$category->title;
+        return __('AN/AUS: In allgemeiner Kategorie-Übersicht zeigen').': '.$category->title;
     }
 
     public function handle(ActionFields $fields, Collection $models)

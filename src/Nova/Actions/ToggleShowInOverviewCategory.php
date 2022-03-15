@@ -20,7 +20,7 @@ class ToggleShowInOverviewCategory extends Action
     {
         $category = Category::find($this->categoryId);
 
-        return __('AN/AUS "In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist"').': '.$category->title;
+        return __('AN/AUS: In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist').': '.$category->title;
     }
 
     public function handle(ActionFields $fields, Collection $models)

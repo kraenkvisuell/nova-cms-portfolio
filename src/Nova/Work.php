@@ -138,7 +138,7 @@ class Work extends Resource
                 Line::make('', function () {
                     if (is_array($this->representationCategorySlugs()) && $this->representationCategorySlugs()) {
                         return '<span class="text-xs uppercase">'
-                        .__('nova-cms-portfolio::works.representation_categories')
+                        .__('In allgemeiner Kategorie-Übersicht zeigen')
                         .': <span class="font-bold">'
                         .implode(', ', $this->representationCategorySlugs())
                         .'</span></span>';
@@ -262,17 +262,17 @@ class Work extends Resource
     public function actions(Request $request)
     {
         $actions = [
-            ToggleShowInOverview::make()
-                ->onlyOnTableRow()
-                ->withoutConfirmation(),
-
             ToggleArtistPortfolioImage::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
 
-            ToggleArtistDisciplineImage::make()
+            ToggleShowInOverview::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
+
+            // ToggleArtistDisciplineImage::make()
+            //     ->onlyOnTableRow()
+            //     ->withoutConfirmation(),
         ];
 
         if ($request->viaResourceId) {

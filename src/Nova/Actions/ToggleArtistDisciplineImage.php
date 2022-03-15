@@ -2,8 +2,8 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova\Actions;
 
-use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 
 class ToggleArtistDisciplineImage extends Action
@@ -16,7 +16,7 @@ class ToggleArtistDisciplineImage extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         $work = $models->first();
-        $work->update(['is_artist_discipline_image' => !$work->is_artist_discipline_image]);
+        $work->update(['is_artist_discipline_image' => ! $work->is_artist_discipline_image]);
     }
 
     public function fields()

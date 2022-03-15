@@ -10,7 +10,6 @@ return [
     'representation_categories' => 'Kat. (Repräsentiert...)',
     'represents_artist_in_discipline_category' => 'In allgemeiner Kategorie-Übersicht zeigen',
     'show_in_overview_category' => 'In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist',
-    'show_in_overview_categoryy' => 'In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist',
     'show_in_overview' => 'In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist',
     'title_position' => 'Position des Titels',
     'title' => 'Titel',

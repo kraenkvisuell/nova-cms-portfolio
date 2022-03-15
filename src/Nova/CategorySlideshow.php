@@ -3,6 +3,7 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -64,6 +65,18 @@ class CategorySlideshow extends Resource
                     }
 
                     return $html;
+                })->asHtml(),
+            ])
+            ->onlyOnIndex(),
+
+            Stack::make('', [
+                Line::make('', function () {
+                    return '<button
+                        onclick="window.open(\'/nova/resources/slideshows/'.$this->id.'\', \'_blank\');"
+                        class="
+                            btn btn-xs btn-primary
+                        "
+                        >Zur Bildstrecke</button>';
                 })->asHtml(),
             ])
             ->onlyOnIndex(),

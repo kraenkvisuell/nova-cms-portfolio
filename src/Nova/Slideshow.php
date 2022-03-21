@@ -85,8 +85,6 @@ class Slideshow extends Resource
 
                     $html .= '<div class="whitespace-normal mb-1">';
                     foreach ($this->categories as $n => $category) {
-                        ray($category->title);
-
                         $html .= '<div class="inline-block mr-1 leading-tight text-80 uppercase text-xs border border-80 px-1  pt-1 pb-px">'.$category->title.'</div>';
                     }
                     $html .= '</div>';

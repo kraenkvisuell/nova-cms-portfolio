@@ -210,4 +210,17 @@ class Artist extends Model implements Sortable
 
         return $socialLinks;
     }
+
+    public function testimonials()
+    {
+        $testimonials = collect([]);
+
+        $this->testimonials->each(function ($item) use (&$testimonials) {
+            $testimonials->push(
+                ContentParser::produceAttributes($item->getAttributes())
+            );
+        });
+
+        return $testimonials;
+    }
 }

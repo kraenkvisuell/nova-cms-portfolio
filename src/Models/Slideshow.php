@@ -57,7 +57,7 @@ class Slideshow extends Model implements Sortable
 
     public function works()
     {
-        return $this->hasMany(Work::class);
+        return $this->hasMany(Work::class)->orderBy('sort_order');
     }
 
     public function categories()

@@ -33,6 +33,10 @@ class Category extends Model
         'meta_keywords',
     ];
 
+    protected $casts = [
+        'robots' => 'array',
+    ];
+
     public function getTitleForDropdownAttribute()
     {
         return $this->title;

@@ -2,18 +2,23 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
-use Illuminate\Http\Request;
-use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Eminiarts\Tabs\Tabs;
 use Manogi\Tiptap\Tiptap;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Text;
+use Eminiarts\Tabs\TabsOnEdit;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Boolean;
+use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 
 class Category extends Resource
 {
+    use TabsOnEdit;
+    
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Category::class;
 
     // public static $sortable = false;
@@ -54,8 +59,9 @@ class Category extends Resource
         $slideshowSingularLabel = __(config('nova-cms-portfolio.custom_slideshow_label'))
         ?: __('nova-cms-portfolio::slideshows.slideshow');
 
-        return [
+        $tabs = [];
 
+        $tabs[__('nova-cms::settings.settings')] = [
             Text::make(__('nova-cms-portfolio::portfolio.title'), 'title')
                 ->translatable(),
 
@@ -64,9 +70,28 @@ class Category extends Resource
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->hideFromDetail(),
 
+            
+            Boolean::make(__('nova-cms-portfolio::categories.show_in_home_navi'), 'show_in_home_navi')
+                ->onlyOnForms(),
+
+            Boolean::make(__('nova-cms-portfolio::categories.show_in_main_menu'), 'show_in_main_menu')
+                ->onlyOnForms(),
+        ];
+
+        $tabs[__('nova-cms::pages.content')] = [
             MediaLibrary::make(__('nova-cms-portfolio::categories.main_image'), 'main_image')
                 ->uploadOnly($uploadOnly)
                 ->hideFromDetail(),
+
+            TipTap::make(__('nova-cms-portfolio::categories.description'), 'description')
+                ->translatable()
+                ->onlyOnForms(),
+        ];
+
+        $tabs[__('nova-cms::seo.seo')] = Seo::make();
+
+        return [
+            (new Tabs(static::singularLabel(), $tabs))->withToolbar(),
 
             Stack::make('', [
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
@@ -81,16 +106,6 @@ class Category extends Resource
                 })->asHtml(),
             ])
             ->onlyOnIndex(),
-
-            TipTap::make(__('nova-cms-portfolio::categories.description'), 'description')
-                ->translatable()
-                ->onlyOnForms(),
-
-            Boolean::make(__('nova-cms-portfolio::categories.show_in_home_navi'), 'show_in_home_navi')
-                ->onlyOnForms(),
-
-            Boolean::make(__('nova-cms-portfolio::categories.show_in_main_menu'), 'show_in_main_menu')
-                ->onlyOnForms(),
 
             BelongsToMany::make($slideshowLabel, 'slideshows', CategorySlideshow::class),
         ];

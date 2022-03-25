@@ -178,16 +178,25 @@ class Slideshow extends Resource
             Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
                 ->onlyOnForms(),
 
-            Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview')), 'is_visible_in_overview')
-                ->onlyOnForms(),
+        ];
 
-            Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.starts_right')), 'starts_right')
-                ->onlyOnForms(),
+        if (config('nova-cms-portfolio.has_visible_in_artist_overview')) {
+            $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview')), 'is_visible_in_overview')
+            ->onlyOnForms();
+        }
 
-            Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.show_title')), 'show_title')
-                ->onlyOnForms(),
+        if (config('nova-cms-portfolio.has_starts_right')) {
+            $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.starts_right')), 'starts_right')
+                ->onlyOnForms();
+        }
 
-            Select::make(__('nova-cms-portfolio::works.title_position'), 'title_position')
+        if (config('nova-cms-portfolio.has_show_title')) {
+            $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.show_title')), 'show_title')
+                ->onlyOnForms();
+        }
+
+        if (config('nova-cms-portfolio.has_title_position')) {
+            $fields[] = Select::make(__('nova-cms-portfolio::works.title_position'), 'title_position')
                 ->options([
                     'bottom_left' => 'bottom left',
                     'bottom_right' => 'bottom right',
@@ -196,16 +205,18 @@ class Slideshow extends Resource
                 ])
                 ->default('bottom_left')
                 ->required()
-                ->onlyOnForms(),
+                ->onlyOnForms();
+        }
 
-            Select::make(__('nova-cms-portfolio::slideshows.break_after_in_overviews'), 'break_after_in_overviews')
+        if (config('nova-cms-portfolio.has_break_after_in_overviews')) {
+            $fields[] = Select::make(__('nova-cms-portfolio::slideshows.break_after_in_overviews'), 'break_after_in_overviews')
                 ->options(config('nova-cms-portfolio.break_sizes'))
                 ->default('none')
                 ->required()
-                ->onlyOnForms(),
+                ->onlyOnForms();
+        }
 
-            HasMany::make($workLabel, 'works', Work::class),
-        ];
+        $fields[] = HasMany::make($workLabel, 'works', Work::class);
 
         $artist = $this->artist;
         if (! $artist) {

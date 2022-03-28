@@ -111,11 +111,15 @@ class Slideshow extends Resource
 
             Stack::make($workLabel, [
                 Text::make('', function () {
-                    $html = '<a
-                        href="/nova/resources/slideshows/'.$this->id.'"
+                    $html = '<div
                         class="block whitespace-normal"
                     >';
                     foreach ($this->works->take(config('nova-cms-portfolio.max_thumbnails') ?: 3) as $work) {
+                        $html .= '<a 
+                            href="'.nova_cms_file($work->file).'"
+                            download
+                        >';
+
                         if (nova_cms_mime($work->file) == 'video') {
                             $html .= '<video
                                 autoplay muted loop playsinline
@@ -129,8 +133,10 @@ class Slideshow extends Resource
                                 src="'.nova_cms_image($work->file, 'thumb').'" 
                             />';
                         }
+
+                        $html .= '</a>';
                     }
-                    $html .= '</a>';
+                    $html .= '</div>';
 
                     return $html;
                 })->asHtml(),

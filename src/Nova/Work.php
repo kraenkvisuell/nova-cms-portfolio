@@ -57,60 +57,65 @@ class Work extends Resource
     {
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
 
-        return [
+        $fields = [
             MediaLibrary::make(__('nova-cms::content_blocks.file'), 'file')
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms(),
 
-                Line::make('', function () {
-                    $html = '';
+            Line::make('', function () {
+                $html = '<a 
+                    href="'.nova_cms_file($this->file).'"
+                    download
+                >';
 
-                    if (nova_cms_mime($this->file) == 'video') {
-                        $html .= '<video
-                                autoplay muted loop playsinline
-                                class="w-auto h-12 mr-1 inline-block"
-                            >
-                                <source src="'.nova_cms_file($this->file).'" type="video/'.nova_cms_extension($this->file).'">
-                            </video>';
-                    } else {
-                        $html .= '<img 
-                                class="w-auto h-12 mr-1 inline-block"
-                                src="'.nova_cms_image($this->file, 'thumb').'" 
-                            />';
-                    }
+                if (nova_cms_mime($this->file) == 'video') {
+                    $html .= '<video
+                            autoplay muted loop playsinline
+                            class="w-auto h-12 mr-1 inline-block"
+                        >
+                            <source src="'.nova_cms_file($this->file).'" type="video/'.nova_cms_extension($this->file).'">
+                        </video>';
+                } else {
+                    $html .= '<img 
+                            class="w-auto h-12 mr-1 inline-block"
+                            src="'.nova_cms_image($this->file, 'thumb').'" 
+                        />';
+                }
 
-                    return $html;
-                })->asHtml(),
+                $html .= '</a>';
+
+                return $html;
+            })->asHtml(),
 
             Stack::make('Details', [
                 Line::make('', function () {
-                    return '<div class="whitespace-normal">'.$this->title.'</div>';
+                    return '<div class="text-xs whitespace-normal">'.$this->title.'</div>';
                 })->asHtml(),
             ]),
 
-            Stack::make('Display', [
-                Line::make('', function () {
-                    $html = '';
-                    if ($this->width_in_overview) {
-                        $html .= '<div class="text-xs">'
-                        .__('nova-cms-portfolio::works.width_in_overview').':<br>'
-                        .'<span class="font-bold">'
-                        .__('nova-cms-portfolio::width_in_overview.'.$this->width_in_overview)
-                        .'</span>'
-                        .'</div>';
-                    }
-                    if ($this->width_in_frame) {
-                        $html .= '<div class="text-xs">'
-                        .__('nova-cms-portfolio::works.width_in_frame').':<br>'
-                        .'<span class="font-bold">'
-                        .__('nova-cms-portfolio::width_in_frame.'.$this->width_in_frame)
-                        .'</span>'
-                        .'</div>';
-                    }
+            // Stack::make('Display', [
+            //     Line::make('', function () {
+            //         $html = '';
+            //         if ($this->width_in_overview) {
+            //             $html .= '<div class="text-xs">'
+            //             .__('nova-cms-portfolio::works.width_in_overview').':<br>'
+            //             .'<span class="font-bold">'
+            //             .__('nova-cms-portfolio::width_in_overview.'.$this->width_in_overview)
+            //             .'</span>'
+            //             .'</div>';
+            //         }
+            //         if ($this->width_in_frame) {
+            //             $html .= '<div class="text-xs">'
+            //             .__('nova-cms-portfolio::works.width_in_frame').':<br>'
+            //             .'<span class="font-bold">'
+            //             .__('nova-cms-portfolio::width_in_frame.'.$this->width_in_frame)
+            //             .'</span>'
+            //             .'</div>';
+            //         }
 
-                    return $html;
-                })->asHtml(),
-            ]),
+            //         return $html;
+            //     })->asHtml(),
+            // ]),
 
             Stack::make('Settings', [
                 Line::make('', function () {
@@ -247,6 +252,8 @@ class Work extends Resource
                 })
                 ->onlyOnForms(),
         ];
+
+        return $fields;
     }
 
     public static function redirectAfterUpdate(NovaRequest $request, $resource)

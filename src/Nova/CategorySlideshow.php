@@ -56,6 +56,11 @@ class CategorySlideshow extends Resource
                         })
                         as $work
                     ) {
+                        $html .= '<a 
+                            href="'.nova_cms_file($work->file).'"
+                            download
+                        >';
+
                         if (nova_cms_mime($work->file) == 'video') {
                             $html .= '<video
                                 autoplay muted loop playsinline
@@ -69,6 +74,8 @@ class CategorySlideshow extends Resource
                                 src="'.nova_cms_image($work->file, 'thumb').'" 
                             />';
                         }
+
+                        $html .= '</a>';
                     }
 
                     return $html;

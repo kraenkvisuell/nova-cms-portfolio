@@ -40,15 +40,22 @@ class CategorySlideshow extends Resource
 
     public function fields(Request $request)
     {
+        ray($request->viaResourceId);
+
         $workLabel = __(config('nova-cms-portfolio.custom_works_label'))
                        ?: __('nova-cms-portfolio::works.works');
 
         $fields = [
 
             Stack::make($workLabel, [
-                Text::make('', function () {
+                Text::make('', function () use ($request) {
                     $html = '<p class="text-xs">'.$this->artist->name.' / '.$this->title.'</p>';
-                    foreach ($this->works->take(config('nova-cms-portfolio.max_thumbnails') ?: 3) as $work) {
+                    foreach (
+                        $this->works->filter(function ($work) use ($request) {
+                            return @$work->represents_artist_in_discipline_category['1_'.$request->viaResourceId];
+                        })
+                        as $work
+                    ) {
                         if (nova_cms_mime($work->file) == 'video') {
                             $html .= '<video
                                 autoplay muted loop playsinline

@@ -5,6 +5,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Kraenkvisuell\NovaCmsPortfolio\Console\DummyData;
+use Kraenkvisuell\NovaCmsPortfolio\Models\CategorySlideshow as CategorySlideshowModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow as SlideshowModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Work as WorkModel;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Artist;
@@ -13,6 +14,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\CategorySlideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Slideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Work;
+use Kraenkvisuell\NovaCmsPortfolio\Observers\CategorySlideshowObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\SlideshowObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\WorkObserver;
 use Laravel\Nova\Events\ServingNova;
@@ -62,6 +64,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
 
         WorkModel::observe(WorkObserver::class);
         SlideshowModel::observe(SlideshowObserver::class);
+        CategorySlideshowModel::observe(CategorySlideshowObserver::class);
     }
 
     public function register()

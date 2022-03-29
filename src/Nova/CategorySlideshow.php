@@ -40,8 +40,6 @@ class CategorySlideshow extends Resource
 
     public function fields(Request $request)
     {
-        ray($request->viaResourceId);
-
         $workLabel = __(config('nova-cms-portfolio.custom_works_label'))
                        ?: __('nova-cms-portfolio::works.works');
 

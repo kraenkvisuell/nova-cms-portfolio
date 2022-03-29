@@ -102,4 +102,15 @@ class Work extends Model implements Sortable
 
         return $slugs;
     }
+
+    public function actualPosition()
+    {
+        foreach ($this->slideshow->works as $index => $work) {
+            if ($work->id == $this->id) {
+                return $index + 1;
+            }
+        }
+
+        return 1;
+    }
 }

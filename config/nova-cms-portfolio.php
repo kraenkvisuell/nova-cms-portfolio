@@ -17,6 +17,9 @@ return [
     'has_title_position' => false,
     'has_break_after_in_overviews' => false,
     'max_thumbnails' => 3,
+    'artists_sortable_dropdown' => false,
+    'slideshows_sortable_dropdown' => false,
+    'works_sortable_dropdown' => false,
     'media' => [
         'only_upload' => true,
     ],

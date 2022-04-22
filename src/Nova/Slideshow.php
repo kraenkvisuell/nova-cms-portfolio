@@ -11,6 +11,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleVisibilityInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
 use Kraenkvisuell\NovaCmsPortfolio\QuickWorksCard;
 use Kraenkvisuell\NovaCmsPortfolio\SlideshowArtistCard;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
@@ -20,7 +21,6 @@ use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
-use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 use OwenMelbz\RadioField\RadioButton;
 
 class Slideshow extends Resource
@@ -38,6 +38,11 @@ class Slideshow extends Resource
     public static $displayInNavigation = false;
 
     public static $perPageViaRelationship = 1000;
+
+    public static function sortableHasDropdown()
+    {
+        return config('nova-cms-portfolio.slideshows_sortable_dropdown') ?: false;
+    }
 
     public static function label()
     {

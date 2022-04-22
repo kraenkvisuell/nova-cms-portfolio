@@ -3,17 +3,17 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
-use Manogi\Tiptap\Tiptap;
-use Laravel\Nova\Resource;
-use Timothyasp\Color\Color;
-use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\TabsOnEdit;
-use Laravel\Nova\Fields\Stack;
+use Illuminate\Http\Request;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use OptimistDigital\NovaSortable\Traits\HasSortableRows;
+use Laravel\Nova\Resource;
+use Manogi\Tiptap\Tiptap;
+use Timothyasp\Color\Color;
 
 class Discipline extends Resource
 {

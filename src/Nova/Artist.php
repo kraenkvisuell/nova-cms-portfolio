@@ -13,6 +13,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
 use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
@@ -22,7 +23,6 @@ use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Manogi\Tiptap\Tiptap;
-use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 use Timothyasp\Color\Color;
 
 class Artist extends Resource
@@ -38,13 +38,14 @@ class Artist extends Resource
 
     public static $perPageOptions = [200, 400];
 
-    public static $orderBy = [
-        'name' => 'asc',
-    ];
-
     public static $search = [
         'name', 'slug',
     ];
+
+    public static function sortableHasDropdown()
+    {
+        return config('nova-cms-portfolio.artists_sortable_dropdown') ?: false;
+    }
 
     public static function label()
     {

@@ -12,6 +12,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleRepresentsArtistInCategory;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverviewCategory;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\Line;
@@ -21,7 +22,6 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
-use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 class Work extends Resource
 {
@@ -42,6 +42,11 @@ class Work extends Resource
     public static $orderBy = [
         'sort_order' => 'asc',
     ];
+
+    public static function sortableHasDropdown()
+    {
+        return config('nova-cms-portfolio.works_sortable_dropdown') ?: false;
+    }
 
     public static function label()
     {

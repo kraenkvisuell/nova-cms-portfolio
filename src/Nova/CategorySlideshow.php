@@ -3,12 +3,12 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
+use KraenkVisuell\NovaSortable\Traits\HasSortableManyToManyRows;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
-use OptimistDigital\NovaSortable\Traits\HasSortableManyToManyRows;
 
 class CategorySlideshow extends Resource
 {

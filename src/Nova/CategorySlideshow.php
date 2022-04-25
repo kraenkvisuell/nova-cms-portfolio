@@ -26,6 +26,11 @@ class CategorySlideshow extends Resource
 
     public static $perPageViaRelationship = 1000;
 
+    public static function sortableHasDropdown()
+    {
+        return config('nova-cms-portfolio.slideshows_sortable_dropdown') ?: false;
+    }
+    
     public static function label()
     {
         return config('nova-cms-portfolio.custom_slideshows_label')

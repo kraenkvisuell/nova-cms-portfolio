@@ -21,7 +21,7 @@ return [
     'slideshows_sortable_dropdown' => false,
     'works_sortable_dropdown' => false,
     'media' => [
-        'only_upload' => true,
+        'upload_only' => true,
     ],
     'break_sizes' => [
         'large' => 'large',

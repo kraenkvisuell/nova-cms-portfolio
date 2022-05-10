@@ -41,6 +41,7 @@ class Discipline extends Model implements Sortable
         'description',
         'browser_title',
         'meta_description',
+        'meta_keywords',
     ];
 
     protected $casts = [

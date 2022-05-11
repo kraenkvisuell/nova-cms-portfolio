@@ -3,27 +3,28 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
-use Eminiarts\Tabs\TabsOnEdit;
-use Illuminate\Http\Request;
-use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
-use Kraenkvisuell\NovaCms\Tabs\Seo;
-use Kraenkvisuell\NovaCmsBlocks\Blocks;
-use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
-use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
-use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Code;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Slug;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Manogi\Tiptap\Tiptap;
 use Timothyasp\Color\Color;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Code;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Slug;
+use Laravel\Nova\Fields\Text;
+use Eminiarts\Tabs\TabsOnEdit;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Textarea;
+use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Illuminate\Support\Facades\Auth;
+use Kraenkvisuell\NovaCmsBlocks\Blocks;
+use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
+use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
+use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
 
 class Artist extends Resource
 {
@@ -57,6 +58,38 @@ class Artist extends Resource
     {
         return __(config('nova-cms-portfolio.custom_artist_label'))
         ?: ucfirst(__('nova-cms-portfolio::artists.artist'));
+    }
+
+    public function authorizedToView(Request $request)
+    {
+        if (Auth::user()->cms_role == 'artist') {
+            return Auth::user()->artist_id == $this->id;
+        }
+
+        return true;
+    }
+
+    public static function authorizedToCreate(Request $request)
+    {
+        return Auth::user()->cms_role != 'artist';
+    }
+
+    public function authorizedToDelete(Request $request)
+    {
+        if (Auth::user()->cms_role == 'artist') {
+            return Auth::user()->artist_id == $this->id;
+        }
+
+        return true;
+    }
+
+    public function authorizedToUpdate(Request $request)
+    {
+        if (Auth::user()->cms_role == 'artist') {
+            return Auth::user()->artist_id == $this->id;
+        }
+
+        return true;
     }
 
     public function fields(Request $request)
@@ -105,6 +138,13 @@ class Artist extends Resource
                 ])
                 ->button(__('nova-cms::content_blocks.add_social_link'))
                 ->stacked()
+                ->onlyOnForms(),
+
+            Text::make('E-Mail', 'email')
+                ->rules('nullable', 'email')
+                ->onlyOnForms(),
+
+            Boolean::make(__('nova-cms-portfolio::artists.can_login'), 'can_login')
                 ->onlyOnForms(),
         ];
 

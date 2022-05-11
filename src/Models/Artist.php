@@ -2,14 +2,15 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
+use Spatie\EloquentSortable\SortableTrait;
 use Kraenkvisuell\NovaCms\Facades\ContentParser;
 use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
-use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
-use Spatie\Translatable\HasTranslations;
 
 class Artist extends Model implements Sortable
 {
@@ -44,6 +45,11 @@ class Artist extends Model implements Sortable
     protected static function newFactory()
     {
         return ArtistFactory::new();
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
     }
 
     public function slideshows()

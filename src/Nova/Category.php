@@ -11,6 +11,7 @@ use Eminiarts\Tabs\TabsOnEdit;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Boolean;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
@@ -47,6 +48,11 @@ class Category extends Resource
     public static function singularLabel()
     {
         return ucfirst(__('nova-cms-portfolio::categories.category'));
+    }
+
+    public static function authorizedToViewAny(Request $request)
+    {
+        return Auth::user()->cms_role != 'artist';
     }
 
     public function fields(Request $request)

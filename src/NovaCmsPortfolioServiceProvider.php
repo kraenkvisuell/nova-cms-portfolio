@@ -2,23 +2,25 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
+use Laravel\Nova\Nova;
+use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Kraenkvisuell\NovaCmsPortfolio\Console\DummyData;
-use Kraenkvisuell\NovaCmsPortfolio\Models\CategorySlideshow as CategorySlideshowModel;
-use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow as SlideshowModel;
-use Kraenkvisuell\NovaCmsPortfolio\Models\Work as WorkModel;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Work;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\CategorySlideshow;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Slideshow;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Work;
-use Kraenkvisuell\NovaCmsPortfolio\Observers\CategorySlideshowObserver;
-use Kraenkvisuell\NovaCmsPortfolio\Observers\SlideshowObserver;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
+use Kraenkvisuell\NovaCmsPortfolio\Console\DummyData;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\CategorySlideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\WorkObserver;
-use Laravel\Nova\Events\ServingNova;
-use Laravel\Nova\Nova;
+use Kraenkvisuell\NovaCmsPortfolio\Models\Artist as ArtistModel;
+use Kraenkvisuell\NovaCmsPortfolio\Models\Work as WorkModel;
+use Kraenkvisuell\NovaCmsPortfolio\Observers\ArtistObserver;
+use Kraenkvisuell\NovaCmsPortfolio\Observers\SlideshowObserver;
+use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow as SlideshowModel;
+use Kraenkvisuell\NovaCmsPortfolio\Observers\CategorySlideshowObserver;
+use Kraenkvisuell\NovaCmsPortfolio\Models\CategorySlideshow as CategorySlideshowModel;
 
 class NovaCmsPortfolioServiceProvider extends ServiceProvider
 {
@@ -62,6 +64,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
             $this->routes();
         });
 
+        ArtistModel::observe(ArtistObserver::class);
         WorkModel::observe(WorkObserver::class);
         SlideshowModel::observe(SlideshowObserver::class);
         CategorySlideshowModel::observe(CategorySlideshowObserver::class);

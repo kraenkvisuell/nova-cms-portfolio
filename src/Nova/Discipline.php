@@ -3,17 +3,18 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
-use Eminiarts\Tabs\TabsOnEdit;
-use Illuminate\Http\Request;
-use Kraenkvisuell\NovaCms\Tabs\Seo;
-use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Resource;
 use Manogi\Tiptap\Tiptap;
+use Laravel\Nova\Resource;
 use Timothyasp\Color\Color;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Text;
+use Eminiarts\Tabs\TabsOnEdit;
+use Laravel\Nova\Fields\Stack;
+use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 
 class Discipline extends Resource
 {
@@ -39,6 +40,11 @@ class Discipline extends Resource
     public static function singularLabel()
     {
         return ucfirst(__('nova-cms-portfolio::disciplines.discipline'));
+    }
+
+    public static function authorizedToViewAny(Request $request)
+    {
+        return Auth::user()->cms_role != 'artist';
     }
 
     public function fields(Request $request)

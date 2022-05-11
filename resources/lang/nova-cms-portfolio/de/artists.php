@@ -3,6 +3,7 @@
 return [
     'artist' => 'Künstler',
     'artists' => 'Künstler',
+    'can_login' => 'Hat CMS-Zugriff',
     'back_to_wildcard' => 'zurück zu :artist',
     'description' => 'Beschreibung/Vita/etc.',
     'portfolio_image' => 'Portfolio-Bild',

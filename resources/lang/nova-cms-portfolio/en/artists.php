@@ -8,6 +8,7 @@ return [
     'description' => 'description/CV/etc.',
     'portfolio_image' => 'portfolio image',
     'portrait_image' => 'portrait image',
+    'sedcard_pdf' => 'Sedcard PDF',
     'slug_explanation' => 'is used in the URL',
     'title' => 'name',
 ];

@@ -1,17 +1,18 @@
 <?php
-
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 
 class Work extends Model implements Sortable
 {
     use SortableTrait;
     use HasTranslations;
+    use HasTags;
 
     public $sortable = [
         'order_column_name' => 'sort_order',
@@ -28,7 +29,7 @@ class Work extends Model implements Sortable
 
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix').'works';
+        return config('nova-cms-portfolio.db_prefix') . 'works';
     }
 
     public $translatable = [
@@ -51,7 +52,7 @@ class Work extends Model implements Sortable
     {
         $defaultRatio = (9 / 16) * 100;
 
-        if (! $this->embed_code_ratio) {
+        if (!$this->embed_code_ratio) {
             return $defaultRatio;
         }
 
@@ -72,7 +73,7 @@ class Work extends Model implements Sortable
     {
         $slugs = [];
 
-        if (! is_array($this->show_in_overview_category) || ! $this->show_in_overview_category) {
+        if (!is_array($this->show_in_overview_category) || !$this->show_in_overview_category) {
             return [];
         }
 
@@ -89,7 +90,7 @@ class Work extends Model implements Sortable
     {
         $slugs = [];
 
-        if (! is_array($this->represents_artist_in_discipline_category) || ! $this->represents_artist_in_discipline_category) {
+        if (!is_array($this->represents_artist_in_discipline_category) || !$this->represents_artist_in_discipline_category) {
             return [];
         }
 

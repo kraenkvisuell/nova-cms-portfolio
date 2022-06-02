@@ -1,25 +1,24 @@
 <?php
-
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
-use Manogi\Tiptap\Tiptap;
-use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\TabsOnEdit;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Fields\Boolean;
-use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Kraenkvisuell\NovaCms\Tabs\Seo;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Manogi\Tiptap\Tiptap;
 
 class Category extends Resource
 {
     use TabsOnEdit;
-    
+
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Category::class;
 
     // public static $sortable = false;
@@ -27,7 +26,7 @@ class Category extends Resource
     public static function orderBy()
     {
         return [
-            'title->'.app()->getLocale() => 'asc',
+            'title->' . app()->getLocale() => 'asc',
         ];
     }
 
@@ -76,7 +75,6 @@ class Category extends Resource
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->hideFromDetail(),
 
-            
             Boolean::make(__('nova-cms-portfolio::categories.show_in_home_navi'), 'show_in_home_navi')
                 ->onlyOnForms(),
 
@@ -102,13 +100,13 @@ class Category extends Resource
             Stack::make('', [
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                     return '<button
-                        onclick="window.location.href=\'/nova/resources/categories/'.$this->id.'\'"
+                        onclick="window.location.href=\'/nova/resources/categories/' . $this->id . '\'"
                         class="btn btn-xs 
-                        '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
+                        ' . ($this->slideshows->count() ? 'btn-primary' : 'btn-danger') . '
                         "
                         >'
-                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
-                        .'</button>';
+                        . $this->slideshows->count() . ' ' . ($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        . '</button>';
                 })->asHtml(),
             ])
             ->onlyOnIndex(),

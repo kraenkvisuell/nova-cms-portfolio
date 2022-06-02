@@ -21,6 +21,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
+use Spatie\TagsField\Tags;
 
 class Work extends Resource
 {
@@ -194,6 +195,9 @@ class Work extends Resource
             Textarea::make(__('nova-cms-portfolio::portfolio.description'), 'description')
                 ->translatable()
                 ->nullable()
+                ->onlyOnForms(),
+
+            Tags::make('Tags')
                 ->onlyOnForms(),
 
             Boolean::make(__('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist'), 'show_in_overview')

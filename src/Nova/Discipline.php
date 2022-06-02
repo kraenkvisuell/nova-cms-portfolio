@@ -1,20 +1,19 @@
 <?php
-
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
-use Manogi\Tiptap\Tiptap;
-use Laravel\Nova\Resource;
-use Timothyasp\Color\Color;
-use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Line;
-use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\TabsOnEdit;
-use Laravel\Nova\Fields\Stack;
-use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Kraenkvisuell\NovaCms\Tabs\Seo;
 use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
+use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Resource;
+use Manogi\Tiptap\Tiptap;
+use Timothyasp\Color\Color;
 
 class Discipline extends Resource
 {
@@ -79,7 +78,7 @@ class Discipline extends Resource
             Stack::make('Details', [
                 Line::make('', 'title')->asBase(),
                 Line::make('', function () {
-                    return '/'.$this->slug;
+                    return '/' . $this->slug;
                 })->asSmall(),
             ]),
 

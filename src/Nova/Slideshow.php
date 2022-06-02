@@ -1,11 +1,11 @@
 <?php
-
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
 use JoshMoreno\Html\Html;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
+use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleSlideshowIsPublished;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleVisibilityInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
@@ -22,6 +22,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
 use OwenMelbz\RadioField\RadioButton;
+use ZiffMedia\NovaSelectPlus\SelectPlus;
 
 class Slideshow extends Resource
 {
@@ -58,46 +59,51 @@ class Slideshow extends Resource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->with(['works', 'categories']);
+        return $query->with(['works', 'categories', 'artist']);
+    }
+
+    public static function formQuery(NovaRequest $request, $query)
+    {
+        return $query->with(['works', 'categories', 'artist']);
     }
 
     public function fields(Request $request)
     {
-        $workLabel = __(config('nova-cms-portfolio.custom_works_label'))
-                       ?: __('nova-cms-portfolio::works.works');
+        $workLabel = config('nova-cms-portfolio.custom_works_label')
+            ?: __('nova-cms-portfolio::works.works');
 
-        $workSingularLabel = __(config('nova-cms-portfolio.custom_work_label'))
-        ?: __('nova-cms-portfolio::works.work');
+        $workSingularLabel = config('nova-cms-portfolio.custom_work_label')
+            ?: __('nova-cms-portfolio::works.work');
 
         $fields = [
             Html::make('')
                 ->html(function () {
                     $html = '<div class="px-8 pt-6 pb-6 border-b border-40">'
-                    .'<a href="/nova/resources/slideshows/'
-                    .$this->id
-                    .'" class="font-bold text-90 uppercase no-underline">'
-                    .(config('nova-cms-portfolio.custom_works_label') ?: __('nova-cms-portfolio::works.works'))
-                    .'&nbsp;&larr;'
-                    .'</a>'
-                    .'</div>';
+                    . '<a href="/nova/resources/slideshows/'
+                    . $this->id
+                    . '" class="font-bold text-90 uppercase no-underline">'
+                    . (config('nova-cms-portfolio.custom_works_label') ?: __('nova-cms-portfolio::works.works'))
+                    . '&nbsp;&larr;'
+                    . '</a>'
+                    . '</div>';
 
                     return $html;
                 })->onlyOnForms(),
 
             Stack::make('Details', [
                 Line::make('', function () {
-                    $html = '<div class="font-bold leading-tight mb-1 whitespace-normal">'.$this->title.'</div>';
+                    $html = '<div class="font-bold leading-tight mb-1 whitespace-normal">' . $this->title . '</div>';
 
                     $html .= '<div class="whitespace-normal mb-1">';
                     foreach ($this->categories as $n => $category) {
-                        $html .= '<div class="inline-block mr-1 leading-tight text-80 uppercase text-xs border border-80 px-1  pt-1 pb-px">'.$category->title.'</div>';
+                        $html .= '<div class="inline-block mr-1 leading-tight text-80 uppercase text-xs border border-80 px-1  pt-1 pb-px">' . $category->title . '</div>';
                     }
                     $html .= '</div>';
 
-                    if (! $this->is_published) {
+                    if (!$this->is_published) {
                         $html .= '<div class="font-bold text-xs text-danger uppercase">not published</div>';
                     }
-                    if (! $this->is_visible_in_overview) {
+                    if (!$this->is_visible_in_overview) {
                         $html .= '<div class="font-bold text-xs text-danger uppercase">hidden from artist overview</div>';
                     }
 
@@ -110,18 +116,34 @@ class Slideshow extends Resource
                 ->rules('required')
                 ->hideFromIndex(),
 
-            BelongsToManyField::make(__('nova-cms-portfolio::categories.categories'), 'categories', Category::class)
+            Select::make(ucfirst(__('nova-cms-portfolio::disciplines.discipline')), 'discipline_id')
+                ->nullable()
+                ->options(function () {
+                    return Discipline::with([
+                        'artists' => function ($b) {
+                            return $b->select('id');
+                        }
+                    ])
+                    ->get()
+                    ->filter(function ($discipline) {
+                        return $discipline->artists->where('id', $this->artist_id)->count();
+                    })
+                    ->pluck('title', 'id');
+                })
+                ->help('Eventuell notwendig wenn der Künstler mehrere Disziplinen hat'),
+
+            BelongsToManyField::make('Kategorien', 'categories', Category::class)
                 ->optionsLabel('title')
                 ->onlyOnForms(),
 
-            Stack::make($workLabel, [
+            Stack::make('', [
                 Text::make('', function () {
                     $html = '<div
                         class="block whitespace-normal"
                     >';
                     foreach ($this->works->take(config('nova-cms-portfolio.max_thumbnails') ?: 3) as $work) {
-                        $html .= '<a 
-                            href="'.nova_cms_file($work->file).'"
+                        $html .= '<a
+                            href="' . nova_cms_file($work->file) . '"
                             download
                         >';
 
@@ -130,12 +152,12 @@ class Slideshow extends Resource
                                 autoplay muted loop playsinline
                                 class="w-auto h-12 mr-1 inline-block"
                             >
-                                <source src="'.nova_cms_file($work->file).'" type="video/'.nova_cms_extension($work->file).'">
+                                <source src="' . nova_cms_file($work->file) . '" type="video/' . nova_cms_extension($work->file) . '">
                             </video>';
                         } else {
-                            $html .= '<img 
+                            $html .= '<img
                                 class="w-auto h-12 mr-1 inline-block"
-                                src="'.nova_cms_image($work->file, 'thumb').'" 
+                                src="' . nova_cms_image($work->file, 'thumb') . '"
                             />';
                         }
 
@@ -149,8 +171,8 @@ class Slideshow extends Resource
                 Line::make('', function () {
                     if ($this->works->where('is_artist_discipline_image', true)->count()) {
                         return '<div class="text-xs font-bold uppercase">'
-                        .__('nova-cms-portfolio::works.is_artist_discipline_image')
-                        .'</div>';
+                        . __('nova-cms-portfolio::works.is_artist_discipline_image')
+                        . '</div>';
                     }
 
                     return '';
@@ -159,8 +181,8 @@ class Slideshow extends Resource
                 Line::make('', function () {
                     if ($this->works->where('is_artist_portfolio_image', true)->count()) {
                         return '<div class="text-xs font-bold uppercase">'
-                        .__('nova-cms-portfolio::works.is_artist_portfolio_image')
-                        .'</div>';
+                        . __('nova-cms-portfolio::works.is_artist_portfolio_image')
+                        . '</div>';
                     }
 
                     return '';
@@ -171,13 +193,13 @@ class Slideshow extends Resource
             Stack::make('', [
                 Line::make('', function () use ($workLabel, $workSingularLabel) {
                     return '<button
-                        onclick="window.location.href=\'/nova/resources/slideshows/'.$this->id.'\'"
-                        class="btn btn-xs 
-                        '.($this->works->count() ? 'btn-primary' : 'btn-danger').'
+                        onclick="window.location.href=\'/nova/resources/slideshows/' . $this->id . '\'"
+                        class="btn btn-xs
+                        ' . ($this->works->count() ? 'btn-primary' : 'btn-danger') . '
                         "
                         >'
-                        .$this->works->count().' '.($this->works->count() != 1 ? $workLabel : $workSingularLabel)
-                        .'</button>';
+                        . $this->works->count() . ' ' . ($this->works->count() != 1 ? $workLabel : $workSingularLabel)
+                        . '</button>';
                 })->asHtml(),
             ])
             ->onlyOnIndex(),
@@ -230,7 +252,7 @@ class Slideshow extends Resource
         $fields[] = HasMany::make($workLabel, 'works', Work::class);
 
         $artist = $this->artist;
-        if (! $artist) {
+        if (!$artist) {
             $artist = $request->viaResourceId ? Artist::find($request->viaResourceId) : null;
         }
 
@@ -248,9 +270,9 @@ class Slideshow extends Resource
     {
         $cards = [];
 
-        if (config('nova-cms-portfolio.has_quick_upload')) {
-            $cards[] = (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail();
-        }
+        // if (config('nova-cms-portfolio.has_quick_upload')) {
+        //     $cards[] = (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail();
+        // }
 
         $cards[] = (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail();
 

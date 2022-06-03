@@ -3,6 +3,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Kraenkvisuell\NovaCmsMedia\Core\Model as MediaModel;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Tags\HasTags;
@@ -41,6 +42,11 @@ class Work extends Model implements Sortable
     public function slideshow()
     {
         return $this->belongsTo(Slideshow::class);
+    }
+
+    public function media_file()
+    {
+        return $this->belongsTo(MediaModel::class, 'file');
     }
 
     public function buildSortQuery()

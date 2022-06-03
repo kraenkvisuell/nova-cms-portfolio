@@ -2,7 +2,6 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Collections;
 
 use Illuminate\Database\Eloquent\Builder;
-use Kraenkvisuell\NovaCmsMedia\Core\Model;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
@@ -10,11 +9,11 @@ use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
 class FilteredArtists
 {
     public static function get(
-        int $disciplineId = null,
-        int $categoryId = null,
-        string $needle = '',
-        int $workLimit = 10,
-        string $sortOrder = 'alphabetical',
+        ?int $disciplineId,
+        ?int $categoryId,
+        ?string $needle,
+        ?int $workLimit,
+        ?string $sortOrder,
     ) {
         $artistsBuilder = Artist::where('is_published', true)
             ->with([
@@ -53,15 +52,17 @@ class FilteredArtists
         $results = [];
 
         foreach ($artists as $artist) {
-            $worksBuilder = $artist->works()->with([
-                'slideshow' => function ($b) {
-                    $b->select([
-                        'id',
-                        'slug',
-                        'title',
-                    ]);
-                }
-            ]);
+            $worksBuilder = $artist->works()
+                ->limit($workLimit)
+                ->with([
+                    'slideshow' => function ($b) {
+                        $b->select([
+                            'id',
+                            'slug',
+                            'title',
+                        ]);
+                    }
+                ]);
 
             if ($needle) {
             } else {
@@ -77,7 +78,7 @@ class FilteredArtists
 
             $works = [];
 
-            foreach ($worksBuilder->limit($workLimit)->get() as $work) {
+            foreach ($worksBuilder->get() as $work) {
                 $imgUrls = [];
                 foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
                     $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
@@ -119,7 +120,13 @@ class FilteredArtists
             ];
         }
 
-        return collect($results)->sortBy('artist.name')->all();
+        $results = collect($results);
+
+        if ($sortOrder == 'alphabetical') {
+            $results = $results->sortBy('artist.name');
+        }
+
+        return $results->values()->all();
     }
 
     protected static function getDisciplineFromNeedle($needle)

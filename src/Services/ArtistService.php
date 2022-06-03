@@ -8,12 +8,16 @@ class ArtistService
     public static function filteredResults(
         int $disciplineId = null,
         int $categoryId = null,
-        string $needle = ''
+        string $needle = '',
+        int $workLimit = 10,
+        string $sortOrder = 'alphabetical'
     ) {
         return FilteredArtists::get(
             $disciplineId,
             $categoryId,
-            $needle
+            $needle,
+            $workLimit,
+            $sortOrder
         );
     }
 }

@@ -13,9 +13,19 @@ class FilteredArtists
         int $disciplineId = null,
         int $categoryId = null,
         string $needle = '',
-        int $workLimit = 10
+        int $workLimit = 10,
+        string $sortOrder = 'alphabetical',
     ) {
-        $artistsBuilder = Artist::where('is_published', true);
+        $artistsBuilder = Artist::where('is_published', true)
+            ->with([
+                'disciplines' => function ($b) {
+                    $b->select([
+                        'id',
+                        'title',
+                        'slug',
+                    ]);
+                }
+            ]);
 
         $needle = trim(strtolower($needle));
 
@@ -43,7 +53,15 @@ class FilteredArtists
         $results = [];
 
         foreach ($artists as $artist) {
-            $worksBuilder = $artist->works();
+            $worksBuilder = $artist->works()->with([
+                'slideshow' => function ($b) {
+                    $b->select([
+                        'id',
+                        'slug',
+                        'title',
+                    ]);
+                }
+            ]);
 
             if ($needle) {
             } else {
@@ -68,20 +86,40 @@ class FilteredArtists
                 $ratio = 1;
 
                 $works[] = [
+                    'id' => $work->id,
                     'imgUrls' => $imgUrls,
                     'ratio' => nova_cms_ratio($work->file),
+                    'slideshow' => [
+                        'id' => $work->slideshow_id,
+                        'slug' => $work->slideshow->slug,
+                        'title' => $work->slideshow->title,
+                    ],
+
+                ];
+            }
+
+            $disciplines = [];
+
+            foreach ($artist->disciplines as $discipline) {
+                $disciplines[] = [
+                    'id' => $discipline->id,
+                    'slug' => $discipline->slug,
+                    'title' => $discipline->title,
                 ];
             }
 
             $results[] = [
-                'id' => $artist->id,
-                'name' => $artist->name,
-                'slug' => $artist->slug,
+                'artist' => [
+                    'id' => $artist->id,
+                    'disciplines' => $disciplines,
+                    'name' => $artist->name,
+                    'slug' => $artist->slug,
+                ],
                 'works' => $works,
             ];
         }
 
-        return collect($results)->sortBy('name')->all();
+        return collect($results)->sortBy('artist.name')->all();
     }
 
     protected static function getDisciplineFromNeedle($needle)

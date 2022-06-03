@@ -60,6 +60,14 @@ class FilteredArtists
                             'id',
                             'slug',
                             'title',
+                        ])
+                        ->with([
+                            'works' => function ($b) {
+                                $b->select([
+                                    'id',
+                                    'slideshow_id',
+                                ]);
+                            }
                         ]);
                     }
                 ]);
@@ -89,6 +97,7 @@ class FilteredArtists
                 $works[] = [
                     'id' => $work->id,
                     'imgUrls' => $imgUrls,
+                    'positionInSlideshow' => $work->actualPosition(),
                     'ratio' => nova_cms_ratio($work->file),
                     'slideshow' => [
                         'id' => $work->slideshow_id,

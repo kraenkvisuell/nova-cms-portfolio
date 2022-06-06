@@ -9,7 +9,7 @@ class DisciplinesWithArtists
     public static function get()
     {
         //Cache::forget('DisciplinesWithArtists.' . app()->getLocale());
-        return Cache::remember('DisciplinesWithArtists.' . app()->getLocale(), now()->addMinutes(10), function () {
+        return Cache::remember('DisciplinesWithArtists.' . app()->getLocale(), now()->addDays(7), function () {
             $disciplines = Discipline::ordered()
                 ->has('artists')
                 ->with(['artists' => function ($b) {

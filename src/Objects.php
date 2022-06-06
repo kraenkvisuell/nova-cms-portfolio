@@ -6,7 +6,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
 
-class FilteredArtists
+class ArtistWithFilledCategories
 {
     public static function get(
         ?int $disciplineId,

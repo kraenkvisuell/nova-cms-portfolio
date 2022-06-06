@@ -2,6 +2,7 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Services;
 
 use Kraenkvisuell\NovaCmsPortfolio\Collections\FilteredArtists;
+use Kraenkvisuell\NovaCmsPortfolio\Objects\ArtistWithFilledCategories;
 
 class ArtistService
 {
@@ -19,5 +20,12 @@ class ArtistService
             $workLimit,
             $sortOrder
         );
+    }
+
+    public static function findWithFilledCategories(
+        int $id,
+        int $workLimit = 10
+    ) {
+        return ArtistWithFilledCategories::find($id, $workLimit);
     }
 }

@@ -1,16 +1,18 @@
 <?php
-
 namespace Kraenkvisuell\NovaCmsPortfolio\Observers;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
+use Kraenkvisuell\NovaCmsPortfolio\Services\ArtistCacheService;
 
 class ArtistObserver
 {
     public function saved(Artist $artist)
     {
         $this->checkUserCreation($artist);
+
+        ArtistCacheService::refreshCachesWhereNeeded($artist);
     }
 
     protected function checkUserCreation($artist)
@@ -20,11 +22,11 @@ class ArtistObserver
 
         if ($original == $email) {
             return;
-        } 
+        }
 
         if (!$email && $artist->user) {
             return $artist->user->delete();
-        } 
+        }
 
         if ($artist->user) {
             $artist->user->update([
@@ -37,7 +39,7 @@ class ArtistObserver
                 'name' => $artist->name,
                 //'password' => Hash::make(Str::uuid()),
                 'password' => Hash::make('password'),
-            ]);    
+            ]);
 
             $user->cms_role = 'artist';
             $user->save();

@@ -8,6 +8,7 @@ class ArtistWithFilledCategories
 {
     public static function find(int $id, int $workLimit)
     {
+        Cache::forget('ArtistWithFilledCategories.' . $id . '.' . $workLimit . '.' . app()->getLocale());
         return Cache::remember(
             'ArtistWithFilledCategories.' . $id . '.' . $workLimit . '.' . app()->getLocale(),
             now()->addDays(7),
@@ -114,6 +115,8 @@ class ArtistWithFilledCategories
                     'id' => $artist->id,
                     'name' => $artist->name,
                     'description' => $artist->description,
+                    'email' => $artist->email,
+                    'website' => $artist->website,
                     'socialLinks' => $socialLinks,
                     'disciplines' => $disciplines,
                     'categories' => $categories,

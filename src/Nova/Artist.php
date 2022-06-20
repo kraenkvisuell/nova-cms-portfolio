@@ -218,9 +218,13 @@ class Artist extends Resource
 
     public function cards(Request $request)
     {
-        return [
-            (new ZipUpdateProjectsCard())->addMeta($request->resourceId)->onlyOnDetail(),
-        ];
+        $cards = [];
+
+        if (config('nova-cms-portfolio.has_projects_zip_upload')) {
+            $cards[] = (new ZipUpdateProjectsCard())->addMeta($request->resourceId)->onlyOnDetail();
+        }
+
+        return $cards;
     }
 
     public function filters(Request $request)

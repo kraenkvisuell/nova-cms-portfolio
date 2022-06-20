@@ -16,6 +16,8 @@ return [
     'has_show_title' => false,
     'has_title_position' => false,
     'has_break_after_in_overviews' => false,
+    'has_projects_zip_upload' => false,
+    'projects_zip_starts_with_categories' => false,
     'max_thumbnails' => 3,
     'artists_sortable_dropdown' => false,
     'slideshows_sortable_dropdown' => false,

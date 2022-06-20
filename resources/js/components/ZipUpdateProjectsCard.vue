@@ -2,7 +2,7 @@
     <card class="flex flex-col h-20">
         <label 
             class="
-                block p-8 h-full 
+                block p-8 h-full
                 text-center cursor-pointer 
                 uppercase text-sm font-bold
             "
@@ -22,20 +22,33 @@
             </template>
 
             <template v-if="uploading">
-                <em>{{ __('Uploading') }}...</em>
+                <em>{{ __('Uploading') }} ({{ progress }}%)...</em>
             </template>
         </label>
+
+
+        <portal to="modals">
+            <transition name="fade">
+                <zip-update-projects-modal
+                    v-if="modalOpen"
+                    @confirm="confirmModal"
+                    @close="closeModal"
+                />
+            </transition>
+        </portal>
     </card>
 </template>
 
 <script>
+import ZipUpdateProjectsModal from './ZipUpdateProjectsModal.vue';
 
 export default {
     data: function () {
         return {
-            files: [],
             uploading: false,
-            count: 0,
+            uploadFinished: false,
+            progress: 0,
+            modalOpen: false,
         }
     },
     
@@ -43,35 +56,48 @@ export default {
         'card', 'artistId'
     ],
 
+    components: {
+        ZipUpdateProjectsModal
+    },
+
     methods: {
         selectFiles(input) {
             if ( !input.target.files.length ) return;
             
-            this.files = Object.assign({}, input.target.files);
-            this.uploadFiles();
+            this.uploadFile(input.target.files[0]);
             
             document.getElementById('zip_update_projects').value = null;
         },
         uploadFile(file) {
-        },
-        uploadFiles() {
-
+       
             this.uploading = true;
-            _.forEach(this.files, function(file) {
-                let config = { headers: { 'Content-Type': 'multipart/form-data' } };
-                let data = new FormData();
-                data.append('file', file);
-                    Nova.request().post('/nova-vendor/nova-cms-portfolio/artists/projects-from-zip-file/'+this.card.artistId, data, config).then(r => {
-                        this.count++;
-                        if (this.count >= Object.keys(this.files).length) {
-                            window.location.reload();
+            
+            let config = { 
+                headers: { 'Content-Type': 'multipart/form-data' },
+                onUploadProgress: (progressEvent) => {
+                    this.progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                }
+            };
 
-                        }
-                    }).catch(e => {
-                        this.count++;
-                    });
+            let data = new FormData();
+            data.append('file', file);
 
-            }.bind(this));
+            Nova.request().post('/nova-vendor/nova-cms-portfolio/artists/projects-from-zip-file/'+this.card.artistId, data, config).then(r => {
+                this.openModal()
+                this.uploading = false
+                
+            }).catch(e => {
+                console.log(e)
+            });
+        },
+        openModal() {
+            this.modalOpen = true;
+        },
+        confirmModal() {
+            this.modalOpen = false;
+        },
+        closeModal() {
+            this.modalOpen = false;
         }
     }
 }

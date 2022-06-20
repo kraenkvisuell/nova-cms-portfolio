@@ -40,6 +40,7 @@ class ImportSlideshow implements ShouldQueue
         $slideshowName = str_replace(':', '/', $folderName);
         $slideshowName = str_replace('(no special order)', '', $slideshowName);
         $slideshowName = str_replace('(video + photos)', '', $slideshowName);
+        $slideshowName = str_replace('(video + photos no special order)', '', $slideshowName);
         $slideshowName = trim($slideshowName);
 
         $files = Storage::disk('local')->files($this->folder);
@@ -70,10 +71,12 @@ class ImportSlideshow implements ShouldQueue
         sort($files);
         //ray($files);
         foreach ($files as $file) {
-            $fileName = Str::afterLast($file, '/');
-            $extension = Str::afterLast($file, '.');
-            if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
-                $this->importFile($slideshow, $file);
+            if (Storage::size($file) < 50000000) {
+                $fileName = Str::afterLast($file, '/');
+                $extension = Str::afterLast($file, '.');
+                if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
+                    $this->importFile($slideshow, $file);
+                }
             }
         }
     }
@@ -85,9 +88,9 @@ class ImportSlideshow implements ShouldQueue
 
         if (
             !stristr($newFilename, $this->artist->slug)
-            && !stristr($newFilename, Str::snake($this->artist->slug))
+            && !stristr($newFilename, str_replace('-', '_', $this->artist->slug))
         ) {
-            $newFilename = Str::snake($this->artist->slug) . '_' . $newFilename;
+            $newFilename = str_replace('-', '_', $this->artist->slug) . '_' . $newFilename;
         }
 
         $mediaItem = MediaModel::where('original_name', $fileName)->first();

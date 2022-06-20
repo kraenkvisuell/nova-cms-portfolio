@@ -82,92 +82,13 @@ class ProjectsZipUpload
     protected function importSlideshows($folders, $categoryId = null)
     {
         foreach ($folders as $folder) {
-            ray($folder);
             $folderName = Str::afterLast($folder, '/');
             if (
                 !Str::startsWith($folderName, '_')
                 && !Str::startsWith($folderName, '.')
             ) {
                 ImportSlideshow::dispatch($this->artist, $folder, $categoryId);
-                //$this->importSlideshow($folder, $categoryId);
             }
-        }
-    }
-
-    protected function importSlideshow($folder, $categoryId)
-    {
-        $folderName = Str::afterLast($folder, '/');
-        $slideshowName = str_replace(':', '/', $folderName);
-        $slideshowName = str_replace('(no special order)', '', $slideshowName);
-        $slideshowName = str_replace('(video + photos)', '', $slideshowName);
-        $slideshowName = trim($slideshowName);
-
-        $files = Storage::disk('local')->files($folder);
-
-        $slideshow = Slideshow::firstOrCreate(
-            [
-                'artist_id' => $this->artist->id,
-                'title' => $slideshowName,
-            ],
-            [
-                'slug' => Str::slug(str_replace('/', '-', $slideshowName)),
-                'robots' => [
-                    'index' => true,
-                    'follow' => true,
-                ],
-            ]
-        );
-
-        if ($categoryId) {
-            $slideshow->categories()->syncWithoutDetaching($categoryId);
-        }
-
-        $this->importFiles($slideshow, $files);
-    }
-
-    protected function importFiles($slideshow, $files)
-    {
-        sort($files);
-        //ray($files);
-        foreach ($files as $file) {
-            $fileName = Str::afterLast($file, '/');
-            $extension = Str::afterLast($file, '.');
-            if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
-                $this->importFile($slideshow, $file);
-            }
-        }
-    }
-
-    protected function importFile($slideshow, $file)
-    {
-        $fileName = Str::afterLast($file, '/');
-        $newFilename = $fileName;
-
-        if (
-            !stristr($newFilename, $this->artist->slug)
-            && !stristr($newFilename, Str::snake($this->artist->slug))
-        ) {
-            $newFilename = Str::snake($this->artist->slug) . '_' . $newFilename;
-        }
-
-        $mediaItem = MediaModel::where('original_name', $fileName)->first();
-
-        if (!$mediaItem) {
-            try {
-                $mediaItem = API::upload(storage_path('app/' . $file), null, $newFilename);
-            } catch (Exception $e) {
-            }
-        }
-
-        if ($mediaItem) {
-            $work = Work::firstOrCreate(
-                [
-                    'file' => $mediaItem->id,
-                ],
-                [
-                    'slideshow_id' => $slideshow->id,
-                ]
-            );
         }
     }
 }

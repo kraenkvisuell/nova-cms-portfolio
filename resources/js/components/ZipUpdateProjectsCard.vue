@@ -22,7 +22,8 @@
             </template>
 
             <template v-if="uploading">
-                <em>{{ __('Uploading') }} ({{ progress }}%)...</em>
+                <em v-if="progress < 100">{{ __('Uploading') }} ({{ progress }}%)...</em>
+                <em v-if="progress >= 100">Uploaded file is processed...</em>
             </template>
         </label>
 

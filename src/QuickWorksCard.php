@@ -1,5 +1,4 @@
 <?php
-
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
 use Laravel\Nova\Card;

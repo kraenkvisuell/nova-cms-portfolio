@@ -76,20 +76,6 @@ class Slideshow extends Resource
             ?: __('nova-cms-portfolio::works.work');
 
         $fields = [
-            Html::make('')
-                ->html(function () {
-                    $html = '<div class="px-8 pt-6 pb-6 border-b border-40">'
-                    . '<a href="/nova/resources/slideshows/'
-                    . $this->id
-                    . '" class="font-bold text-90 uppercase no-underline">'
-                    . (config('nova-cms-portfolio.custom_works_label') ?: __('nova-cms-portfolio::works.works'))
-                    . '&nbsp;&larr;'
-                    . '</a>'
-                    . '</div>';
-
-                    return $html;
-                })->onlyOnForms(),
-
             Stack::make('Details', [
                 Line::make('', function () {
                     $html = '<div class="font-bold leading-tight mb-1 whitespace-normal">' . $this->title . '</div>';
@@ -130,7 +116,8 @@ class Slideshow extends Resource
                     })
                     ->pluck('title', 'id');
                 })
-                ->help('Eventuell notwendig wenn der Künstler mehrere Disziplinen hat'),
+                ->help('Eventuell notwendig wenn der Künstler mehrere Disziplinen hat')
+                ->onlyOnForms(),
 
             BelongsToManyField::make('Kategorien', 'categories', Category::class)
                 ->optionsLabel('title')
@@ -270,11 +257,8 @@ class Slideshow extends Resource
     {
         $cards = [];
 
-        // if (config('nova-cms-portfolio.has_quick_upload')) {
-        //     $cards[] = (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail();
-        // }
-
         $cards[] = (new SlideshowArtistCard)->addMeta($request->resourceId)->onlyOnDetail();
+        $cards[] = (new QuickWorksCard())->addMeta($request->resourceId)->onlyOnDetail();
 
         return $cards;
     }

@@ -1,9 +1,8 @@
 <?php
-
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
-use Laravel\Nova\Card;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
+use Laravel\Nova\Card;
 
 class SlideshowArtistCard extends Card
 {
@@ -27,7 +26,7 @@ class SlideshowArtistCard extends Card
     public function addMeta($slideshowId = 0)
     {
         $slideshow = Slideshow::find($slideshowId);
-        
+
         $text = __(
             'nova-cms-portfolio::artists.back_to_wildcard',
             ['artist' => __(config('nova-cms-portfolio.custom_artist_label'))
@@ -36,7 +35,7 @@ class SlideshowArtistCard extends Card
         );
         return $this->withMeta([
             'text' => $text,
-            'url' => config('nova.path').'/resources/artists/'.$slideshow->artist_id
+            'url' => config('nova.path') . '/resources/artists/' . $slideshow?->artist_id
         ]);
     }
 }

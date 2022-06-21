@@ -45,8 +45,8 @@ class ProjectsZipUpload
             }
         }
 
-        Storage::disk('local')->delete($path);
-        Storage::disk('local')->delete($this->tmpFolder);
+        // Storage::disk('local')->delete($path);
+        // Storage::disk('local')->delete($this->tmpFolder);
     }
 
     protected function importCategories($folders)

@@ -71,12 +71,10 @@ class ImportSlideshow implements ShouldQueue
         sort($files);
         //ray($files);
         foreach ($files as $file) {
-            if (Storage::size($file) < 50000000) {
-                $fileName = Str::afterLast($file, '/');
-                $extension = Str::afterLast($file, '.');
-                if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
-                    $this->importFile($slideshow, $file);
-                }
+            $fileName = Str::afterLast($file, '/');
+            $extension = Str::afterLast($file, '.');
+            if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
+                $this->importFile($slideshow, $file);
             }
         }
     }

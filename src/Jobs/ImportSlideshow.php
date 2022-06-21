@@ -28,9 +28,9 @@ class ImportSlideshow implements ShouldQueue
 
     public function handle()
     {
-        ini_set('memory_limit', '4096M');
-        ini_set('max_input_time', 1800);
-        ini_set('max_execution_time', 1800);
+        // ini_set('memory_limit', '4096M');
+        // ini_set('max_input_time', 1800);
+        // ini_set('max_execution_time', 1800);
 
         $folderName = Str::afterLast($this->folder, '/');
         $slideshowName = str_replace(':', '/', $folderName);
@@ -55,10 +55,10 @@ class ImportSlideshow implements ShouldQueue
             ]
         );
 
+        ImportSlideshowFiles::dispatch($this->artist, $slideshow, $files);
+
         if ($this->categoryId) {
             $slideshow->categories()->syncWithoutDetaching($this->categoryId);
         }
-
-        ImportSlideshowFiles::dispatch($this->artist, $slideshow, $files);
     }
 }

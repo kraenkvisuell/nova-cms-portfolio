@@ -111,6 +111,18 @@ class ArtistWithFilledCategories
                     ];
                 }
 
+                $portraitImage = null;
+
+                if ($artist->portrait_image) {
+                    $portraitImage = [
+                        'imgUrls' => [],
+                    ];
+
+                    foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
+                        $portraitImage['imgUrls'][$sizeKey] = nova_cms_image($artist->portrait_image, $sizeKey);
+                    }
+                }
+
                 return [
                     'id' => $artist->id,
                     'name' => $artist->name,
@@ -118,6 +130,7 @@ class ArtistWithFilledCategories
                     'email' => $artist->email,
                     'website' => $artist->website,
                     'socialLinks' => $socialLinks,
+                    'portraitImage' => $portraitImage,
                     'disciplines' => $disciplines,
                     'categories' => $categories,
                 ];

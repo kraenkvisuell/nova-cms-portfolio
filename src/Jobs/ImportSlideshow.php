@@ -9,16 +9,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Kraenkvisuell\NovaCmsMedia\API;
-use Kraenkvisuell\NovaCmsMedia\Core\Model as MediaModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
-use Kraenkvisuell\NovaCmsPortfolio\Models\Work;
 
 class ImportSlideshow implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $okExtensions = ['jpg', 'png', 'gif', 'mp4', 'jpeg'];
     protected $artist;
     protected $folder;
     protected $categoryId;
@@ -63,52 +59,6 @@ class ImportSlideshow implements ShouldQueue
             $slideshow->categories()->syncWithoutDetaching($this->categoryId);
         }
 
-        $this->importFiles($slideshow, $files);
-    }
-
-    protected function importFiles($slideshow, $files)
-    {
-        sort($files);
-        //ray($files);
-        foreach ($files as $file) {
-            $fileName = Str::afterLast($file, '/');
-            $extension = Str::afterLast($file, '.');
-            if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
-                $this->importFile($slideshow, $file);
-            }
-        }
-    }
-
-    protected function importFile($slideshow, $file)
-    {
-        $fileName = Str::afterLast($file, '/');
-        $newFilename = $fileName;
-
-        if (
-            !stristr($newFilename, $this->artist->slug)
-            && !stristr($newFilename, str_replace('-', '_', $this->artist->slug))
-        ) {
-            $newFilename = str_replace('-', '_', $this->artist->slug) . '_' . $newFilename;
-        }
-
-        $mediaItem = MediaModel::where('original_name', $fileName)->first();
-
-        if (!$mediaItem) {
-            try {
-                $mediaItem = API::upload(storage_path('app/' . $file), null, $newFilename);
-            } catch (Exception $e) {
-            }
-        }
-
-        if ($mediaItem) {
-            $work = Work::firstOrCreate(
-                [
-                    'file' => $mediaItem->id,
-                ],
-                [
-                    'slideshow_id' => $slideshow->id,
-                ]
-            );
-        }
+        ImportSlideshowFiles::dispatch($this->artist, $slideshow, $files);
     }
 }

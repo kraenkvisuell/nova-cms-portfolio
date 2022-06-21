@@ -44,9 +44,6 @@ class ProjectsZipUpload
                 $this->importSlideshows($folders);
             }
         }
-
-        // Storage::disk('local')->delete($path);
-        // Storage::disk('local')->delete($this->tmpFolder);
     }
 
     protected function importCategories($folders)

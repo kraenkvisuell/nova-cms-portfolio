@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsMedia\API;
 use Kraenkvisuell\NovaCmsMedia\Core\Model as MediaModel;
-use Kraenkvisuell\NovaCmsPortfolio\Jobs\ImportSlideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
@@ -43,6 +42,9 @@ class ProjectsZipUpload
             } else {
                 $this->importSlideshows($folders);
             }
+
+            Storage::disk('local')->delete($path);
+            Storage::disk('local')->deleteDirectory($this->tmpFolder);
         }
     }
 
@@ -84,8 +86,82 @@ class ProjectsZipUpload
                 !Str::startsWith($folderName, '_')
                 && !Str::startsWith($folderName, '.')
             ) {
-                ImportSlideshow::dispatch($this->artist, $folder, $categoryId);
+                $this->importSlideshow($folder, $categoryId);
+                //ImportSlideshow::dispatch($this->artist, $folder, $categoryId);
             }
+        }
+    }
+
+    protected function importSlideshow($folder, $categoryId)
+    {
+        $folderName = Str::afterLast($folder, '/');
+        $slideshowName = str_replace(':', '/', $folderName);
+        $slideshowName = str_replace('(no special order)', '', $slideshowName);
+        $slideshowName = str_replace('(video + photos)', '', $slideshowName);
+        $slideshowName = str_replace('(video + photos no special order)', '', $slideshowName);
+        $slideshowName = trim($slideshowName);
+
+        $files = Storage::disk('local')->files($folder);
+
+        $slideshow = Slideshow::firstOrCreate(
+            [
+                'artist_id' => $this->artist->id,
+                'title' => $slideshowName,
+            ],
+            [
+                'slug' => Str::slug(str_replace('/', '-', $slideshowName)),
+                'robots' => [
+                    'index' => true,
+                    'follow' => true,
+                ],
+            ]
+        );
+
+        if ($categoryId) {
+            $slideshow->categories()->syncWithoutDetaching($categoryId);
+        }
+
+        sort($files);
+        //ray($files);
+        foreach ($files as $file) {
+            $fileName = Str::afterLast($file, '/');
+            $extension = Str::afterLast($file, '.');
+            if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
+                $this->importFile($file, $slideshow);
+            }
+        }
+    }
+
+    protected function importFile($file, $slideshow)
+    {
+        $fileName = Str::afterLast($file, '/');
+        $newFilename = $fileName;
+
+        if (
+            !stristr($newFilename, $this->artist->slug)
+            && !stristr($newFilename, str_replace('-', '_', $this->artist->slug))
+        ) {
+            $newFilename = str_replace('-', '_', $this->artist->slug) . '_' . $newFilename;
+        }
+
+        $mediaItem = MediaModel::where('original_name', $fileName)->first();
+
+        if (!$mediaItem) {
+            try {
+                $mediaItem = API::upload(storage_path('app/' . $file), null, $newFilename);
+            } catch (Exception $e) {
+            }
+        }
+
+        if ($mediaItem) {
+            $work = Work::firstOrCreate(
+                [
+                    'file' => $mediaItem->id,
+                ],
+                [
+                    'slideshow_id' => $slideshow->id,
+                ]
+            );
         }
     }
 }

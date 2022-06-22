@@ -9,17 +9,13 @@
             <slot :uppercaseMode="uppercaseMode" :mode="mode">
                 <div class="p-8">
                     <p class="text-80 leading-normal">
-                        The file is processing in the background.<br>
-                        Depending on the number of folders and files this might some time.<br>
+                        The file is now processed - 
+                        depending on the number of folders and files this might take up to 15 minutes.<br>
+                        When the upload is finished, the page will reload.<br>
+                        <strong>Please leave this page open.</strong>
                     </p>
                 </div>
             </slot>
-
-            <div class="bg-30 px-6 py-3 flex">
-                <div class="ml-auto">
-                    <button id="confirm-button" ref="confirmButton" data-testid="confirm-button" type="submit" class="btn btn-default btn-primary">OK</button>
-                </div>
-            </div>
         </form>
     </modal>
 </template>

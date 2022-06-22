@@ -77,6 +77,13 @@ export default {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 onUploadProgress: (progressEvent) => {
                     this.progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    if (this.progress == 100) {
+                        this.openModal()
+                        window.setTimeout(function() {
+                            window.location.reload()
+                        }, 900000)
+                        
+                    }
                 }
             };
 
@@ -84,9 +91,7 @@ export default {
             data.append('file', file);
 
             Nova.request().post('/nova-vendor/nova-cms-portfolio/artists/projects-from-zip-file/'+this.card.artistId, data, config).then(r => {
-                this.openModal()
-                this.uploading = false
-                
+                window.location.reload()
             }).catch(e => {
                 console.log(e)
             });

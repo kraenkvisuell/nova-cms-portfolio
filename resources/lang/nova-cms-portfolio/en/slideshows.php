@@ -18,4 +18,5 @@ return [
     'toggle_visibility_in_artist_overview' => 'ON/OFF visible in artist overview',
     'visible_in_artist_overview' => 'visible in artist overview',
     'zip_update_projects' => 'projects upload as ZIP',
+    'create_via_folder_upload' => 'Create Project by uploading a folder',
 ];

@@ -9,6 +9,7 @@ use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
 use Kraenkvisuell\NovaCmsBlocks\Blocks;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
+use Kraenkvisuell\NovaCmsPortfolio\CreateProjectsViaUploadCard;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
@@ -223,6 +224,8 @@ class Artist extends Resource
         if (config('nova-cms-portfolio.has_projects_zip_upload')) {
             $cards[] = (new ZipUpdateProjectsCard())->addMeta($request->resourceId)->onlyOnDetail();
         }
+
+        $cards[] = (new CreateProjectsViaUploadCard())->addMeta($request->resourceId)->onlyOnDetail();
 
         return $cards;
     }

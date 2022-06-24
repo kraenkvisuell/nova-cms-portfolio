@@ -20,6 +20,7 @@ return [
     'projects_zip_starts_with_categories' => false,
     'max_thumbnails' => 3,
     'artists_sortable_dropdown' => false,
+    'slideshows_sortable' => true,
     'slideshows_sortable_dropdown' => false,
     'works_sortable_dropdown' => false,
     'media' => [

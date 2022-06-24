@@ -18,7 +18,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Observers\ArtistObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\CategorySlideshowObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\SlideshowObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\WorkObserver;
-use Kraenkvisuell\NovaCmsPortfolio\Services\ProjectsZipUpload;
+use Kraenkvisuell\NovaCmsPortfolio\Services\ProjectFolderUpload;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 
@@ -72,8 +72,8 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('projects-zip-upload', function () {
-            return new ProjectsZipUpload();
+        $this->app->bind('project-folder-upload', function () {
+            return new ProjectFolderUpload();
         });
 
         $this->mergeConfigFrom(

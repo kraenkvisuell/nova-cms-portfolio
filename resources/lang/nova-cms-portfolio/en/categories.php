@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'category' => 'Category',
-    'categories' => 'Categories',
-    'description' => 'Description',
-    'main_image' => 'Bild',
+    'category' => 'category',
+    'categories' => 'categories',
+    'description' => 'description',
+    'main_image' => 'image',
     'show_in_home_navi' => 'show in home navigation',
     'show_in_main_menu' => 'show in menu',
 ];

@@ -94,7 +94,9 @@ class Work extends Resource
 
             Stack::make('Details', [
                 Line::make('', function () {
-                    return '<div class="text-xs whitespace-normal">' . $this->title . '</div>';
+                    return '
+                    <div class="text-xs whitespace-normal">' . $this->title . '</div>
+                    ';
                 })->asHtml(),
             ]),
 

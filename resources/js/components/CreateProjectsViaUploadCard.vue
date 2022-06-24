@@ -115,7 +115,7 @@ export default {
                         if (response.data.reason != 'hidden file') {
                             this.results.unshift(response.data);
                         }
-                        if (count < files.length - 1 && count < 5) {
+                        if (count < files.length - 1) {
                             postFile(sortedFiles[count]);
                         } else {
                             window.location.reload();

@@ -44,6 +44,12 @@
                 style="max-height: 100px"
             >
                 <div 
+                    v-if="uploadingString"
+                    class="text-sm text-60 mb-2"
+                    v-text="uploadingString"
+                />
+
+                <div 
                     v-for="result in results" :key="result"
                     class="mb-3"
                     :class="{
@@ -79,6 +85,7 @@ export default {
     data: function () {
         return {
            uploading: false,
+           uploadingString: '',
            results: [],
         }
     },
@@ -106,6 +113,8 @@ export default {
                 formData.append('originalPath', file.webkitRelativePath);
                 formData.append('size', file.size);
                 formData.append('uuid', uuid);
+
+                this.uploadingString = 'uploading '+file.webkitRelativePath;
                 
                 Nova.request()
                     .post('/nova-vendor/nova-cms-portfolio/create-project-via-upload/'+this.card.artistId, formData, config)
@@ -119,12 +128,23 @@ export default {
                             postFile(sortedFiles[count]);
                         } else {
                             window.location.reload();
-                            // this.uploading = false;
-                            // document.getElementById('upload_input').value = null;
                         }
                         
                     }).catch(e => {
-        
+                        this.results.unshift({
+                            status: 'error',
+                            reason: 'Server Error',
+                            filename: file.webkitRelativePath,
+                            category: '',
+                            slideshow: '',
+                        });
+
+                        if (count < files.length - 1) {
+                            postFile(sortedFiles[count]);
+                        } else {
+                            window.location.reload();
+                        }
+                        console.log(e);
                     });
             };
 

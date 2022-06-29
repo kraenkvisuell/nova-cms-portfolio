@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Facades;
 
 use Illuminate\Support\Facades\Facade;

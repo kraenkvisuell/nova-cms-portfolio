@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
@@ -30,12 +31,13 @@ class SlideshowArtistCard extends Card
         $text = __(
             'nova-cms-portfolio::artists.back_to_wildcard',
             ['artist' => __(config('nova-cms-portfolio.custom_artist_label'))
-                ?: __('nova-cms-portfolio::artists.artist')
+                ?: __('nova-cms-portfolio::artists.artist'),
             ]
         );
+
         return $this->withMeta([
             'text' => $text,
-            'url' => config('nova.path') . '/resources/artists/' . $slideshow?->artist_id
+            'url' => config('nova.path').'/resources/artists/'.$slideshow?->artist_id,
         ]);
     }
 }

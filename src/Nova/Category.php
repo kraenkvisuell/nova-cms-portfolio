@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
@@ -26,7 +27,7 @@ class Category extends Resource
     public static function orderBy()
     {
         return [
-            'title->' . app()->getLocale() => 'asc',
+            'title->'.app()->getLocale() => 'asc',
         ];
     }
 
@@ -100,13 +101,13 @@ class Category extends Resource
             Stack::make('', [
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                     return '<button
-                        onclick="window.location.href=\'/nova/resources/categories/' . $this->id . '\'"
+                        onclick="window.location.href=\'/nova/resources/categories/'.$this->id.'\'"
                         class="btn btn-xs 
-                        ' . ($this->slideshows->count() ? 'btn-primary' : 'btn-danger') . '
+                        '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
                         "
                         >'
-                        . $this->slideshows->count() . ' ' . ($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
-                        . '</button>';
+                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        .'</button>';
                 })->asHtml(),
             ])
             ->onlyOnIndex(),

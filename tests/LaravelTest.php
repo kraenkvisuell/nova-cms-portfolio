@@ -17,7 +17,7 @@ class LaravelTest extends TestCase
 
     protected function getEnvironmentSetUp($app)
     {
-        include_once __DIR__ . '/../database/migrations/2020_08_05_000000_create_pages_table.php';
+        include_once __DIR__.'/../database/migrations/2020_08_05_000000_create_pages_table.php';
 
         (new \CreatePagesTable)->up();
     }

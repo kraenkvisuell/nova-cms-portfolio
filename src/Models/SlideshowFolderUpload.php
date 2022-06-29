@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Model;

@@ -2,10 +2,10 @@
 
 namespace Kraenkvisuell\NovaCms\Tests;
 
-use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Kraenkvisuell\NovaCms\Models\Page;
 use Kraenkvisuell\NovaCms\NovaPagesServiceProvider;
+use Orchestra\Testbench\TestCase;
 
 class CommandsTest extends TestCase
 {
@@ -18,7 +18,7 @@ class CommandsTest extends TestCase
 
     protected function getEnvironmentSetUp($app)
     {
-        include_once __DIR__ . '/../database/migrations/2020_08_05_000000_create_pages_table.php';
+        include_once __DIR__.'/../database/migrations/2020_08_05_000000_create_pages_table.php';
 
         (new \CreatePagesTable)->up();
     }
@@ -41,7 +41,7 @@ class CommandsTest extends TestCase
         Page::create([
             'slug' => 'home',
             'title' => 'Home',
-            'is_home' => true
+            'is_home' => true,
         ]);
 
         $this->assertTrue(Page::where('is_home', true)->count() == 1);
@@ -51,6 +51,6 @@ class CommandsTest extends TestCase
 
         $this->assertTrue(Page::where('is_home', true)->count() == 1);
         $this->assertTrue(Page::count() == 1);
-        $this->assertSame('Home page already existed.' . PHP_EOL, Artisan::output());
+        $this->assertSame('Home page already existed.'.PHP_EOL, Artisan::output());
     }
 }

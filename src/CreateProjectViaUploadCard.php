@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;

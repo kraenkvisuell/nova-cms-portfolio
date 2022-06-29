@@ -1,9 +1,9 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Kraenkvisuell\NovaCmsMedia\API;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistDisciplineImage;
@@ -69,7 +69,7 @@ class Work extends Resource
 
             Line::make('', function () {
                 $html = '<a 
-                    href="' . nova_cms_file($this->file) . '"
+                    href="'.nova_cms_file($this->file).'"
                     download
                 >';
 
@@ -78,12 +78,12 @@ class Work extends Resource
                             autoplay muted loop playsinline
                             class="w-auto h-12 mr-1 inline-block"
                         >
-                            <source src="' . nova_cms_file($this->file) . '" type="video/' . nova_cms_extension($this->file) . '">
+                            <source src="'.nova_cms_file($this->file).'" type="video/'.nova_cms_extension($this->file).'">
                         </video>';
                 } else {
                     $html .= '<img 
                             class="w-auto h-12 mr-1 inline-block"
-                            src="' . nova_cms_image($this->file, 'thumb') . '" 
+                            src="'.nova_cms_image($this->file, 'thumb').'" 
                         />';
                 }
 
@@ -95,7 +95,7 @@ class Work extends Resource
             Stack::make('Details', [
                 Line::make('', function () {
                     return '
-                    <div class="text-xs whitespace-normal">' . $this->title . '</div>
+                    <div class="text-xs whitespace-normal">'.$this->title.'</div>
                     ';
                 })->asHtml(),
             ]),
@@ -128,8 +128,8 @@ class Work extends Resource
                 Line::make('', function () {
                     if ($this->show_in_overview) {
                         return '<span class="text-xs font-bold uppercase">'
-                        . __('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist')
-                        . '</span>';
+                        .__('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist')
+                        .'</span>';
                     }
 
                     return '';
@@ -138,10 +138,10 @@ class Work extends Resource
                 Line::make('', function () {
                     if (is_array($this->overviewCategorySlugs()) && $this->overviewCategorySlugs()) {
                         return '<span class="text-xs uppercase">'
-                        . __('nova-cms-portfolio::works.overview_categories')
-                        . ': <span class="font-bold">'
-                        . implode(', ', $this->overviewCategorySlugs())
-                        . '</span></span>';
+                        .__('nova-cms-portfolio::works.overview_categories')
+                        .': <span class="font-bold">'
+                        .implode(', ', $this->overviewCategorySlugs())
+                        .'</span></span>';
                     }
 
                     return '';
@@ -150,10 +150,10 @@ class Work extends Resource
                 Line::make('', function () {
                     if (is_array($this->representationCategorySlugs()) && $this->representationCategorySlugs()) {
                         return '<span class="text-xs uppercase">'
-                        . __('In allgemeiner Kategorie-Übersicht zeigen')
-                        . ': <span class="font-bold">'
-                        . implode(', ', $this->representationCategorySlugs())
-                        . '</span></span>';
+                        .__('In allgemeiner Kategorie-Übersicht zeigen')
+                        .': <span class="font-bold">'
+                        .implode(', ', $this->representationCategorySlugs())
+                        .'</span></span>';
                     }
 
                     return '';
@@ -162,8 +162,8 @@ class Work extends Resource
                 Line::make('', function () {
                     if ($this->is_artist_portfolio_image) {
                         return '<span class="text-xs font-bold uppercase">'
-                        . __('nova-cms-portfolio::works.is_artist_portfolio_image')
-                        . '</span>';
+                        .__('nova-cms-portfolio::works.is_artist_portfolio_image')
+                        .'</span>';
                     }
 
                     return '';
@@ -172,8 +172,8 @@ class Work extends Resource
                 Line::make('', function () {
                     if ($this->is_artist_discipline_image) {
                         return '<span class="text-xs font-bold uppercase">'
-                        . __('nova-cms-portfolio::works.is_artist_discipline_image')
-                        . '</span>';
+                        .__('nova-cms-portfolio::works.is_artist_discipline_image')
+                        .'</span>';
                     }
 
                     return '';
@@ -258,7 +258,7 @@ class Work extends Resource
                     $options = [];
 
                     foreach (optional($slideshow)->categories ?: [] as $category) {
-                        $options[$disciplineId . '_' . $category->id] = $category->title;
+                        $options[$disciplineId.'_'.$category->id] = $category->title;
                     }
 
                     return $options;
@@ -271,12 +271,12 @@ class Work extends Resource
 
     public static function redirectAfterUpdate(NovaRequest $request, $resource)
     {
-        return '/resources/slideshows/' . $resource->slideshow_id;
+        return '/resources/slideshows/'.$resource->slideshow_id;
     }
 
     public static function redirectAfterCreate(NovaRequest $request, $resource)
     {
-        return '/resources/slideshows/' . $resource->slideshow_id;
+        return '/resources/slideshows/'.$resource->slideshow_id;
     }
 
     public function actions(Request $request)
@@ -296,7 +296,7 @@ class Work extends Resource
         ];
 
         if ($request->viaResourceId) {
-            $categoryIds = Cache::remember('novaSlideshowCategoryIds.' . $request->viaResourceId, now()->addSeconds(15), function () use ($request) {
+            $categoryIds = Cache::remember('novaSlideshowCategoryIds.'.$request->viaResourceId, now()->addSeconds(15), function () use ($request) {
                 return Slideshow::find($request->viaResourceId)->categories->pluck('id');
             });
             session(['lastNovaSlideshowCategoryIds' => $categoryIds]);

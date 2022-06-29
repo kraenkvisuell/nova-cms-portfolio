@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Services;
 
 use Kraenkvisuell\NovaCmsPortfolio\Collections\FilteredArtists;

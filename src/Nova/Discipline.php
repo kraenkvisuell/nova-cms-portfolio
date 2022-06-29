@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
@@ -78,7 +79,7 @@ class Discipline extends Resource
             Stack::make('Details', [
                 Line::make('', 'title')->asBase(),
                 Line::make('', function () {
-                    return '/' . $this->slug;
+                    return '/'.$this->slug;
                 })->asSmall(),
             ]),
 

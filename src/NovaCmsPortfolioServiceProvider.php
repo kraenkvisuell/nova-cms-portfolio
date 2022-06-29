@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
 use Illuminate\Support\Facades\Route;
@@ -26,18 +27,18 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/nova-cms-portfolio', 'nova-cms-portfolio');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang/nova-cms-portfolio', 'nova-cms-portfolio');
 
         $this->publishes([
-            __DIR__ . '/../resources/lang/nova-cms-portfolio' => resource_path('lang/vendor/nova-cms-portfolio'),
+            __DIR__.'/../resources/lang/nova-cms-portfolio' => resource_path('lang/vendor/nova-cms-portfolio'),
         ]);
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         $this->publishes([
-            __DIR__ . '/../config/nova-cms-portfolio.php' => config_path('nova-cms-portfolio.php'),
+            __DIR__.'/../config/nova-cms-portfolio.php' => config_path('nova-cms-portfolio.php'),
         ]);
 
         Nova::resources([
@@ -51,7 +52,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
 
         // Serve assets
         Nova::serving(function (ServingNova $event) {
-            Nova::script('cards', __DIR__ . '/../dist/js/cards.js');
+            Nova::script('cards', __DIR__.'/../dist/js/cards.js');
         });
 
         if ($this->app->runningInConsole()) {
@@ -77,7 +78,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
         });
 
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/nova-cms-portfolio.php',
+            __DIR__.'/../config/nova-cms-portfolio.php',
             'nova-cms-portfolio'
         );
     }
@@ -90,6 +91,6 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
 
         Route::middleware(['nova'])
                 ->prefix('nova-vendor/nova-cms-portfolio')
-                ->group(__DIR__ . '/../routes/api.php');
+                ->group(__DIR__.'/../routes/api.php');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +27,7 @@ class Slideshow extends Model implements Sortable
 
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix') . 'slideshows';
+        return config('nova-cms-portfolio.db_prefix').'slideshows';
     }
 
     protected static function newFactory()
@@ -61,7 +62,7 @@ class Slideshow extends Model implements Sortable
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix') . 'category_slideshow')
+        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
             ->withPivot(['sort_order'])
             ->using(CategorySlideshow::class);
     }
@@ -113,7 +114,7 @@ class Slideshow extends Model implements Sortable
             ->where('show_in_overview', true)
             ->first();
 
-        if (!$markedWork) {
+        if (! $markedWork) {
             $markedWork = $this->works()->first();
         }
 

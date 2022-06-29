@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use App\Models\User;
@@ -25,7 +26,7 @@ class Artist extends Model implements Sortable
 
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix') . 'artists';
+        return config('nova-cms-portfolio.db_prefix').'artists';
     }
 
     public $translatable = [
@@ -64,7 +65,7 @@ class Artist extends Model implements Sortable
 
     public function disciplines()
     {
-        return $this->belongsToMany(Discipline::class, config('nova-cms-portfolio.db_prefix') . 'artist_discipline');
+        return $this->belongsToMany(Discipline::class, config('nova-cms-portfolio.db_prefix').'artist_discipline');
     }
 
     public function url()
@@ -89,11 +90,11 @@ class Artist extends Model implements Sortable
         if ($this->works->count()) {
             $markedWork = $this->works->where('is_artist_portfolio_image', true)->first();
 
-            if (!$markedWork) {
+            if (! $markedWork) {
                 $markedWork = $this->works->where('show_in_overview', true)->first();
             }
 
-            if (!$markedWork) {
+            if (! $markedWork) {
                 $markedWork = $this->works->first();
             }
 
@@ -120,7 +121,7 @@ class Artist extends Model implements Sortable
 
     public function categoriesForDiscipline($disciplineId = null)
     {
-        if (!$disciplineId) {
+        if (! $disciplineId) {
             $disciplineId = Discipline::first()?->id;
         }
 
@@ -128,7 +129,7 @@ class Artist extends Model implements Sortable
 
         if ($disciplineId) {
             $slideshows = $slideshows->filter(function ($slideshow) use ($disciplineId) {
-                return !$slideshow->disciplines
+                return ! $slideshow->disciplines
                     || $slideshow->disciplines->pluck('id')->contains($disciplineId);
             });
         }
@@ -159,7 +160,7 @@ class Artist extends Model implements Sortable
             ->has('works')
             ->first();
 
-        if (!$slideshow) {
+        if (! $slideshow) {
             $slideshow = $this->slideshows()
                 ->has('works')
                 ->first();
@@ -170,7 +171,7 @@ class Artist extends Model implements Sortable
                 ->where('show_in_overview', true)
                 ->first();
 
-            if (!$markedWork) {
+            if (! $markedWork) {
                 $markedWork = $slideshow->works()->first();
             }
 
@@ -190,7 +191,7 @@ class Artist extends Model implements Sortable
     public function worksForCategory($categoryId, $disciplineId)
     {
         $works = $this->works()->whereHas('slideshow', function ($q) use ($categoryId, $disciplineId) {
-            $q->where(function ($q) use ($categoryId, $disciplineId) {
+            $q->where(function ($q) use ($disciplineId) {
                 $q->whereNull('discipline_id')
                   ->orWhere('discipline_id', $disciplineId);
             })
@@ -198,7 +199,7 @@ class Artist extends Model implements Sortable
                 $q->where('id', $categoryId);
             });
         })
-        ->where('represents_artist_in_discipline_category->' . $disciplineId . '_' . $categoryId, true)
+        ->where('represents_artist_in_discipline_category->'.$disciplineId.'_'.$categoryId, true)
         ->get();
 
         if ($works->count()) {

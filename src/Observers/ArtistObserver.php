@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Observers;
 
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,7 @@ class ArtistObserver
             return;
         }
 
-        if (!$email && $artist->user) {
+        if (! $email && $artist->user) {
             return $artist->user->delete();
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
 use Eminiarts\Tabs\Tabs;
@@ -10,9 +11,7 @@ use Kraenkvisuell\NovaCms\Tabs\Seo;
 use Kraenkvisuell\NovaCmsBlocks\Blocks;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\CreateProjectsViaUploadCard;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Resource;
 use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
 use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 use Laravel\Nova\Fields\Boolean;
@@ -111,8 +110,8 @@ class Artist extends Resource
 
             Slug::make(__('nova-cms::pages.slug'), 'slug')->from('name')
                 ->rules('required')
-                ->creationRules('unique:' . config('nova-cms-portfolio.db_prefix') . 'artists,slug')
-                ->updateRules('unique:' . config('nova-cms-portfolio.db_prefix') . 'artists,slug,{{resourceId}}')
+                ->creationRules('unique:'.config('nova-cms-portfolio.db_prefix').'artists,slug')
+                ->updateRules('unique:'.config('nova-cms-portfolio.db_prefix').'artists,slug,{{resourceId}}')
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->onlyOnForms(),
 
@@ -193,7 +192,7 @@ class Artist extends Resource
             Stack::make('Details', [
                 Line::make('', 'name')->asBase(),
                 Line::make('', function () {
-                    return '/' . $this->slug;
+                    return '/'.$this->slug;
                 })->asSmall(),
             ]),
 
@@ -202,13 +201,13 @@ class Artist extends Resource
             Stack::make('', [
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                     return '<button
-                        onclick="window.location.href=\'/nova/resources/artists/' . $this->id . '\'"
+                        onclick="window.location.href=\'/nova/resources/artists/'.$this->id.'\'"
                         class="btn btn-xs 
-                        ' . ($this->slideshows->count() ? 'btn-primary' : 'btn-danger') . '
+                        '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
                         "
                         >'
-                        . $this->slideshows->count() . ' ' . ($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
-                        . '</button>';
+                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        .'</button>';
                 })->asHtml(),
             ])
             ->onlyOnIndex(),

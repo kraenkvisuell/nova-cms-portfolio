@@ -15,7 +15,7 @@ class BogusArtistPolicy
         if ($user->cms_role == 'artist') {
             return $user->artist_id == $artist->id;
         }
-        
+
         return true;
     }
 

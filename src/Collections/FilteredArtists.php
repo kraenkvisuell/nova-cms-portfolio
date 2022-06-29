@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Collections;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -23,7 +24,7 @@ class FilteredArtists
                         'title',
                         'slug',
                     ]);
-                }
+                },
             ]);
 
         $needle = trim(strtolower($needle));
@@ -67,9 +68,9 @@ class FilteredArtists
                                     'id',
                                     'slideshow_id',
                                 ]);
-                            }
+                            },
                         ]);
-                    }
+                    },
                 ]);
 
             if ($needle) {

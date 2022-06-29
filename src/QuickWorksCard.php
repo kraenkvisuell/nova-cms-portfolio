@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
 use Laravel\Nova\Card;
@@ -27,13 +28,13 @@ class QuickWorksCard extends Card
         $text = __(
             'nova-cms-portfolio::slideshows.quick_wildcard_upload',
             ['works' => __(config('nova-cms-portfolio.custom_works_label'))
-                ?: __('nova-cms-portfolio::works.works')
+                ?: __('nova-cms-portfolio::works.works'),
             ]
         );
 
         return $this->withMeta([
             'text' => $text,
-            'slideshowId' => $slideshowId
+            'slideshowId' => $slideshowId,
         ]);
     }
 }

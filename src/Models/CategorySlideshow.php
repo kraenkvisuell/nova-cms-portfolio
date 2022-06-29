@@ -11,7 +11,9 @@ class CategorySlideshow extends Pivot implements Sortable
     use SortableTrait;
 
     public $primaryKey = 'doid';
+
     public $incrementing = true;
+
     public $timestamps = false;
 
     public function getTable()

@@ -20,6 +20,6 @@ class PortfolioController
             app()->setLocale($locale);
         }
 
-        return Artist::where('slug->' . $locale, $slug)->first();
+        return Artist::where('slug->'.$locale, $slug)->first();
     }
 }

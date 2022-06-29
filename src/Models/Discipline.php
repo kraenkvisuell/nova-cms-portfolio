@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,7 +34,7 @@ class Discipline extends Model implements Sortable
 
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix') . 'disciplines';
+        return config('nova-cms-portfolio.db_prefix').'disciplines';
     }
 
     public $translatable = [
@@ -56,7 +57,7 @@ class Discipline extends Model implements Sortable
 
     public function artists()
     {
-        return $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix') . 'artist_discipline');
+        return $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix').'artist_discipline');
     }
 
     public function getCategories()
@@ -80,7 +81,7 @@ class Discipline extends Model implements Sortable
 
     public function getCachedCategories()
     {
-        return Cache::remember('disciplineCategories.' . app()->getLocale(), now()->addSeconds(5), function () {
+        return Cache::remember('disciplineCategories.'.app()->getLocale(), now()->addSeconds(5), function () {
             return $this->getCategories();
         });
     }
@@ -90,7 +91,7 @@ class Discipline extends Model implements Sortable
         return static::ordered()
             ->with('artists', function ($q) {
                 $q->with([
-                    'slideshows.categories'
+                    'slideshows.categories',
                 ])
                     ->where('is_published', true)
                     ->has('slideshows')
@@ -105,7 +106,7 @@ class Discipline extends Model implements Sortable
 
     public static function getCachedWithSortedArtists()
     {
-        return Cache::remember('discipliesWithSortedArtists.' . app()->getLocale(), now()->addSeconds(5), function () {
+        return Cache::remember('discipliesWithSortedArtists.'.app()->getLocale(), now()->addSeconds(5), function () {
             return static::getWithSortedArtists();
         });
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Collections;
 
 use Illuminate\Support\Facades\Cache;
@@ -9,7 +10,7 @@ class DisciplinesWithArtists
     public static function get()
     {
         //Cache::forget('DisciplinesWithArtists.' . app()->getLocale());
-        return Cache::remember('DisciplinesWithArtists.' . app()->getLocale(), now()->addDays(7), function () {
+        return Cache::remember('DisciplinesWithArtists.'.app()->getLocale(), now()->addDays(7), function () {
             $disciplines = Discipline::ordered()
                 ->has('artists')
                 ->with(['artists' => function ($b) {
@@ -18,7 +19,7 @@ class DisciplinesWithArtists
                         'id',
                         'name',
                         'slug',
-                        'is_published'
+                        'is_published',
                     ]);
                 }])
                 ->get();

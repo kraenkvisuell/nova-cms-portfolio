@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Services;
 
 use Exception;
@@ -44,7 +45,7 @@ class ProjectFolderUpload
         }
 
         $extension = Str::afterLast($filename, '.');
-        if ($response['status'] != 'not_uploaded' && !in_array($extension, $this->okExtensions)) {
+        if ($response['status'] != 'not_uploaded' && ! in_array($extension, $this->okExtensions)) {
             $response['status'] = 'not_uploaded';
             $response['reason'] = 'wrong filetype';
         }
@@ -65,6 +66,7 @@ class ProjectFolderUpload
 
         if ($response['status'] == 'not_uploaded') {
             $upload->save();
+
             return $response;
         }
 
@@ -92,12 +94,12 @@ class ProjectFolderUpload
         $slug = Str::slug(str_replace(':', '-', $folderName));
 
         $category = Cache::remember(
-            'portfolio.uploaded_category.' . $slug,
+            'portfolio.uploaded_category.'.$slug,
             now()->addSeconds(1),
             function () use ($categoryName, $slug) {
                 return Category::firstOrCreate(
                     [
-                        'title->' . app()->getLocale() => $categoryName,
+                        'title->'.app()->getLocale() => $categoryName,
                     ],
                     [
                         'slug' => $slug,
@@ -120,7 +122,7 @@ class ProjectFolderUpload
         $slug = Str::slug(str_replace('/', '-', $slideshowName));
 
         $slideshow = Cache::remember(
-            'portfolio.uploaded_slideshow.' . $artist->id . '.' . $slug,
+            'portfolio.uploaded_slideshow.'.$artist->id.'.'.$slug,
             now()->addSeconds(1),
             function () use ($slideshowName, $artist, $slug, $category) {
                 $slideshow = Slideshow::firstOrCreate(
@@ -156,18 +158,18 @@ class ProjectFolderUpload
         $newFilename = $filename;
 
         if (
-            !stristr($newFilename, $artist->slug)
-            && !stristr($newFilename, str_replace('-', '_', $artist->slug))
+            ! stristr($newFilename, $artist->slug)
+            && ! stristr($newFilename, str_replace('-', '_', $artist->slug))
         ) {
-            $newFilename = str_replace('-', '_', $artist->slug) . '_' . $newFilename;
+            $newFilename = str_replace('-', '_', $artist->slug).'_'.$newFilename;
         }
 
         $mediaItem = MediaModel::where('original_name', $filename)->first();
 
-        if (!$mediaItem) {
+        if (! $mediaItem) {
             try {
                 $tmpPath = Storage::putFileAs('tmp/portfolio-uploads', $file, $filename);
-                $mediaItem = API::upload(storage_path('app/' . $tmpPath), null, $newFilename);
+                $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
                 $response['status'] = 'success';
                 $response['reason'] = '';
             } catch (Exception $e) {

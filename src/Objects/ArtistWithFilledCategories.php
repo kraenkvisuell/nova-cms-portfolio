@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Objects;
 
 use Illuminate\Support\Facades\Cache;
@@ -8,9 +9,10 @@ class ArtistWithFilledCategories
 {
     public static function find(int $id, int $workLimit)
     {
-        Cache::forget('ArtistWithFilledCategories.' . $id . '.' . $workLimit . '.' . app()->getLocale());
+        Cache::forget('ArtistWithFilledCategories.'.$id.'.'.$workLimit.'.'.app()->getLocale());
+
         return Cache::remember(
-            'ArtistWithFilledCategories.' . $id . '.' . $workLimit . '.' . app()->getLocale(),
+            'ArtistWithFilledCategories.'.$id.'.'.$workLimit.'.'.app()->getLocale(),
             now()->addDays(7),
             function () use ($id, $workLimit) {
                 $artist = Artist::where('id', $id)
@@ -23,16 +25,16 @@ class ArtistWithFilledCategories
                                 'works',
                                 'categories' => function ($b) {
                                     $b->select(['id', 'title', 'slug']);
-                                }
+                                },
                             ]);
                     },
                     'slideshows.categories' => function ($b) {
                         $b->select(['id', 'title', 'slug']);
-                    }
+                    },
                 ])
                 ->first();
 
-                if (!$artist) {
+                if (! $artist) {
                     return null;
                 }
 
@@ -62,7 +64,7 @@ class ArtistWithFilledCategories
                         $works = $slideshow->works
                             ->where('show_in_overview', true);
 
-                        if (!$works->count()) {
+                        if (! $works->count()) {
                             $works = $slideshow->works
                                 ->take($workLimit);
                         }

@@ -5,8 +5,8 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Seeders;
 use Illuminate\Database\Seeder;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
-use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
+use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
 
 class DummySeeder extends Seeder
 {

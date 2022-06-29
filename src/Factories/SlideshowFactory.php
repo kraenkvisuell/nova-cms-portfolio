@@ -1,8 +1,9 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
 
 class SlideshowFactory extends Factory
@@ -18,13 +19,13 @@ class SlideshowFactory extends Factory
         return [
             'title' => $title,
             'slug' => $slug,
-            'description' => [ $locale => $this->faker->sentences() ],
-            'meta_description' => [ $locale => $this->faker->sentence ],
-            'browser_title' => [ $locale => $this->faker->words ],
+            'description' => [$locale => $this->faker->sentences()],
+            'meta_description' => [$locale => $this->faker->sentence],
+            'browser_title' => [$locale => $this->faker->words],
             'robots' => [
                 'index' => true,
                 'follow' => true,
-            ]
+            ],
         ];
     }
 }

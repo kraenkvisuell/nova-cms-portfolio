@@ -1,8 +1,9 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
 
 class CategoryFactory extends Factory
@@ -14,9 +15,10 @@ class CategoryFactory extends Factory
         $locale = app()->getLocale();
         $title = ucfirst($this->faker->unique()->word);
         $slug = Str::slug($title);
+
         return [
-            'title' => [ $locale => $title ],
-            'slug' => [ $locale => $slug ],
+            'title' => [$locale => $title],
+            'slug' => [$locale => $slug],
         ];
     }
 }

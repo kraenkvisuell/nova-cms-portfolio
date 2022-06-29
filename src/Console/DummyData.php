@@ -15,7 +15,7 @@ class DummyData extends Command
 
         if (\Kraenkvisuell\NovaCmsPortfolio\Models\Discipline::count() == 0) {
             $this->call('db:seed', [
-                'class' => DummySeeder::class
+                'class' => DummySeeder::class,
             ]);
         } else {
             $this->warn('did not seed data because tables are not empty.');

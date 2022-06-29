@@ -7,7 +7,6 @@ use KraenkVisuell\NovaSortable\Traits\HasSortableManyToManyRows;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
 
 class CategorySlideshow extends Resource
@@ -30,7 +29,7 @@ class CategorySlideshow extends Resource
     {
         return config('nova-cms-portfolio.slideshows_sortable_dropdown') ?: false;
     }
-    
+
     public static function label()
     {
         return config('nova-cms-portfolio.custom_slideshows_label')

@@ -7,7 +7,7 @@ trait QueryableBySlug
     public static function queryBySlug($slug)
     {
         $builder = static::where('slug->'.app()->getLocale(), $slug);
-        if (!$builder->count()) {
+        if (! $builder->count()) {
             $builder = static::where('slug->'.app()->getFallbackLocale(), $slug);
         }
 

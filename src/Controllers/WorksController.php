@@ -11,8 +11,8 @@ class WorksController
     {
         $existingFilenames = $slideshow->workFilenames();
         $filename = API::getOriginalName($fileId);
-        
-        if (!in_array($filename, $existingFilenames)) {
+
+        if (! in_array($filename, $existingFilenames)) {
             $slideshow->works()->create([
                 'file' => $fileId,
             ]);

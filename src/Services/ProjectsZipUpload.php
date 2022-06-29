@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio\Services;
 
 use Exception;
@@ -15,7 +16,9 @@ use ZipArchive;
 class ProjectsZipUpload
 {
     protected $okExtensions = ['jpg', 'png', 'gif', 'mp4', 'jpeg'];
+
     protected $artist;
+
     protected $tmpFolder;
 
     public function handle(Artist $artist, $path)
@@ -26,13 +29,13 @@ class ProjectsZipUpload
 
         $this->artist = $artist;
 
-        $zipperPath = storage_path('app/' . $path);
+        $zipperPath = storage_path('app/'.$path);
 
-        $this->tmpFolder = 'tmp/' . Str::random(20);
+        $this->tmpFolder = 'tmp/'.Str::random(20);
 
         $zip = new ZipArchive;
         if ($zip->open($zipperPath) === true) {
-            $zip->extractTo(storage_path('app/' . $this->tmpFolder));
+            $zip->extractTo(storage_path('app/'.$this->tmpFolder));
             $zip->close();
 
             $folders = Storage::disk('local')->directories($this->tmpFolder);
@@ -53,8 +56,8 @@ class ProjectsZipUpload
         foreach ($folders as $folder) {
             $folderName = Str::afterLast($folder, '/');
             if (
-                !Str::startsWith($folderName, '_')
-                && !Str::startsWith($folderName, '.')
+                ! Str::startsWith($folderName, '_')
+                && ! Str::startsWith($folderName, '.')
             ) {
                 $this->importCategory($folderName);
             }
@@ -63,12 +66,12 @@ class ProjectsZipUpload
 
     protected function importCategory($folderName)
     {
-        $folders = Storage::disk('local')->directories($this->tmpFolder . '/' . $folderName);
+        $folders = Storage::disk('local')->directories($this->tmpFolder.'/'.$folderName);
 
         $categoryName = str_replace(':', '/', $folderName);
         $category = Category::firstOrCreate(
             [
-                'title->' . app()->getLocale() => $categoryName,
+                'title->'.app()->getLocale() => $categoryName,
             ],
             [
                 'slug' => Str::slug(str_replace(':', '-', $folderName)),
@@ -83,8 +86,8 @@ class ProjectsZipUpload
         foreach ($folders as $folder) {
             $folderName = Str::afterLast($folder, '/');
             if (
-                !Str::startsWith($folderName, '_')
-                && !Str::startsWith($folderName, '.')
+                ! Str::startsWith($folderName, '_')
+                && ! Str::startsWith($folderName, '.')
             ) {
                 $this->importSlideshow($folder, $categoryId);
                 //ImportSlideshow::dispatch($this->artist, $folder, $categoryId);
@@ -126,7 +129,7 @@ class ProjectsZipUpload
         foreach ($files as $file) {
             $fileName = Str::afterLast($file, '/');
             $extension = Str::afterLast($file, '.');
-            if (!Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
+            if (! Str::startsWith($fileName, '.') && in_array($extension, $this->okExtensions)) {
                 $this->importFile($file, $slideshow);
             }
         }
@@ -138,17 +141,17 @@ class ProjectsZipUpload
         $newFilename = $fileName;
 
         if (
-            !stristr($newFilename, $this->artist->slug)
-            && !stristr($newFilename, str_replace('-', '_', $this->artist->slug))
+            ! stristr($newFilename, $this->artist->slug)
+            && ! stristr($newFilename, str_replace('-', '_', $this->artist->slug))
         ) {
-            $newFilename = str_replace('-', '_', $this->artist->slug) . '_' . $newFilename;
+            $newFilename = str_replace('-', '_', $this->artist->slug).'_'.$newFilename;
         }
 
         $mediaItem = MediaModel::where('original_name', $fileName)->first();
 
-        if (!$mediaItem) {
+        if (! $mediaItem) {
             try {
-                $mediaItem = API::upload(storage_path('app/' . $file), null, $newFilename);
+                $mediaItem = API::upload(storage_path('app/'.$file), null, $newFilename);
             } catch (Exception $e) {
             }
         }

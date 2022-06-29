@@ -1,7 +1,7 @@
 <?php
+
 namespace Kraenkvisuell\NovaCmsPortfolio;
 
-use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
 use Laravel\Nova\Card;
 
 class CreateProjectsViaUploadCard extends Card

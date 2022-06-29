@@ -205,7 +205,7 @@ class Work extends Resource
             Tags::make('Tags')
                 ->onlyOnForms(),
 
-            Boolean::make(__('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist'), 'show_in_overview')
+            Boolean::make($showInOverviewLabel, 'show_in_overview')
                 ->onlyOnForms(),
 
             BooleanGroup::make(

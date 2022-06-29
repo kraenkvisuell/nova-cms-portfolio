@@ -62,6 +62,9 @@ class Work extends Resource
     {
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
 
+        $showInOverviewLabel = config('nova-cms-portfolio.custom_show_in_overview_label')
+            ?: __('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist');
+
         $fields = [
             MediaLibrary::make(__('nova-cms::content_blocks.file'), 'file')
                 ->uploadOnly($uploadOnly)
@@ -125,10 +128,10 @@ class Work extends Resource
             // ]),
 
             Stack::make('Settings', [
-                Line::make('', function () {
+                Line::make('', function () use ($showInOverviewLabel) {
                     if ($this->show_in_overview) {
                         return '<span class="text-xs font-bold uppercase">'
-                        .__('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist')
+                        .$showInOverviewLabel
                         .'</span>';
                     }
 

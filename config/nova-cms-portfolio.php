@@ -8,6 +8,7 @@ return [
     'custom_slideshow_label' => '',
     'custom_works_label' => '',
     'custom_work_label' => '',
+    'custom_show_in_overview_label' => '',
     'artists_have_custom_bg' => true,
     'artists_are_sortable' => false,
     'has_quick_upload' => true,

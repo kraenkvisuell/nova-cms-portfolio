@@ -52,26 +52,31 @@ class FilteredArtists
 
         $results = [];
 
-        foreach ($artists as $artist) {
-            $worksBuilder = $artist->works()
-                ->limit($workLimit)
+        $with = [
+            'slideshow' => function ($b) {
+                $b->select([
+                    'id',
+                    'slug',
+                    'title',
+                ])
                 ->with([
-                    'slideshow' => function ($b) {
+                    'works' => function ($b) {
                         $b->select([
                             'id',
-                            'slug',
-                            'title',
-                        ])
-                        ->with([
-                            'works' => function ($b) {
-                                $b->select([
-                                    'id',
-                                    'slideshow_id',
-                                ]);
-                            },
+                            'slideshow_id',
                         ]);
                     },
                 ]);
+            },
+        ];
+
+        foreach ($artists as $artist) {
+            $worksBuilder = $artist->works()
+                ->limit($workLimit)
+                ->with($with)
+                ->orderByDesc('show_in_overview')
+                ->orderBy('sort_order')
+                ->orderByDesc('id');
 
             if ($needle) {
             } else {

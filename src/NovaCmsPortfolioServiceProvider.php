@@ -73,6 +73,8 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang/nova-cms-portfolio', 'nova-cms-portfolio');
+
         $this->app->bind('project-folder-upload', function () {
             return new ProjectFolderUpload();
         });

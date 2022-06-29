@@ -30,11 +30,11 @@ class ProjectFolderUpload
             'category' => '',
             'slideshow' => '',
         ];
-        //ray($data);
+        ray($data);
 
         $pathArr = explode('/', $data['originalPath']);
 
-        if (Str::startsWith($filename, '.') || Str::startsWith($filename, '_')) {
+        if (Str::startsWith($filename, '.') || Str::startsWith($filename, '__')) {
             $response['status'] = 'not_uploaded';
             $response['reason'] = 'hidden file';
         }

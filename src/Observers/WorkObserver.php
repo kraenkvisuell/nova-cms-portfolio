@@ -8,12 +8,16 @@ class WorkObserver
 {
     public function created(Work $work)
     {
-        $this->ensureOnlyOneArtistPortfolioImage($work);
+        if (config('nova-cms-porfolio.number_of_portfolio_images') == 1) {
+            $this->ensureOnlyOneArtistPortfolioImage($work);
+        }
     }
 
     public function updated(Work $work)
     {
-        $this->ensureOnlyOneArtistPortfolioImage($work);
+        if (config('nova-cms-porfolio.number_of_portfolio_images') == 1) {
+            $this->ensureOnlyOneArtistPortfolioImage($work);
+        }
         $this->ensureOnlyOneArtistDisciplineImage($work);
     }
 

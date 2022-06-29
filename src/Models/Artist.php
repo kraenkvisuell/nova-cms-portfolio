@@ -83,7 +83,7 @@ class Artist extends Model implements Sortable
 
     public function portfolioImage()
     {
-        if ($this->portfolio_image) {
+        if (config('nova-cms-portfolio.artists_have_custom_bg') && $this->portfolio_image) {
             return $this->portfolio_image;
         }
 
@@ -102,6 +102,51 @@ class Artist extends Model implements Sortable
                 return $markedWork->file;
             }
         }
+    }
+
+    public function portfolioImages()
+    {
+        $images = [];
+
+        if (config('nova-cms-portfolio.artists_have_custom_bg') && $this->portfolio_image) {
+            $images[] = $this->portfolio_image;
+        }
+        if ($this->works()->count()) {
+            $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
+
+            if ($limit > 0) {
+                foreach (
+                    $this->works()->where('is_artist_portfolio_image', true)->limit($limit)->get()
+                    as $work
+                ) {
+                    $images[] = $work->file;
+                }
+            }
+
+            $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
+
+            if ($limit > 0) {
+                foreach (
+                    $this->works()->where('show_in_overview', true)->limit($limit)->get()
+                    as $work
+                ) {
+                    $images[] = $work->file;
+                }
+            }
+
+            $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
+
+            if ($limit > 0) {
+                foreach (
+                    $this->works()->limit($limit)->get()
+                    as $work
+                ) {
+                    $images[] = $work->file;
+                }
+            }
+        }
+
+        return $images;
     }
 
     public function categories()

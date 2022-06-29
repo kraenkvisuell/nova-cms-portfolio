@@ -9,7 +9,8 @@ class DisciplinesWithArtists
 {
     public static function get()
     {
-        //Cache::forget('DisciplinesWithArtists.' . app()->getLocale());
+        Cache::forget('DisciplinesWithArtists.'.app()->getLocale());
+
         return Cache::remember('DisciplinesWithArtists.'.app()->getLocale(), now()->addDays(7), function () {
             $disciplines = Discipline::ordered()
                 ->has('artists')
@@ -30,25 +31,30 @@ class DisciplinesWithArtists
                 $artists = [];
 
                 foreach ($discipline->artists as $artist) {
-                    $actualImage = $artist->portfolioImage();
+                    $portfolioImages = [];
 
-                    $imgUrls = [];
-                    foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
-                        if ($actualImage) {
-                            $imgUrls[$sizeKey] = nova_cms_image($actualImage, $sizeKey);
-                        } else {
-                            $imgUrls[$sizeKey] = nova_cms_empty_image();
+                    foreach ($artist->portfolioImages() as $portfolioImage) {
+                        $item = [
+                            'imgUrls' => [],
+                            'ratio' => $portfolioImage ? nova_cms_ratio($portfolioImage) : 1,
+                        ];
+
+                        foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
+                            if ($portfolioImage) {
+                                $item['imgUrls'][$sizeKey] = nova_cms_image($portfolioImage, $sizeKey);
+                            } else {
+                                $item['imgUrls'][$sizeKey] = nova_cms_empty_image();
+                            }
                         }
+
+                        $portfolioImages[] = $item;
                     }
 
                     $artists[] = [
                         'id' => $artist->id,
                         'slug' => $artist->slug,
                         'name' => $artist->name,
-                        'portfolioImage' => [
-                            'imgUrls' => $imgUrls,
-                            'ratio' => $actualImage ? nova_cms_ratio($actualImage) : 1,
-                        ],
+                        'portfolioImages' => $portfolioImages,
                     ];
                 }
 

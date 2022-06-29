@@ -150,30 +150,31 @@ class Artist extends Resource
                 ->onlyOnForms(),
         ];
 
-        if (config('nova-cms-portfolio.artists_have_custom_bg')) {
-            $tabs[__('nova-cms::pages.content')][] = Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
-                ->sketch()
-                ->hideFromDetail();
-        }
-
         $tabs[__('nova-cms::pages.content')] = [
             TipTap::make(__('nova-cms-portfolio::artists.description'), 'description')
                 ->translatable()
                 ->onlyOnForms(),
+        ];
 
-            MediaLibrary::make(__('nova-cms-portfolio::artists.portfolio_image'), 'portfolio_image')
+        $tabs[__('nova-cms::pages.content')][] = TipTap::make(__('nova-cms-portfolio::artists.description'), 'description')
+                ->translatable()
+                ->onlyOnForms();
+
+        if (config('nova-cms-portfolio.has_custom_portfolio_image')) {
+            $tabs[__('nova-cms::pages.content')][] = MediaLibrary::make(__('nova-cms-portfolio::artists.portfolio_image'), 'portfolio_image')
                 ->uploadOnly($uploadOnly)
-                ->onlyOnForms(),
+                ->onlyOnForms();
+        }
 
-            MediaLibrary::make(__('nova-cms-portfolio::artists.portrait_image'), 'portrait_image')
+        $tabs[__('nova-cms::pages.content')][] = MediaLibrary::make(__('nova-cms-portfolio::artists.portrait_image'), 'portrait_image')
                 ->uploadOnly($uploadOnly)
-                ->onlyOnForms(),
+                ->onlyOnForms();
 
-            MediaLibrary::make(__('nova-cms-portfolio::artists.sedcard_pdf'), 'sedcard_pdf')
+        $tabs[__('nova-cms::pages.content')][] = MediaLibrary::make(__('nova-cms-portfolio::artists.sedcard_pdf'), 'sedcard_pdf')
                 ->uploadOnly($uploadOnly)
-                ->onlyOnForms(),
+                ->onlyOnForms();
 
-            Blocks::make('Testimonials', 'testimonials')
+        $tabs[__('nova-cms::pages.content')][] = Blocks::make('Testimonials', 'testimonials')
                 ->addLayout('Testimonial', 'testimonial', [
                     Textarea::make('Text', 'text')
                         ->translatable(),
@@ -183,8 +184,13 @@ class Artist extends Resource
                 ->button('Testimonial hinzufügen')
                 ->collapsed()
                 ->stacked()
-                ->onlyOnForms(),
-        ];
+                ->onlyOnForms();
+
+        if (config('nova-cms-portfolio.artists_have_custom_bg')) {
+            $tabs[__('nova-cms::pages.content')][] = Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
+                ->sketch()
+                ->hideFromDetail();
+        }
 
         $tabs[__('nova-cms::seo.seo')] = Seo::make();
 

@@ -34,7 +34,7 @@ class ProjectFolderUpload
 
         $pathArr = explode('/', $data['originalPath']);
 
-        if (Str::startsWith($filename, '.') || Str::startsWith($filename, '__')) {
+        if (Str::startsWith($filename, '.')) {
             $response['status'] = 'not_uploaded';
             $response['reason'] = 'hidden file';
         }

@@ -7,7 +7,7 @@ return [
     'embed_url' => 'Embed URL (Youtube, Vimeo etc.)',
     'is_artist_discipline_image' => 'represents artist in discipline',
     'is_artist_portfolio_image' => 'is artist portfolio image',
-    'overview_categories' => 'cat. (overview)',
+    'overview_categories' => 'category prio in overview',
     'representation_categories' => 'cat. (represents...)',
     'represents_artist_in_discipline_category' => 'represents artist on frontpage category',
     'show_in_overview_category' => 'show in artists category portfolio',

@@ -153,25 +153,25 @@ class Slideshow extends Resource
                     return $html;
                 })->asHtml(),
 
-                Line::make('', function () {
-                    if ($this->works->where('is_artist_discipline_image', true)->count()) {
-                        return '<div class="text-xs font-bold uppercase">'
-                        .__('nova-cms-portfolio::works.is_artist_discipline_image')
-                        .'</div>';
-                    }
+                // Line::make('', function () {
+                //     if ($this->works->where('is_artist_discipline_image', true)->count()) {
+                //         return '<div class="text-xs font-bold uppercase">'
+                //         .__('nova-cms-portfolio::works.is_artist_discipline_image')
+                //         .'</div>';
+                //     }
 
-                    return '';
-                })->asHtml(),
+                //     return '';
+                // })->asHtml(),
 
-                Line::make('', function () {
-                    if ($this->works->where('is_artist_portfolio_image', true)->count()) {
-                        return '<div class="text-xs font-bold uppercase">'
-                        .__('nova-cms-portfolio::works.is_artist_portfolio_image')
-                        .'</div>';
-                    }
+                // Line::make('', function () {
+                //     if ($this->works->where('is_artist_portfolio_image', true)->count()) {
+                //         return '<div class="text-xs font-bold uppercase">'
+                //         .__('nova-cms-portfolio::works.is_artist_portfolio_image')
+                //         .'</div>';
+                //     }
 
-                    return '';
-                })->asHtml(),
+                //     return '';
+                // })->asHtml(),
             ])
             ->onlyOnIndex(),
 

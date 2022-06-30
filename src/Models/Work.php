@@ -93,6 +93,23 @@ class Work extends Model implements Sortable
         return $slugs;
     }
 
+    public function overviewCategoryTitles()
+    {
+        $titles = [];
+
+        if (! is_array($this->show_in_overview_category) || ! $this->show_in_overview_category) {
+            return [];
+        }
+
+        foreach ($this->show_in_overview_category as $categoryId => $bool) {
+            if ($bool) {
+                $titles[] = optional($this->slideshow->categories->firstWhere('id', $categoryId))->title;
+            }
+        }
+
+        return $titles;
+    }
+
     public function representationCategorySlugs()
     {
         $slugs = [];

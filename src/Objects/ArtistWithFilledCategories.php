@@ -106,7 +106,7 @@ class ArtistWithFilledCategories
                 foreach ($artist->social_links as $socialLink) {
                     $socialLinks[] = [
                         'title' => $socialLink->title,
-                        'url' => $socialLink->link_url->{app()->getLocale()},
+                        'url' => @$socialLink->link_url->{app()->getLocale()},
                         'slug' => $socialLink->slug,
                         'icon' => $socialLink->link_icon,
                         'svg' => $socialLink->svg_tag,

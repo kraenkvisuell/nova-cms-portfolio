@@ -10,7 +10,7 @@ class ToggleSlideshowIsPublished extends Action
 {
     public function name()
     {
-        return __('nova-cms-portfolio::slideshows.toggle_is_published');
+        return __('AN/AUS').': '.__('nova-cms-portfolio::portfolio.published');
     }
 
     public function handle(ActionFields $fields, Collection $models)

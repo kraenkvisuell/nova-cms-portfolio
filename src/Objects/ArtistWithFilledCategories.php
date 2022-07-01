@@ -21,6 +21,7 @@ class ArtistWithFilledCategories
                     'slideshows' => function ($b) {
                         $b->has('works')
                             ->where('is_published', true)
+                            ->where('is_visible_in_overview', true)
                             ->with([
                                 'works',
                                 'categories' => function ($b) {

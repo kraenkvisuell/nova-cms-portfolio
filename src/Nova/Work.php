@@ -70,7 +70,7 @@ class Work extends Resource
 
         $overviewCategoriesLabel = config('nova-cms-portfolio.custom_overview_categories_label')
             ?: __('nova-cms-portfolio::works.overview_categories');
- 
+
         $fields = [];
 
         $fields[] = MediaLibrary::make(__('nova-cms::content_blocks.file'), 'file')
@@ -132,18 +132,20 @@ class Work extends Resource
             return '';
         })->asHtml();
 
-        $settingsStack[] = Line::make('', function () use ($overviewCategoriesLabel) {
-            if (is_array($this->overviewCategoryTitles()) && $this->overviewCategoryTitles()) {
-                return '<span class="text-xs uppercase">'
-                .$overviewCategoriesLabel
-                .': <span class="font-bold">'
-                .implode(', ', $this->overviewCategoryTitles())
-                .'</span></span>';
-            }
+        if (config('nova-cms-portfolio.has_show_in_overview_category')) {
+            $settingsStack[] = Line::make('', function () use ($overviewCategoriesLabel) {
+                if (is_array($this->overviewCategoryTitles()) && $this->overviewCategoryTitles()) {
+                    return '<span class="text-xs uppercase">'
+                    .$overviewCategoriesLabel
+                    .': <span class="font-bold">'
+                    .implode(', ', $this->overviewCategoryTitles())
+                    .'</span></span>';
+                }
 
-            return '';
-        })->asHtml();
-        
+                return '';
+            })->asHtml();
+        }
+
         if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
             $settingsStack[] = Line::make('', function () {
                 if (is_array($this->representationCategorySlugs()) && $this->representationCategorySlugs()) {
@@ -153,14 +155,11 @@ class Work extends Resource
                     .implode(', ', $this->representationCategorySlugs())
                     .'</span></span>';
                 }
-    
+
                 return '';
             })->asHtml();
         }
-        
-        
-        
-        
+
         $settingsStack[] = Line::make('', function () {
             if ($this->is_artist_discipline_image) {
                 return '<span class="text-xs font-bold uppercase">'
@@ -294,10 +293,12 @@ class Work extends Resource
             session(['lastNovaSlideshowCategoryIds' => $categoryIds]);
         }
 
-        foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
-            $actions[] = ToggleShowInOverviewCategory::make($categoryId)
-            ->onlyOnTableRow()
-            ->withoutConfirmation();
+        if (config('nova-cms-portfolio.has_show_in_overview_category')) {
+            foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
+                $actions[] = ToggleShowInOverviewCategory::make($categoryId)
+                ->onlyOnTableRow()
+                ->withoutConfirmation();
+            }
         }
 
         if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {

@@ -73,9 +73,12 @@ class Slideshow extends Resource
         $workSingularLabel = config('nova-cms-portfolio.custom_work_label')
             ?: __('nova-cms-portfolio::works.work');
 
+        $visibleInArtistOverviewLabel = config('nova-cms-portfolio.custom_visible_in_artist_overview_label')
+            ?: ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview'));
+
         $fields = [
             Stack::make('Details', [
-                Line::make('', function () {
+                Line::make('', function () use ($visibleInArtistOverviewLabel) {
                     $html = '<div class="font-bold leading-tight mb-1 whitespace-normal">'.$this->title.'</div>';
 
                     $html .= '<div class="whitespace-normal mb-1">';
@@ -85,10 +88,14 @@ class Slideshow extends Resource
                     $html .= '</div>';
 
                     if (! $this->is_published) {
-                        $html .= '<div class="font-bold text-xs text-danger uppercase">not published</div>';
+                        $html .= '<div class="font-bold text-xs text-60 line-through uppercase">'
+                            .__('nova-cms-portfolio::portfolio.published')
+                            .'</div>';
                     }
                     if (! $this->is_visible_in_overview) {
-                        $html .= '<div class="font-bold text-xs text-danger uppercase">hidden from artist overview</div>';
+                        $html .= '<div class="font-bold text-xs text-60 line-through uppercase">'
+                            .$visibleInArtistOverviewLabel
+                            .'</div>';
                     }
 
                     return $html;
@@ -199,7 +206,7 @@ class Slideshow extends Resource
         ];
 
         if (config('nova-cms-portfolio.has_visible_in_artist_overview')) {
-            $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview')), 'is_visible_in_overview')
+            $fields[] = Boolean::make($visibleInArtistOverviewLabel, 'is_visible_in_overview')
             ->onlyOnForms();
         }
 

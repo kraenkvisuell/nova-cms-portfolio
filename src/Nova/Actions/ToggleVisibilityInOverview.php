@@ -10,7 +10,9 @@ class ToggleVisibilityInOverview extends Action
 {
     public function name()
     {
-        return __('nova-cms-portfolio::slideshows.toggle_visibility_in_artist_overview');
+        return __('AN/AUS').': '
+            .config('nova-cms-portfolio.custom_visible_in_artist_overview_label')
+            ?: __('nova-cms-portfolio::slideshows.toggle_visibility_in_artist_overview');
     }
 
     public function handle(ActionFields $fields, Collection $models)

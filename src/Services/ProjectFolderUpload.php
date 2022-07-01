@@ -97,14 +97,12 @@ class ProjectFolderUpload
             'portfolio.uploaded_category.'.$slug,
             now()->addSeconds(1),
             function () use ($categoryName, $slug) {
-                return Category::firstOrCreate(
-                    [
-                        'title->'.app()->getLocale() => $categoryName,
-                    ],
-                    [
-                        'slug' => $slug,
-                    ]
-                );
+                return Category::firstOrCreate([
+                    'slug' => $slug,
+                ],
+                [
+                    'title->'.app()->getLocale() => $categoryName,
+                ]);
             }
         );
 

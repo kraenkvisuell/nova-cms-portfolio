@@ -98,7 +98,7 @@ class ProjectFolderUpload
             now()->addSeconds(1),
             function () use ($categoryName, $slug) {
                 return Category::firstOrCreate([
-                    'slug' => $slug,
+                    'slug->'.app()->getLocale() => $slug,
                 ],
                 [
                     'title->'.app()->getLocale() => $categoryName,

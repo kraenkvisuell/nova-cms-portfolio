@@ -51,7 +51,7 @@ class ArtistWithFilledCategories
 
                 $categories = [];
 
-                foreach ($artist->categories() as $category) {
+                foreach ($artist->slideshowCategories() as $category) {
                     $slideshows = $artist
                         ->slideshows
                         ->filter(function ($slideshow) use ($category) {

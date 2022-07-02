@@ -95,25 +95,42 @@ class Category extends Resource
 
         $tabs[__('nova-cms::seo.seo')] = Seo::make();
 
-        return [
+        $fields = [
             (new Tabs(static::singularLabel(), $tabs))->withToolbar(),
+        ];
 
-            Stack::make('', [
+        if (config('nova-cms-portfolio.has_category_slideshows')) {
+            $fields[] = Stack::make('', [
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                     return '<button
-                        onclick="window.location.href=\'/nova/resources/categories/'.$this->id.'\'"
-                        class="btn btn-xs 
-                        '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
-                        "
-                        >'
+                                onclick="window.location.href=\'/nova/resources/categories/'.$this->id.'\'"
+                                class="btn btn-xs 
+                                '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
+                                "
+                                >'
                         .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
                         .'</button>';
                 })->asHtml(),
             ])
-            ->onlyOnIndex(),
+            ->onlyOnIndex();
 
-            BelongsToMany::make($slideshowLabel, 'slideshows', CategorySlideshow::class),
-        ];
+            $fields[] = BelongsToMany::make($slideshowLabel, 'slideshows', CategorySlideshow::class);
+        } else {
+            $fields[] = Stack::make('', [
+                Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
+                    return '<div
+                                class="
+                                '.(! $this->slideshows->count() ? 'text-60' : '').'
+                                "
+                        >'
+                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        .'</div>';
+                })->asHtml(),
+            ])
+            ->onlyOnIndex();
+        }
+
+        return $fields;
     }
 
     public static function redirectAfterUpdate(NovaRequest $request, $resource)

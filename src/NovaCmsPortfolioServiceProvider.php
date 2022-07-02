@@ -5,6 +5,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Kraenkvisuell\NovaCmsPortfolio\Console\DummyData;
+use Kraenkvisuell\NovaCmsPortfolio\Console\FillArtistCategories;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist as ArtistModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\CategorySlideshow as CategorySlideshowModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow as SlideshowModel;
@@ -58,6 +59,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 DummyData::class,
+                FillArtistCategories::class,
             ]);
         }
 

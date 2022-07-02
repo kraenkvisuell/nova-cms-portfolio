@@ -151,6 +151,13 @@ class Artist extends Model implements Sortable
 
     public function categories()
     {
+        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix').'artist_category')
+                ->withPivot(['sort_order'])
+                ->using(ArtistCategory::class);
+    }
+
+    public function slideshowCategories()
+    {
         $slideshows = $this->slideshows;
 
         $categories = collect([]);

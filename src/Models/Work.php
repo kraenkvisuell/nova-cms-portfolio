@@ -82,9 +82,7 @@ class Work extends Model implements Sortable
         $arr = explode(':', $this->custom_ratio);
 
         if (count($arr) == 2 && intval($arr[0]) && intval($arr[1])) {
-            ray($this->custom_ratio);
-
-            return intval($arr[1]) / intval($arr[0]);
+            return intval($arr[0]) / intval($arr[1]);
         }
 
         // try actual file ratio
@@ -95,8 +93,10 @@ class Work extends Model implements Sortable
         }
 
         // try embed code ratio
-        if ($this->embedRatio()) {
-            return $this->embedRatio() / 100;
+        $arr = explode(':', $this->embed_code_ratio);
+
+        if (count($arr) == 2 && intval($arr[0]) && intval($arr[1])) {
+            return intval($arr[0]) / intval($arr[1]);
         }
 
         return 16 / 9;

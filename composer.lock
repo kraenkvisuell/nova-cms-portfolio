@@ -1843,16 +1843,16 @@
         },
         {
             "name": "manogi/nova-tiptap",
-            "version": "v2.8.2",
+            "version": "v2.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/manogi/nova-tiptap.git",
-                "reference": "eb1c3f7ce8a146488116e7e92513cb6996319494"
+                "reference": "dbd0a9d9ac68f9858522f5a03666d40ba0b2b048"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/manogi/nova-tiptap/zipball/eb1c3f7ce8a146488116e7e92513cb6996319494",
-                "reference": "eb1c3f7ce8a146488116e7e92513cb6996319494",
+                "url": "https://api.github.com/repos/manogi/nova-tiptap/zipball/dbd0a9d9ac68f9858522f5a03666d40ba0b2b048",
+                "reference": "dbd0a9d9ac68f9858522f5a03666d40ba0b2b048",
                 "shasum": ""
             },
             "require": {
@@ -1890,9 +1890,9 @@
             ],
             "support": {
                 "issues": "https://github.com/manogi/nova-tiptap/issues",
-                "source": "https://github.com/manogi/nova-tiptap/tree/v3.0.3"
+                "source": "https://github.com/manogi/nova-tiptap/tree/v2.8.3"
             },
-            "time": "2022-04-26T07:41:55+00:00"
+            "time": "2022-07-04T08:20:35+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6403,16 +6403,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v0.2.1",
+            "version": "v0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "b5e525e3867d289843d2e830d2fddfde17a74ede"
+                "reference": "d0829631687c1238abdd660daac3d7218254b65c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/b5e525e3867d289843d2e830d2fddfde17a74ede",
-                "reference": "b5e525e3867d289843d2e830d2fddfde17a74ede",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/d0829631687c1238abdd660daac3d7218254b65c",
+                "reference": "d0829631687c1238abdd660daac3d7218254b65c",
                 "shasum": ""
             },
             "require": {
@@ -6465,7 +6465,7 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2022-06-27T13:37:52+00:00"
+            "time": "2022-07-04T16:04:06+00:00"
         },
         {
             "name": "mockery/mockery",

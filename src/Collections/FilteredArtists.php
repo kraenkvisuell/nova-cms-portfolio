@@ -102,13 +102,12 @@ class FilteredArtists
                     'id' => $work->id,
                     'imgUrls' => $imgUrls,
                     'positionInSlideshow' => $work->actualPosition(),
-                    'ratio' => nova_cms_ratio($work->file),
+                    'ratio' => $work->fileRatio(),
                     'slideshow' => [
                         'id' => $work->slideshow_id,
                         'slug' => $work->slideshow->slug,
                         'title' => $work->slideshow->title,
                     ],
-
                 ];
             }
 

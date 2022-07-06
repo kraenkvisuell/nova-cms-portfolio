@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistDisciplineImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleRepresentsArtistInCategory;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
@@ -179,6 +178,11 @@ class Work extends Resource
             ->onlyOnForms();
 
         $fields[] = Text::make(__('nova-cms-portfolio::works.embed_code_ratio'), 'embed_code_ratio')
+            ->help(__('nova-cms-portfolio::works.embed_code_ratio_help'))
+            ->onlyOnForms();
+
+        $fields[] = Text::make(__('nova-cms-portfolio::works.custom_ratio'), 'custom_ratio')
+            ->help(__('nova-cms-portfolio::works.custom_ratio_help'))
             ->onlyOnForms();
 
         $fields[] = Text::make(__('nova-cms::pages.title'), 'title')

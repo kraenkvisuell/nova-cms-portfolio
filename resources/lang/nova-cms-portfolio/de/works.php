@@ -2,7 +2,10 @@
 
 return [
     'caption' => 'Caption',
-    'embed_code_ratio' => 'Seitenverhältnis Embed Code (z.B. "16:9")',
+    'custom_ratio' => 'Benutzerdefiniertes Seitenverhältnis',
+    'custom_ratio_help' => 'z.B. "4:3" für MP4s, nur benötigt wenn nicht 16:9',
+    'embed_code_ratio' => 'Seitenverhältnis Embed Code',
+    'embed_code_ratio_help' => 'z.B. "4:3", nur benötigt wenn nicht 16:9',
     'embed_code' => 'Embed Code (Youtube, Vimeo etc.)',
     'embed_url' => 'Embed URL (Youtube, Vimeo etc.)',
     'is_artist_discipline_image' => 'Repräsentiert Künstler in Disziplin',

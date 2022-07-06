@@ -2,7 +2,10 @@
 
 return [
     'caption' => 'caption',
-    'embed_code_ratio' => 'embed code ratio (f.e "16:9")',
+    'custom_ratio' => 'custom ratio',
+    'custom_ratio_help' => 'f.e. "4:3" for MP4s - only needed if not 16:9',
+    'embed_code_ratio' => 'embed code ratio',
+    'embed_code_ratio_help' => 'f.e. "4:3", only needed if not 16:9',
     'embed_code' => 'embed code (Youtube, Vimeo etc.)',
     'embed_url' => 'Embed URL (Youtube, Vimeo etc.)',
     'is_artist_discipline_image' => 'represents artist in discipline',

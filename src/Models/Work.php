@@ -76,6 +76,32 @@ class Work extends Model implements Sortable
         return ($height / $width) * 100;
     }
 
+    public function fileRatio()
+    {
+        // try custom ratio
+        $arr = explode(':', $this->custom_ratio);
+
+        if (count($arr) == 2 && intval($arr[0]) && intval($arr[1])) {
+            ray($this->custom_ratio);
+
+            return intval($arr[1]) / intval($arr[0]);
+        }
+
+        // try actual file ratio
+        $ratio = nova_cms_ratio($this->file);
+
+        if ($ratio) {
+            return $ratio;
+        }
+
+        // try embed code ratio
+        if ($this->embedRatio()) {
+            return $this->embedRatio() / 100;
+        }
+
+        return 16 / 9;
+    }
+
     public function overviewCategorySlugs()
     {
         $slugs = [];

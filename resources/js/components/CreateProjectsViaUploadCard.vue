@@ -102,7 +102,6 @@ export default {
             
             this.uploading = true;
             
-            
             let uuid = uuidv4();
             let count = 0;
             
@@ -124,7 +123,7 @@ export default {
                         if (response.data.reason != 'hidden file') {
                             this.results.unshift(response.data);
                         }
-                        if (count < files.length - 1) {
+                        if (count < sortedFiles.length) {
                             postFile(sortedFiles[count]);
                         } else {
                             window.location.reload();
@@ -139,7 +138,7 @@ export default {
                             slideshow: '',
                         });
 
-                        if (count < files.length - 1) {
+                        if (count < sortedFiles.length) {
                             postFile(sortedFiles[count]);
                         } else {
                             window.location.reload();

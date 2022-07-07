@@ -81,7 +81,7 @@ class Discipline extends Model implements Sortable
 
     public function getCachedCategories()
     {
-        return Cache::remember('disciplineCategories.'.app()->getLocale(), now()->addSeconds(5), function () {
+        return Cache::remember('disciplineCategories.'.$this->id.'.'.app()->getLocale(), now()->addSeconds(10), function () {
             return $this->getCategories();
         });
     }

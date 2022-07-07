@@ -10,7 +10,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleSlideshowIsPublished;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleVisibilityInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\QuickWorksCard;
 use Kraenkvisuell\NovaCmsPortfolio\SlideshowArtistCard;
-use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
+use Kraenkvisuell\NovaCmsPortfolio\Traits\OptionalHasSortableRows;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
@@ -24,7 +24,7 @@ use OwenMelbz\RadioField\RadioButton;
 
 class Slideshow extends Resource
 {
-    use HasSortableRows;
+    use OptionalHasSortableRows;
 
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow::class;
 
@@ -57,7 +57,14 @@ class Slideshow extends Resource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->with(['works', 'categories', 'artist']);
+        $query->with(['works', 'categories', 'artist']);
+
+        if (! config('nova-cms-portfolio.slideshows_sortable')) {
+        } else {
+            ray('foo');
+        }
+
+        return $query;
     }
 
     public static function formQuery(NovaRequest $request, $query)

@@ -70,7 +70,7 @@ class ProjectFolderUpload
             return $response;
         }
 
-        $category = $this->importCategory($pathArr[1]);
+        $category = $this->importCategory($artist, $pathArr[1]);
         $slideshow = $this->importSlideshow($artist, $category, $pathArr[2]);
 
         $upload->category = $category?->title;
@@ -88,7 +88,7 @@ class ProjectFolderUpload
         return $response;
     }
 
-    protected function importCategory($folderName)
+    protected function importCategory($artist, $folderName)
     {
         $categoryName = str_replace(':', '/', $folderName);
         $slug = Str::slug(str_replace(':', '-', $folderName));
@@ -96,13 +96,19 @@ class ProjectFolderUpload
         $category = Cache::remember(
             'portfolio.uploaded_category.'.$slug,
             now()->addSeconds(1),
-            function () use ($categoryName, $slug) {
-                return Category::firstOrCreate([
-                    'slug->'.app()->getLocale() => $slug,
-                ],
-                [
-                    'title->'.app()->getLocale() => $categoryName,
-                ]);
+            function () use ($categoryName, $slug, $artist) {
+                $category = Category::where('slug->'.app()->getLocale(), $slug)->first();
+
+                if (! $category) {
+                    $category = Category::create([
+                        'slug->'.app()->getLocale() => $slug,
+                        'title->'.app()->getLocale() => $categoryName,
+                    ]);
+
+                    $artist->categories()->attach($category->id);
+                }
+
+                return $category;
             }
         );
 

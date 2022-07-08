@@ -18,6 +18,7 @@ class ArtistWithFilledCategories
                 $artist = Artist::where('id', $id)
                 ->with([
                     'disciplines',
+                    'categories',
                     'slideshows' => function ($b) {
                         $b->has('works')
                             ->where('is_published', true)
@@ -51,7 +52,7 @@ class ArtistWithFilledCategories
 
                 $categories = [];
 
-                foreach ($artist->slideshowCategories() as $category) {
+                foreach ($artist->categories as $category) {
                     $slideshows = $artist
                         ->slideshows
                         ->filter(function ($slideshow) use ($category) {

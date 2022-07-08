@@ -4,6 +4,7 @@ return [
     'artists_are_sortable' => false,
     'artists_have_custom_bg' => true,
     'artists_sortable_dropdown' => false,
+    'category_sortable_dropdown' => false,
     'custom_artist_label' => '',
     'custom_artists_label' => '',
     'custom_is_artist_portfolio_image_label' => '',

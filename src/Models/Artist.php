@@ -68,6 +68,14 @@ class Artist extends Model implements Sortable
         return $this->belongsToMany(Discipline::class, config('nova-cms-portfolio.db_prefix').'artist_discipline');
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix').'artist_category')
+                ->withPivot(['sort_order'])
+                ->orderBy(config('nova-cms-portfolio.db_prefix').'artist_category.sort_order')
+                ->using(ArtistCategory::class);
+    }
+
     public function url()
     {
         $locales = config('nova-translatable.locales');
@@ -147,13 +155,6 @@ class Artist extends Model implements Sortable
         }
 
         return $images;
-    }
-
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix').'artist_category')
-                ->withPivot(['sort_order'])
-                ->using(ArtistCategory::class);
     }
 
     public function slideshowCategories()

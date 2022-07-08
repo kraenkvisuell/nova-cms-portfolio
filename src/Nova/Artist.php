@@ -5,7 +5,6 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 use Eminiarts\Tabs\Tabs;
 use Eminiarts\Tabs\TabsOnEdit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
 use Kraenkvisuell\NovaCmsBlocks\Blocks;
@@ -14,6 +13,7 @@ use Kraenkvisuell\NovaCmsPortfolio\CreateProjectsViaUploadCard;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\Published;
 use Kraenkvisuell\NovaCmsPortfolio\ZipUpdateProjectsCard;
 use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
@@ -57,38 +57,6 @@ class Artist extends Resource
     {
         return __(config('nova-cms-portfolio.custom_artist_label'))
         ?: ucfirst(__('nova-cms-portfolio::artists.artist'));
-    }
-
-    public function authorizedToView(Request $request)
-    {
-        if (Auth::user()->cms_role == 'artist') {
-            return Auth::user()->artist_id == $this->id;
-        }
-
-        return true;
-    }
-
-    public static function authorizedToCreate(Request $request)
-    {
-        return Auth::user()->cms_role != 'artist';
-    }
-
-    public function authorizedToDelete(Request $request)
-    {
-        if (Auth::user()->cms_role == 'artist') {
-            return Auth::user()->artist_id == $this->id;
-        }
-
-        return true;
-    }
-
-    public function authorizedToUpdate(Request $request)
-    {
-        if (Auth::user()->cms_role == 'artist') {
-            return Auth::user()->artist_id == $this->id;
-        }
-
-        return true;
     }
 
     public function fields(Request $request)
@@ -194,7 +162,7 @@ class Artist extends Resource
 
         $tabs[__('nova-cms::seo.seo')] = Seo::make();
 
-        return [
+        $fields = [
             Stack::make('Details', [
                 Line::make('', 'name')->asBase(),
                 Line::make('', function () {
@@ -220,6 +188,16 @@ class Artist extends Resource
 
             HasMany::make($slideshowLabel, 'slideshows', Slideshow::class),
         ];
+
+        if (config('nova-cms-portfolio.has_artist_category')) {
+            $fields[] = BelongsToMany::make(
+                __('nova-cms-portfolio::categories.sort_categories'),
+                'categories',
+                ArtistCategory::class
+            );
+        }
+
+        return $fields;
     }
 
     public function cards(Request $request)

@@ -59,11 +59,6 @@ class Slideshow extends Resource
     {
         $query->with(['works', 'categories', 'artist']);
 
-        if (! config('nova-cms-portfolio.slideshows_sortable')) {
-        } else {
-            ray('foo');
-        }
-
         return $query;
     }
 
@@ -285,6 +280,13 @@ class Slideshow extends Resource
             ToggleVisibilityInOverview::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
+        ];
+    }
+
+    public function filters(Request $request)
+    {
+        return [
+            new \Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\CategoryFilter,
         ];
     }
 }

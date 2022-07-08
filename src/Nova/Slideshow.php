@@ -128,6 +128,8 @@ class Slideshow extends Resource
 
             BelongsToManyField::make('Kategorien', 'categories', Category::class)
                 ->optionsLabel('title')
+                ->required()
+                ->rules('required')
                 ->onlyOnForms(),
 
             Stack::make('', [

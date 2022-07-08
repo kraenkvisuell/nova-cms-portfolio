@@ -15,7 +15,6 @@ class SlideshowObserver
     {
         if (
             $slideshow->artist
-            && request()->get('categories')
             && is_array(json_decode(request()->get('categories')))
         ) {
             $this->syncArtistCategories(
@@ -28,8 +27,13 @@ class SlideshowObserver
     protected function syncArtistCategories($artist, $categories)
     {
         $artist->categories()->sync([]);
+
+        foreach ($artist->slideshowCategories() as $category) {
+            $artist->categories()->syncWithoutDetaching($category->id);
+        }
+
         foreach ($categories as $category) {
-            $artist->categories()->attach($category->id);
+            $artist->categories()->syncWithoutDetaching($category->id);
         }
     }
 }

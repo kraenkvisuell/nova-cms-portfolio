@@ -4,6 +4,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\CategoryFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\QueryableByTranslation;
 use Spatie\Translatable\HasTranslations;
@@ -50,5 +51,12 @@ class Category extends Model
             ->withPivot(['sort_order'])
             ->with('artist')
             ->using(CategorySlideshow::class);
+    }
+
+    public static function getCached()
+    {
+        return Cache::remember('cachedCategories.'.app()->getLocale(), now()->addSeconds(10), function () {
+            return static::all()->sortBy('title')->all();
+        });
     }
 }

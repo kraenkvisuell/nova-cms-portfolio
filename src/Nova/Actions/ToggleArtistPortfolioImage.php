@@ -10,9 +10,11 @@ class ToggleArtistPortfolioImage extends Action
 {
     public function name()
     {
-        return __('AN/AUS').': '
-        .config('nova-cms-portfolio.custom_is_artist_portfolio_image_label')
-            ?: __('Ist Künstler-Portfolio-Bild');
+        return __('AN/AUS').': '.
+        (
+            config('nova-cms-portfolio.custom_is_artist_portfolio_image_label')
+            ?: __('Ist Künstler-Portfolio-Bild')
+        );
     }
 
     public function handle(ActionFields $fields, Collection $models)

@@ -121,15 +121,17 @@ class Work extends Resource
             return '';
         })->asHtml();
 
-        $settingsStack[] = Line::make('', function () use ($isArtistPortfolioImageLabel) {
-            if ($this->is_artist_portfolio_image) {
-                return '<span class="text-xs font-bold uppercase">'
-                .$isArtistPortfolioImageLabel
-                .'</span>';
-            }
+        if (config('nova-cms-portfolio.has_select_portfolio_image')) {
+            $settingsStack[] = Line::make('', function () use ($isArtistPortfolioImageLabel) {
+                if ($this->is_artist_portfolio_image) {
+                    return '<span class="text-xs font-bold uppercase">'
+                    .$isArtistPortfolioImageLabel
+                    .'</span>';
+                }
 
-            return '';
-        })->asHtml();
+                return '';
+            })->asHtml();
+        }
 
         if (config('nova-cms-portfolio.has_show_in_overview_category')) {
             $settingsStack[] = Line::make('', function () use ($overviewCategoriesLabel) {
@@ -276,19 +278,17 @@ class Work extends Resource
 
     public function actions(Request $request)
     {
-        $actions = [
-            ToggleArtistPortfolioImage::make()
-                ->onlyOnTableRow()
-                ->withoutConfirmation(),
+        $actions = [];
 
-            ToggleShowInOverview::make()
+        if (config('nova-cms-portfolio.has_select_portfolio_image')) {
+            $actions[] = ToggleArtistPortfolioImage::make()
                 ->onlyOnTableRow()
-                ->withoutConfirmation(),
+                ->withoutConfirmation();
+        }
 
-            // ToggleArtistDisciplineImage::make()
-            //     ->onlyOnTableRow()
-            //     ->withoutConfirmation(),
-        ];
+        $actions[] = ToggleShowInOverview::make()
+            ->onlyOnTableRow()
+            ->withoutConfirmation();
 
         if ($request->viaResourceId) {
             $categoryIds = Cache::remember('novaSlideshowCategoryIds.'.$request->viaResourceId, now()->addSeconds(15), function () use ($request) {

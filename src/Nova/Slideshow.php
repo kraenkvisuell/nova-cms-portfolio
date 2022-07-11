@@ -166,26 +166,6 @@ class Slideshow extends Resource
 
                 return $html;
             })->asHtml(),
-
-            // Line::make('', function () {
-            //     if ($this->works->where('is_artist_discipline_image', true)->count()) {
-            //         return '<div class="text-xs font-bold uppercase">'
-            //         .__('nova-cms-portfolio::works.is_artist_discipline_image')
-            //         .'</div>';
-            //     }
-
-            //     return '';
-            // })->asHtml(),
-
-            // Line::make('', function () {
-            //     if ($this->works->where('is_artist_portfolio_image', true)->count()) {
-            //         return '<div class="text-xs font-bold uppercase">'
-            //         .__('nova-cms-portfolio::works.is_artist_portfolio_image')
-            //         .'</div>';
-            //     }
-
-            //     return '';
-            // })->asHtml(),
         ])
         ->onlyOnIndex();
 
@@ -205,10 +185,12 @@ class Slideshow extends Resource
 
         $fields[] = Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
             ->rules('required')
-            ->onlyOnForms();
+            ->onlyOnForms()
+            ->default(true);
 
         $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
-            ->onlyOnForms();
+            ->onlyOnForms()
+            ->default(true);
 
         if (config('nova-cms-portfolio.has_visible_in_artist_overview')) {
             $fields[] = Boolean::make($visibleInArtistOverviewLabel, 'is_visible_in_overview')

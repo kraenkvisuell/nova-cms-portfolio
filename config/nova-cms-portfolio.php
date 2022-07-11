@@ -21,6 +21,7 @@ return [
     'has_category_slideshows' => true,
     'has_custom_portfolio_image' => true,
     'has_embed_code' => true,
+    'has_move_to_slideshow' => false,
     'has_select_portfolio_image' => true,
     'has_projects_zip_upload' => false,
     'has_quick_upload' => true,

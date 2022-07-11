@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\MoveToSlideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleRepresentsArtistInCategory;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
@@ -293,6 +294,10 @@ class Work extends Resource
     public function actions(Request $request)
     {
         $actions = [];
+
+        if (config('nova-cms-portfolio.has_move_to_slideshow')) {
+            $actions[] = MoveToSlideshow::make();
+        }
 
         if (config('nova-cms-portfolio.has_select_portfolio_image')) {
             $actions[] = ToggleArtistPortfolioImage::make()

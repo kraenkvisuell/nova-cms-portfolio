@@ -120,4 +120,16 @@ class Slideshow extends Model implements Sortable
 
         return $markedWork;
     }
+
+    public function refreshWorksOrder()
+    {
+        $newPosition = 1;
+        foreach ($this->works as $work) {
+            Work::withoutEvents(function () use ($work, $newPosition) {
+                $work->update(['sort_order' => $newPosition]);
+            });
+
+            $newPosition++;
+        }
+    }
 }

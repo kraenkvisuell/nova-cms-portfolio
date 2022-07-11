@@ -22,6 +22,14 @@ class SlideshowObserver
                 json_decode(request()->get('categories'))
             );
         }
+
+        $slideshow->refreshWorksOrder();
+    }
+
+    public function reordered(Slideshow $slideshow)
+    {
+        ray('asdf');
+        $slideshow->refreshWorksOrder();
     }
 
     protected function syncArtistCategories($artist, $categories)

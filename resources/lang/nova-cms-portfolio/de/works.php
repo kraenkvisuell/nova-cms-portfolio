@@ -10,6 +10,7 @@ return [
     'embed_url' => 'Embed URL (Youtube, Vimeo etc.)',
     'is_artist_discipline_image' => 'Repräsentiert Künstler in Disziplin',
     'is_artist_portfolio_image' => 'Ist Künstler-Portfolio-Bild',
+    'move_to_different_project' => 'In anderes :attribute verschieben',
     'overview_categories' => 'Kat. (Übersicht)',
     'representation_categories' => 'Kat. (Repräsentiert...)',
     'represents_artist_in_discipline_category' => 'In allgemeiner Kategorie-Übersicht zeigen',

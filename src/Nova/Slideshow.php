@@ -108,8 +108,10 @@ class Slideshow extends Resource
             Text::make(__('nova-cms::pages.title'), 'title')
                 ->rules('required')
                 ->hideFromIndex(),
+        ];
 
-            Select::make(ucfirst(__('nova-cms-portfolio::disciplines.discipline')), 'discipline_id')
+        if (config('nova-cms-portfolio.has_slideshow_disciplines')) {
+            $fields[] = Select::make(ucfirst(__('nova-cms-portfolio::disciplines.discipline')), 'discipline_id')
                 ->nullable()
                 ->options(function () {
                     return Discipline::with([
@@ -124,90 +126,89 @@ class Slideshow extends Resource
                     ->pluck('title', 'id');
                 })
                 ->help('Eventuell notwendig wenn der Künstler mehrere Disziplinen hat')
-                ->onlyOnForms(),
+                ->onlyOnForms();
+        }
 
-            BelongsToManyField::make('Kategorien', 'categories', Category::class)
-                ->optionsLabel('title')
-                ->required()
-                ->rules('required')
-                ->onlyOnForms(),
+        $fields[] = BelongsToManyField::make('Kategorien', 'categories', Category::class)
+            ->optionsLabel('title')
+            ->required()
+            ->rules('required')
+            ->onlyOnForms();
 
-            Stack::make('', [
-                Text::make('', function () {
-                    $html = '<div
-                        class="block whitespace-normal"
+        $fields[] = Stack::make('', [
+            Text::make('', function () {
+                $html = '<div
+                    class="block whitespace-normal"
+                >';
+                foreach ($this->works->take(config('nova-cms-portfolio.max_thumbnails') ?: 3) as $work) {
+                    $html .= '<a
+                        href="'.nova_cms_file($work->file).'"
+                        download
                     >';
-                    foreach ($this->works->take(config('nova-cms-portfolio.max_thumbnails') ?: 3) as $work) {
-                        $html .= '<a
-                            href="'.nova_cms_file($work->file).'"
-                            download
-                        >';
 
-                        if (nova_cms_mime($work->file) == 'video') {
-                            $html .= '<video
-                                autoplay muted loop playsinline
-                                class="w-auto h-12 mr-1 inline-block"
-                            >
-                                <source src="'.nova_cms_file($work->file).'" type="video/'.nova_cms_extension($work->file).'">
-                            </video>';
-                        } else {
-                            $html .= '<img
-                                class="w-auto h-12 mr-1 inline-block"
-                                src="'.nova_cms_image($work->file, 'thumb').'"
-                            />';
-                        }
-
-                        $html .= '</a>';
+                    if (nova_cms_mime($work->file) == 'video') {
+                        $html .= '<video
+                            autoplay muted loop playsinline
+                            class="w-auto h-12 mr-1 inline-block"
+                        >
+                            <source src="'.nova_cms_file($work->file).'" type="video/'.nova_cms_extension($work->file).'">
+                        </video>';
+                    } else {
+                        $html .= '<img
+                            class="w-auto h-12 mr-1 inline-block"
+                            src="'.nova_cms_image($work->file, 'thumb').'"
+                        />';
                     }
-                    $html .= '</div>';
 
-                    return $html;
-                })->asHtml(),
+                    $html .= '</a>';
+                }
+                $html .= '</div>';
 
-                // Line::make('', function () {
-                //     if ($this->works->where('is_artist_discipline_image', true)->count()) {
-                //         return '<div class="text-xs font-bold uppercase">'
-                //         .__('nova-cms-portfolio::works.is_artist_discipline_image')
-                //         .'</div>';
-                //     }
+                return $html;
+            })->asHtml(),
 
-                //     return '';
-                // })->asHtml(),
+            // Line::make('', function () {
+            //     if ($this->works->where('is_artist_discipline_image', true)->count()) {
+            //         return '<div class="text-xs font-bold uppercase">'
+            //         .__('nova-cms-portfolio::works.is_artist_discipline_image')
+            //         .'</div>';
+            //     }
 
-                // Line::make('', function () {
-                //     if ($this->works->where('is_artist_portfolio_image', true)->count()) {
-                //         return '<div class="text-xs font-bold uppercase">'
-                //         .__('nova-cms-portfolio::works.is_artist_portfolio_image')
-                //         .'</div>';
-                //     }
+            //     return '';
+            // })->asHtml(),
 
-                //     return '';
-                // })->asHtml(),
-            ])
-            ->onlyOnIndex(),
+            // Line::make('', function () {
+            //     if ($this->works->where('is_artist_portfolio_image', true)->count()) {
+            //         return '<div class="text-xs font-bold uppercase">'
+            //         .__('nova-cms-portfolio::works.is_artist_portfolio_image')
+            //         .'</div>';
+            //     }
 
-            Stack::make('', [
-                Line::make('', function () use ($workLabel, $workSingularLabel) {
-                    return '<button
-                        onclick="window.location.href=\'/nova/resources/slideshows/'.$this->id.'\'"
-                        class="btn btn-xs
-                        '.($this->works->count() ? 'btn-primary' : 'btn-danger').'
-                        "
-                        >'
-                        .$this->works->count().' '.($this->works->count() != 1 ? $workLabel : $workSingularLabel)
-                        .'</button>';
-                })->asHtml(),
-            ])
-            ->onlyOnIndex(),
+            //     return '';
+            // })->asHtml(),
+        ])
+        ->onlyOnIndex();
 
-            Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
-                ->rules('required')
-                ->onlyOnForms(),
+        $fields[] = Stack::make('', [
+            Line::make('', function () use ($workLabel, $workSingularLabel) {
+                return '<button
+                            onclick="window.location.href=\'/nova/resources/slideshows/'.$this->id.'\'"
+                            class="btn btn-xs
+                            '.($this->works->count() ? 'btn-primary' : 'btn-danger').'
+                            "
+                            >'
+                    .$this->works->count().' '.($this->works->count() != 1 ? $workLabel : $workSingularLabel)
+                    .'</button>';
+            })->asHtml(),
+        ])
+        ->onlyOnIndex();
 
-            Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
-                ->onlyOnForms(),
+        $fields[] = Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
+            ->rules('required')
+            ->onlyOnForms();
 
-        ];
+        $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
+            ->onlyOnForms();
 
         if (config('nova-cms-portfolio.has_visible_in_artist_overview')) {
             $fields[] = Boolean::make($visibleInArtistOverviewLabel, 'is_visible_in_overview')

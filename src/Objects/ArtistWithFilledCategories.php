@@ -60,47 +60,49 @@ class ArtistWithFilledCategories
                                 ->count();
                         });
 
-                    $categorySlideshows = [];
+                    if ($slideshows->count()) {
+                        $categorySlideshows = [];
 
-                    foreach ($slideshows as $slideshow) {
-                        $works = $slideshow->works
-                            ->where('show_in_overview', true);
-
-                        if (! $works->count()) {
+                        foreach ($slideshows as $slideshow) {
                             $works = $slideshow->works
-                                ->take($workLimit);
-                        }
+                                ->where('show_in_overview', true);
 
-                        $slideshowWorks = [];
-
-                        foreach ($works as $work) {
-                            $imgUrls = [];
-                            foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
-                                $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
+                            if (! $works->count()) {
+                                $works = $slideshow->works
+                                    ->take($workLimit);
                             }
 
-                            $slideshowWorks[] = [
-                                'id' => $work->id,
-                                'imgUrls' => $imgUrls,
-                                'positionInSlideshow' => $work->actualPosition(),
-                                'ratio' => $work->fileRatio(),
+                            $slideshowWorks = [];
+
+                            foreach ($works as $work) {
+                                $imgUrls = [];
+                                foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
+                                    $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
+                                }
+
+                                $slideshowWorks[] = [
+                                    'id' => $work->id,
+                                    'imgUrls' => $imgUrls,
+                                    'positionInSlideshow' => $work->actualPosition(),
+                                    'ratio' => $work->fileRatio(),
+                                ];
+                            }
+
+                            $categorySlideshows[] = [
+                                'id' => $slideshow->id,
+                                'title' => $slideshow->title,
+                                'slug' => $slideshow->slug,
+                                'works' => $slideshowWorks,
                             ];
                         }
 
-                        $categorySlideshows[] = [
-                            'id' => $slideshow->id,
-                            'title' => $slideshow->title,
-                            'slug' => $slideshow->slug,
-                            'works' => $slideshowWorks,
+                        $categories[] = [
+                            'id' => $category->id,
+                            'slug' => $category->slug,
+                            'title' => $category->title,
+                            'slideshows' => $categorySlideshows,
                         ];
                     }
-
-                    $categories[] = [
-                        'id' => $category->id,
-                        'slug' => $category->slug,
-                        'title' => $category->title,
-                        'slideshows' => $categorySlideshows,
-                    ];
                 }
 
                 $socialLinks = [];

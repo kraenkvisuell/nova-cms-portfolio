@@ -173,8 +173,10 @@ class Work extends Resource
 
         $fields[] = Stack::make('Settings', $settingsStack);
 
-        $fields[] = Textarea::make(__('nova-cms-portfolio::works.embed_code'), 'embed_code')
-            ->onlyOnForms();
+        if (config('nova-cms-portfolio.has_embed_code')) {
+            $fields[] = Textarea::make(__('nova-cms-portfolio::works.embed_code'), 'embed_code')
+                ->onlyOnForms();
+        }
 
         $fields[] = Text::make(__('nova-cms-portfolio::works.embed_url'), 'embed_url')
             ->onlyOnForms();
@@ -203,65 +205,77 @@ class Work extends Resource
         $fields[] = Boolean::make($showInOverviewLabel, 'show_in_overview')
             ->onlyOnForms();
 
-        $fields[] = BooleanGroup::make(
-                __('In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist'),
-                'show_in_overview_category'
-            )
-            ->options(function () use ($request) {
-                $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
-                $options = [];
+        if (config('nova-cms-portfolio.has_show_in_overview_category')) {
+            $fields[] = BooleanGroup::make(
+                    __('In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist'),
+                    'show_in_overview_category'
+                )
+                ->options(function () use ($request) {
+                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
+                    $options = [];
 
-                foreach (optional($slideshow)->categories ?: [] as $category) {
-                    $options[$category->id] = $category->title;
-                }
+                    foreach (optional($slideshow)->categories ?: [] as $category) {
+                        $options[$category->id] = $category->title;
+                    }
 
-                return $options;
-            })
-            ->onlyOnForms();
+                    return $options;
+                })
+                ->onlyOnForms();
+        }
 
-        $fields[] = Boolean::make(__('nova-cms-portfolio::works.is_artist_portfolio_image'), 'is_artist_portfolio_image')
-            ->onlyOnForms();
+        if (config('nova-cms-portfolio.has_select_portfolio_image')) {
+            $fields[] = Boolean::make(__('nova-cms-portfolio::works.is_artist_portfolio_image'), 'is_artist_portfolio_image')
+                ->onlyOnForms();
+        }
 
-        $fields[] = Boolean::make(__('nova-cms-portfolio::works.is_artist_discipline_image'), 'is_artist_discipline_image')
-            ->onlyOnForms();
+        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
+            $fields[] = Boolean::make(__('nova-cms-portfolio::works.is_artist_discipline_image'), 'is_artist_discipline_image')
+                ->onlyOnForms();
+        }
 
-        $fields[] = Select::make(__('nova-cms-portfolio::works.width_in_overview'), 'width_in_overview')
-            ->options([
-                'regular' => __('nova-cms-portfolio::width_in_overview.regular'),
-                'double' => __('nova-cms-portfolio::width_in_overview.double'),
-            ])
-            ->onlyOnForms()
-            ->default('regular')
-            ->required();
+        if (config('nova-cms-portfolio.has_width_in_overview')) {
+            $fields[] = Select::make(__('nova-cms-portfolio::works.width_in_overview'), 'width_in_overview')
+                ->options([
+                    'regular' => __('nova-cms-portfolio::width_in_overview.regular'),
+                    'double' => __('nova-cms-portfolio::width_in_overview.double'),
+                ])
+                ->onlyOnForms()
+                ->default('regular')
+                ->required();
+        }
 
-        $fields[] = Select::make(__('nova-cms-portfolio::works.width_in_frame'), 'width_in_frame')
-            ->options([
-                'full' => __('nova-cms-portfolio::width_in_frame.full'),
-                'two_thirds' => __('nova-cms-portfolio::width_in_frame.two_thirds'),
-                'half' => __('nova-cms-portfolio::width_in_frame.half'),
-            ])
-            ->onlyOnForms()
-            ->default('full')
-            ->required();
+        if (config('nova-cms-portfolio.has_width_in_overview')) {
+            $fields[] = Select::make(__('nova-cms-portfolio::works.width_in_frame'), 'width_in_frame')
+                ->options([
+                    'full' => __('nova-cms-portfolio::width_in_frame.full'),
+                    'two_thirds' => __('nova-cms-portfolio::width_in_frame.two_thirds'),
+                    'half' => __('nova-cms-portfolio::width_in_frame.half'),
+                ])
+                ->onlyOnForms()
+                ->default('full')
+                ->required();
+        }
 
-        $fields[] = BooleanGroup::make(
-                __('In allgemeiner Kategorie-Übersicht zeigen'),
-                'represents_artist_in_discipline_category'
-            )
-            ->options(function () use ($request) {
-                $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
+        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
+            $fields[] = BooleanGroup::make(
+                    __('In allgemeiner Kategorie-Übersicht zeigen'),
+                    'represents_artist_in_discipline_category'
+                )
+                ->options(function () use ($request) {
+                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
 
-                $disciplineId = optional(optional($slideshow)->getDiscipline())->id;
+                    $disciplineId = optional(optional($slideshow)->getDiscipline())->id;
 
-                $options = [];
+                    $options = [];
 
-                foreach (optional($slideshow)->categories ?: [] as $category) {
-                    $options[$disciplineId.'_'.$category->id] = $category->title;
-                }
+                    foreach (optional($slideshow)->categories ?: [] as $category) {
+                        $options[$disciplineId.'_'.$category->id] = $category->title;
+                    }
 
-                return $options;
-            })
-            ->onlyOnForms();
+                    return $options;
+                })
+                ->onlyOnForms();
+        }
 
         return $fields;
     }

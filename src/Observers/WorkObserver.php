@@ -24,7 +24,7 @@ class WorkObserver
 
     public function saved(Work $work)
     {
-        Slideshow::find($work->slideshow_id)->refreshWorksOrder();
+        // Slideshow::find($work->slideshow_id)->refreshWorksOrder();
     }
 
     protected function ensureOnlyOneArtistPortfolioImage($work)

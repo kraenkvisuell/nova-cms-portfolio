@@ -91,7 +91,7 @@ class Artist extends Model implements Sortable
 
     public function portfolioImage()
     {
-        if (config('nova-cms-portfolio.artists_have_custom_bg') && $this->portfolio_image) {
+        if (config('nova-cms-portfolio.has_custom_portfolio_image') && $this->portfolio_image) {
             return $this->portfolio_image;
         }
 
@@ -116,7 +116,7 @@ class Artist extends Model implements Sortable
     {
         $images = [];
 
-        if (config('nova-cms-portfolio.artists_have_custom_bg') && $this->portfolio_image) {
+        if (config('nova-cms-portfolio.has_custom_portfolio_image') && $this->portfolio_image) {
             $images[] = $this->portfolio_image;
         }
         if ($this->works()->count()) {

@@ -119,12 +119,12 @@ class Artist extends Model implements Sortable
         if (config('nova-cms-portfolio.has_custom_portfolio_image') && $this->portfolio_image) {
             $images[] = $this->portfolio_image;
         }
-        if ($this->works()->count()) {
+        if ($this->works->count()) {
             $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
 
             if ($limit > 0) {
                 foreach (
-                    $this->works()->where('is_artist_portfolio_image', true)->limit($limit)->get()
+                    $this->works->where('is_artist_portfolio_image', true)->take($limit)
                     as $work
                 ) {
                     $images[] = $work->file;
@@ -135,7 +135,7 @@ class Artist extends Model implements Sortable
 
             if ($limit > 0) {
                 foreach (
-                    $this->works()->where('show_in_overview', true)->limit($limit)->get()
+                    $this->works->where('show_in_overview', true)->take($limit)
                     as $work
                 ) {
                     $images[] = $work->file;
@@ -146,7 +146,7 @@ class Artist extends Model implements Sortable
 
             if ($limit > 0) {
                 foreach (
-                    $this->works()->limit($limit)->get()
+                    $this->works->take($limit)
                     as $work
                 ) {
                     $images[] = $work->file;

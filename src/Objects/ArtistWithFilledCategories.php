@@ -24,7 +24,7 @@ class ArtistWithFilledCategories
                             ->where('is_published', true)
                             ->where('is_visible_in_overview', true)
                             ->with([
-                                'works',
+                                'works.slideshow.works',
                                 'categories' => function ($b) {
                                     $b->select(['id', 'title', 'slug']);
                                 },

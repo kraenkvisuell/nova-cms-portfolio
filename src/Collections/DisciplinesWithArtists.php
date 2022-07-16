@@ -16,6 +16,7 @@ class DisciplinesWithArtists
                 ->has('artists')
                 ->with(['artists' => function ($b) {
                     $b->where('is_published', true)
+                    ->with(['works'])
                     ->select([
                         'id',
                         'name',

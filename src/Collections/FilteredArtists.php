@@ -52,7 +52,7 @@ class FilteredArtists
 
         $results = [];
 
-        $with = [
+        $worksWith = [
             'slideshow' => function ($b) {
                 $b->select([
                     'id',
@@ -66,6 +66,7 @@ class FilteredArtists
                             'slideshow_id',
                         ]);
                     },
+
                 ]);
             },
         ];
@@ -73,7 +74,7 @@ class FilteredArtists
         foreach ($artists as $artist) {
             $worksBuilder = $artist->works()
                 ->limit($workLimit)
-                ->with($with)
+                ->with($worksWith)
                 ->orderByDesc('show_in_overview')
                 ->orderBy('sort_order')
                 ->orderByDesc('id');

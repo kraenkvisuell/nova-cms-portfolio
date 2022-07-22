@@ -85,6 +85,7 @@ class ArtistWithFilledCategories
                                     'imgUrls' => $imgUrls,
                                     'positionInSlideshow' => $work->actualPosition(),
                                     'ratio' => $work->fileRatio(),
+                                    'embedUrl' => $work->embedUrl(),
                                 ];
                             }
 

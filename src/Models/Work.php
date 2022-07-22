@@ -55,6 +55,26 @@ class Work extends Model implements Sortable
         return static::query()->where('slideshow_id', $this->slideshow_id);
     }
 
+    public function embedRatioString()
+    {
+        if (! $this->embed_code_ratio) {
+            return '16/9';
+        }
+
+        return str_replace(' ', '', str_replace(':', '/', $this->embed_code_ratio));
+    }
+
+    public function embedUrl()
+    {
+        if (! $this->embed_url) {
+            return '';
+        }
+
+        $url = str_replace('/vimeo.com', '/player.vimeo.com/video', $this->embed_url);
+
+        return $url;
+    }
+
     public function embedRatio()
     {
         $defaultRatio = (9 / 16) * 100;

@@ -109,6 +109,7 @@ class FilteredArtists
                         'slug' => $work->slideshow->slug,
                         'title' => $work->slideshow->title,
                     ],
+                    'embedUrl' => $work->embedUrl(),
                 ];
             }
 

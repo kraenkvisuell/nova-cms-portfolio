@@ -185,8 +185,7 @@ class Slideshow extends Resource
 
         $fields[] = Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
             ->rules('required')
-            ->onlyOnForms()
-            ->default(true);
+            ->onlyOnForms();
 
         $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
             ->onlyOnForms()

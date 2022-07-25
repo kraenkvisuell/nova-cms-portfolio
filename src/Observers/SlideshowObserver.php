@@ -28,7 +28,6 @@ class SlideshowObserver
 
     public function reordered(Slideshow $slideshow)
     {
-        ray('asdf');
         $slideshow->refreshWorksOrder();
     }
 

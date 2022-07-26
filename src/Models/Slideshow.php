@@ -111,8 +111,14 @@ class Slideshow extends Model implements Sortable
     public function workForNews()
     {
         $markedWork = $this->works()
-            ->where('show_in_overview', true)
+            ->where('is_artist_portfolio_image', true)
             ->first();
+
+        if (! $markedWork) {
+            $markedWork = $this->works()
+                ->where('show_in_overview', true)
+                ->first();
+        }
 
         if (! $markedWork) {
             $markedWork = $this->works()->first();

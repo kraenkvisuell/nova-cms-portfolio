@@ -3,6 +3,7 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Collections;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
@@ -16,131 +17,141 @@ class FilteredArtists
         ?int $workLimit,
         ?string $sortOrder,
     ) {
-        $artistsBuilder = Artist::where('is_published', true)
-            ->with([
-                'disciplines' => function ($b) {
-                    $b->select([
-                        'id',
-                        'title',
-                        'slug',
+        $cacheKey = 'filteredartists_'.$disciplineId
+            .'_'.$categoryId
+            .'_'.$needle
+            .'_'.$workLimit
+            .'_'.$sortOrder;
+
+        return Cache::tags('artists')->rememberForever(
+            $cacheKey, 
+            function() use ($disciplineId, $categoryId, $needle, $workLimit, $sortOrder) {
+                $artistsBuilder = Artist::where('is_published', true)
+                    ->with([
+                        'disciplines' => function ($b) {
+                            $b->select([
+                                'id',
+                                'title',
+                                'slug',
+                            ]);
+                        },
                     ]);
-                },
-            ]);
 
-        $needle = trim(strtolower($needle));
+                $needle = trim(strtolower($needle));
 
-        if ($needle) {
-            $discipline = static::getDisciplineFromNeedle($needle);
+                if ($needle) {
+                    $discipline = static::getDisciplineFromNeedle($needle);
 
-            if ($discipline) {
-                $needle = '';
-                $disciplineId = $discipline->id;
-            } else {
-                $category = static::getCategoryFromNeedle($needle);
-                if ($category) {
-                    $needle = '';
-                    $categoryId = $category->id;
+                    if ($discipline) {
+                        $needle = '';
+                        $disciplineId = $discipline->id;
+                    } else {
+                        $category = static::getCategoryFromNeedle($needle);
+                        if ($category) {
+                            $needle = '';
+                            $categoryId = $category->id;
+                        }
+                    }
                 }
-            }
-        }
 
-        if ($needle) {
-            $artists = static::getArtistsForNeedle($needle, $artistsBuilder);
-        } else {
-            $artists = static::getArtistsForFilters($disciplineId, $categoryId, $artistsBuilder);
-        }
+                if ($needle) {
+                    $artists = static::getArtistsForNeedle($needle, $artistsBuilder);
+                } else {
+                    $artists = static::getArtistsForFilters($disciplineId, $categoryId, $artistsBuilder);
+                }
 
-        $results = [];
+                $results = [];
 
-        $worksWith = [
-            'slideshow' => function ($b) {
-                $b->select([
-                    'id',
-                    'slug',
-                    'title',
-                ])
-                ->with([
-                    'works' => function ($b) {
+                $worksWith = [
+                    'slideshow' => function ($b) {
                         $b->select([
                             'id',
-                            'slideshow_id',
+                            'slug',
+                            'title',
+                        ])
+                        ->with([
+                            'works' => function ($b) {
+                                $b->select([
+                                    'id',
+                                    'slideshow_id',
+                                ]);
+                            },
+
                         ]);
                     },
+                ];
 
-                ]);
-            },
-        ];
+                foreach ($artists as $artist) {
+                    $worksBuilder = $artist->works()
+                        ->limit($workLimit)
+                        ->with($worksWith)
+                        ->orderByDesc('show_in_overview')
+                        ->orderBy('sort_order')
+                        ->orderByDesc('id');
 
-        foreach ($artists as $artist) {
-            $worksBuilder = $artist->works()
-                ->limit($workLimit)
-                ->with($worksWith)
-                ->orderByDesc('show_in_overview')
-                ->orderBy('sort_order')
-                ->orderByDesc('id');
-
-            if ($needle) {
-            } else {
-                if ($categoryId) {
-                    $worksBuilder->whereHas('slideshow', function (Builder $b) use ($categoryId) {
-                        $b->where('is_published', true)
-                            ->whereHas('categories', function (Builder $b) use ($categoryId) {
-                                $b->where('id', $categoryId);
+                    if ($needle) {
+                    } else {
+                        if ($categoryId) {
+                            $worksBuilder->whereHas('slideshow', function (Builder $b) use ($categoryId) {
+                                $b->where('is_published', true)
+                                    ->whereHas('categories', function (Builder $b) use ($categoryId) {
+                                        $b->where('id', $categoryId);
+                                    });
                             });
-                    });
+                        }
+                    }
+
+                    $works = [];
+
+                    foreach ($worksBuilder->get() as $work) {
+                        $imgUrls = [];
+                        foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
+                            $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
+                        }
+
+                        $works[] = [
+                            'id' => $work->id,
+                            'imgUrls' => $imgUrls,
+                            'positionInSlideshow' => $work->actualPosition(),
+                            'ratio' => $work->fileRatio(),
+                            'slideshow' => [
+                                'id' => $work->slideshow_id,
+                                'slug' => $work->slideshow->slug,
+                                'title' => $work->slideshow->title,
+                            ],
+                            'embedUrl' => $work->embedUrl(),
+                        ];
+                    }
+
+                    $disciplines = [];
+
+                    foreach ($artist->disciplines as $discipline) {
+                        $disciplines[] = [
+                            'id' => $discipline->id,
+                            'slug' => $discipline->slug,
+                            'title' => $discipline->title,
+                        ];
+                    }
+
+                    $results[] = [
+                        'artist' => [
+                            'id' => $artist->id,
+                            'disciplines' => $disciplines,
+                            'name' => $artist->name,
+                            'slug' => $artist->slug,
+                        ],
+                        'works' => $works,
+                    ];
                 }
-            }
 
-            $works = [];
+                $results = collect($results);
 
-            foreach ($worksBuilder->get() as $work) {
-                $imgUrls = [];
-                foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
-                    $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
+                if ($sortOrder == 'alphabetical') {
+                    $results = $results->sortBy('artist.name');
                 }
 
-                $works[] = [
-                    'id' => $work->id,
-                    'imgUrls' => $imgUrls,
-                    'positionInSlideshow' => $work->actualPosition(),
-                    'ratio' => $work->fileRatio(),
-                    'slideshow' => [
-                        'id' => $work->slideshow_id,
-                        'slug' => $work->slideshow->slug,
-                        'title' => $work->slideshow->title,
-                    ],
-                    'embedUrl' => $work->embedUrl(),
-                ];
-            }
-
-            $disciplines = [];
-
-            foreach ($artist->disciplines as $discipline) {
-                $disciplines[] = [
-                    'id' => $discipline->id,
-                    'slug' => $discipline->slug,
-                    'title' => $discipline->title,
-                ];
-            }
-
-            $results[] = [
-                'artist' => [
-                    'id' => $artist->id,
-                    'disciplines' => $disciplines,
-                    'name' => $artist->name,
-                    'slug' => $artist->slug,
-                ],
-                'works' => $works,
-            ];
-        }
-
-        $results = collect($results);
-
-        if ($sortOrder == 'alphabetical') {
-            $results = $results->sortBy('artist.name');
-        }
-
-        return $results->values()->all();
+                return $results->values()->all();
+        });
     }
 
     protected static function getDisciplineFromNeedle($needle)

@@ -81,9 +81,11 @@ class Discipline extends Model implements Sortable
 
     public function getCachedCategories()
     {
-        return Cache::remember('disciplineCategories.'.$this->id.'.'.app()->getLocale(), now()->addSeconds(10), function () {
-            return $this->getCategories();
-        });
+        return Cache::tags('categories')->rememberForever(
+            'disciplineCategories.'.$this->id.'.'.app()->getLocale(), 
+            function () {
+                return $this->getCategories();
+            });
     }
 
     public static function getWithSortedArtists()
@@ -102,6 +104,15 @@ class Discipline extends Model implements Sortable
                 ->has('slideshows');
             })
             ->get();
+    }
+
+    public static function getCachedIdBySlug($slug)
+    {
+        return Cache::tags('disciplines')->rememberForever(
+            'discipline.getCachedIdBySlug.'.$slug, 
+            function () use ($slug) {
+                return static::where('slug->'.app()->getLocale(), $slug)->first()?->id ?: 0;
+            });
     }
 
     public static function getCachedWithSortedArtists()

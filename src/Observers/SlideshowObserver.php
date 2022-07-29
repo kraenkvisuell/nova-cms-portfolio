@@ -2,6 +2,7 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
 
 class SlideshowObserver
@@ -24,6 +25,13 @@ class SlideshowObserver
         }
 
         $slideshow->refreshWorksOrder();
+
+        Cache::tags('artists')->flush();
+    }
+
+    public function deleted(Slideshow $slideshow)
+    {
+        Cache::tags('artists')->flush();
     }
 
     public function reordered(Slideshow $slideshow)

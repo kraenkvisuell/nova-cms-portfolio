@@ -9,11 +9,8 @@ class ArtistWithFilledCategories
 {
     public static function find(int $id, int $workLimit)
     {
-        Cache::forget('ArtistWithFilledCategories.'.$id.'.'.$workLimit.'.'.app()->getLocale());
-
-        return Cache::remember(
+        return Cache::tags('artists')->rememberForever(
             'ArtistWithFilledCategories.'.$id.'.'.$workLimit.'.'.app()->getLocale(),
-            now()->addDays(7),
             function () use ($id, $workLimit) {
                 $artist = Artist::where('id', $id)
                 ->with([

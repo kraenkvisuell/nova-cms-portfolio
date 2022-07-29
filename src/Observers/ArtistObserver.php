@@ -3,9 +3,8 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Observers;
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
-use Kraenkvisuell\NovaCmsPortfolio\Services\ArtistCacheService;
 
 class ArtistObserver
 {
@@ -13,7 +12,12 @@ class ArtistObserver
     {
         $this->checkUserCreation($artist);
 
-        ArtistCacheService::refreshCachesWhereNeeded($artist);
+        Cache::tags('artists')->flush();
+    }
+
+    public function deleted(Artist $artist)
+    {
+        Cache::tags('artists')->flush();
     }
 
     protected function checkUserCreation($artist)

@@ -59,4 +59,13 @@ class Category extends Model
             return static::all()->sortBy('title')->all();
         });
     }
+
+    public static function getCachedIdBySlug($slug)
+    {
+        return Cache::tags('categories')->rememberForever(
+            'category.getCachedIdBySlug.'.$slug, 
+            function () use ($slug) {
+                return static::where('slug->'.app()->getLocale(), $slug)->first()?->id ?: 0;
+            });
+    }
 }

@@ -2,8 +2,9 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Observers;
 
-use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
+use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Work;
+use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
 
 class WorkObserver
 {
@@ -25,6 +26,7 @@ class WorkObserver
     public function saved(Work $work)
     {
         // Slideshow::find($work->slideshow_id)->refreshWorksOrder();
+        Cache::tags('artists')->flush();
     }
 
     protected function ensureOnlyOneArtistPortfolioImage($work)

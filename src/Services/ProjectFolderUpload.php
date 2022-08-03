@@ -104,9 +104,9 @@ class ProjectFolderUpload
                         'slug->'.app()->getLocale() => $slug,
                         'title->'.app()->getLocale() => $categoryName,
                     ]);
-
-                    $artist->categories()->attach($category->id);
                 }
+
+                $artist->categories()->syncWithoutDetaching($category->id);
 
                 return $category;
             }
@@ -185,8 +185,6 @@ class ProjectFolderUpload
             Work::firstOrCreate(
                 [
                     'file' => $mediaItem->id,
-                ],
-                [
                     'slideshow_id' => $slideshow->id,
                 ]
             );

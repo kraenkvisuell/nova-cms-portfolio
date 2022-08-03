@@ -37,6 +37,6 @@ class CategoryFilter extends Filter
 
     public function default()
     {
-        return Artist::find(request()->viaResourceId)?->categories->first()->id;
+        return Artist::find(request()->viaResourceId)?->categories?->first()?->id;
     }
 }

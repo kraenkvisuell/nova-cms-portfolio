@@ -23,9 +23,9 @@ class FilteredArtists
             .'_'.$workLimit
             .'_'.$sortOrder;
 
-        return Cache::tags('artists')->rememberForever(
-            $cacheKey, 
-            function() use ($disciplineId, $categoryId, $needle, $workLimit, $sortOrder) {
+        // return Cache::tags('artists')->rememberForever(
+            // $cacheKey, 
+            // function() use ($disciplineId, $categoryId, $needle, $workLimit, $sortOrder) {
                 $artistsBuilder = Artist::where('is_published', true)
                     ->with([
                         'disciplines' => function ($b) {
@@ -151,7 +151,7 @@ class FilteredArtists
                 }
 
                 return $results->values()->all();
-        });
+        // });
     }
 
     protected static function getDisciplineFromNeedle($needle)

@@ -9,7 +9,7 @@ class DisciplinesWithArtists
 {
     public static function get()
     {
-        return Cache::tags('artists')->rememberForever('DisciplinesWithArtists.'.app()->getLocale(), function () {
+        //return Cache::tags('artists')->rememberForever('DisciplinesWithArtists.'.app()->getLocale(), function () {
             $disciplines = Discipline::ordered()
                 ->has('artists')
                 ->with(['artists' => function ($b) {
@@ -68,6 +68,6 @@ class DisciplinesWithArtists
             }
 
             return $results;
-        });
+        //});
     }
 }

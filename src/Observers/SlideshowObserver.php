@@ -26,12 +26,12 @@ class SlideshowObserver
 
         $slideshow->refreshWorksOrder();
 
-        Cache::tags('artists')->flush();
+        // Cache::tags('artists')->flush();
     }
 
     public function deleted(Slideshow $slideshow)
     {
-        Cache::tags('artists')->flush();
+        // Cache::tags('artists')->flush();
     }
 
     public function reordered(Slideshow $slideshow)

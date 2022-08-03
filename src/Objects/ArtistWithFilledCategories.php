@@ -9,9 +9,9 @@ class ArtistWithFilledCategories
 {
     public static function find(int $id, int $workLimit)
     {
-        return Cache::tags('artists')->rememberForever(
-            'ArtistWithFilledCategories.'.$id.'.'.$workLimit.'.'.app()->getLocale(),
-            function () use ($id, $workLimit) {
+        // return Cache::tags('artists')->rememberForever(
+        //     'ArtistWithFilledCategories.'.$id.'.'.$workLimit.'.'.app()->getLocale(),
+        //     function () use ($id, $workLimit) {
                 $artist = Artist::where('id', $id)
                 ->with([
                     'disciplines',
@@ -138,7 +138,7 @@ class ArtistWithFilledCategories
                     'disciplines' => $disciplines,
                     'categories' => $categories,
                 ];
-            }
-        );
+            
+            // });
     }
 }

@@ -12,12 +12,12 @@ class ArtistObserver
     {
         $this->checkUserCreation($artist);
 
-        Cache::tags('artists')->flush();
+        // Cache::tags('artists')->flush();
     }
 
     public function deleted(Artist $artist)
     {
-        Cache::tags('artists')->flush();
+        // Cache::tags('artists')->flush();
     }
 
     protected function checkUserCreation($artist)

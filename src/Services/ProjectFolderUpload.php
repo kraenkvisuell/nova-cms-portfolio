@@ -162,16 +162,17 @@ class ProjectFolderUpload
         }
 
         $mediaItem = MediaModel::where('original_name', $filename)->first();
-        Log::error($filename);
-        Log::error($mediaItem);
+        
         if (! $mediaItem) {
             try {
+
                 $tmpPath = Storage::putFileAs('tmp/portfolio-uploads', $file, $filename);
-                $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
-                $response['status'] = 'success';
-                $response['reason'] = '';
+                Log::error($tmpPath);
+                // $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
+                // $response['status'] = 'success';
+                // $response['reason'] = '';
             } catch (Exception $e) {
-                Log::error($e);
+                // Log::error($e);
             }
         } else {
             $response['reason'] = 'already exists';

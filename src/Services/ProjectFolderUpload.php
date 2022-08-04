@@ -164,9 +164,9 @@ class ProjectFolderUpload
         
         if (! $mediaItem) {
             try {
-
-                $tmpPath = Storage::putFileAs('tmp/portfolio-uploads', $file, $filename);
-                Log::error($tmpPath);
+                
+                $tmpPath = Storage::putFileAs('tmp-uploads', $file, $filename);
+                ray($tmpPath);
                 Log::error(config('filesystems.disks.local.root').'/'.$tmpPath);
                 // $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
                 // $response['status'] = 'success';

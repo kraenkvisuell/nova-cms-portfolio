@@ -162,8 +162,8 @@ class ProjectFolderUpload
         }
 
         $mediaItem = MediaModel::where('original_name', $filename)->first();
-        Log::debug($filename);
-        Log::debug($mediaItem);
+        Log::error($filename);
+        Log::error($mediaItem);
         if (! $mediaItem) {
             try {
                 $tmpPath = Storage::putFileAs('tmp/portfolio-uploads', $file, $filename);
@@ -171,7 +171,7 @@ class ProjectFolderUpload
                 $response['status'] = 'success';
                 $response['reason'] = '';
             } catch (Exception $e) {
-                Log::debug($e);
+                Log::error($e);
             }
         } else {
             $response['reason'] = 'already exists';

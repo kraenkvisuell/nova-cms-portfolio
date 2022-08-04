@@ -166,7 +166,7 @@ class ProjectFolderUpload
             try {
                 
                 $tmpPath = Storage::putFileAs('tmp-uploads', $file, $filename);
-                ray($tmpPath);
+                Log::error($tmpPath);
                 Log::error(config('filesystems.disks.local.root').'/'.$tmpPath);
                 // $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
                 // $response['status'] = 'success';

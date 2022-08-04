@@ -149,7 +149,7 @@ class ProjectFolderUpload
     {
         $response = [
             'status' => 'not_uploaded',
-            'reason' => 'already exists',
+            'reason' => 'unknown',
         ];
 
         $newFilename = $filename;
@@ -162,7 +162,8 @@ class ProjectFolderUpload
         }
 
         $mediaItem = MediaModel::where('original_name', $filename)->first();
-
+        Log::debug($filename);
+        Log::debug($mediaItem);
         if (! $mediaItem) {
             try {
                 $tmpPath = Storage::putFileAs('tmp/portfolio-uploads', $file, $filename);
@@ -172,6 +173,8 @@ class ProjectFolderUpload
             } catch (Exception $e) {
                 Log::debug($e);
             }
+        } else {
+            $response['reason'] = 'already exists';
         }
 
         if ($mediaItem) {

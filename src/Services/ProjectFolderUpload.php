@@ -2,10 +2,7 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Services;
 
-use Exception;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsMedia\API;
 use Kraenkvisuell\NovaCmsMedia\Core\Model as MediaModel;
@@ -174,6 +171,8 @@ class ProjectFolderUpload
             $mediaItem = API::upload($tmpPath, null, $newFilename);
             $response['status'] = 'success';
             $response['reason'] = '';
+
+            unlink($tmpPath);
         } else {
             $response['reason'] = 'already exists';
         }

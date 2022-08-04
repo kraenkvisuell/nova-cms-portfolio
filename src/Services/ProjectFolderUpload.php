@@ -31,8 +31,7 @@ class ProjectFolderUpload
             'category' => '',
             'slideshow' => '',
         ];
-        ray($data);
-
+        
         $pathArr = explode('/', $data['originalPath']);
 
         if (Str::startsWith($filename, '.')) {
@@ -168,10 +167,10 @@ class ProjectFolderUpload
 
                 $tmpPath = Storage::putFileAs('tmp/portfolio-uploads', $file, $filename);
                 Log::error($tmpPath);
-                Log::error(storage_path('app/'.$tmpPath));
-                $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
-                $response['status'] = 'success';
-                $response['reason'] = '';
+                Log::error(config('filesystems.disks.local.root').'/'.$tmpPath);
+                // $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
+                // $response['status'] = 'success';
+                // $response['reason'] = '';
             } catch (Exception $e) {
                 Log::error($e);
             }

@@ -4,6 +4,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Services;
 
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsMedia\API;
@@ -169,7 +170,7 @@ class ProjectFolderUpload
                 $response['status'] = 'success';
                 $response['reason'] = '';
             } catch (Exception $e) {
-                ray($e);
+                Log::debug($e);
             }
         }
 

@@ -125,29 +125,21 @@ class ProjectFolderUpload
 
         $slug = Str::slug(str_replace('/', '-', $slideshowName));
 
-        $slideshow = Cache::remember(
-            'portfolio.uploaded_slideshow.'.$artist->id.'.'.$slug,
-            now()->addSeconds(1),
-            function () use ($slideshowName, $artist, $slug, $category) {
-                $slideshow = Slideshow::firstOrCreate(
-                    [
-                        'artist_id' => $artist->id,
-                        'title' => $slideshowName,
-                    ],
-                    [
-                        'slug' => $slug,
-                        'robots' => [
-                            'index' => true,
-                            'follow' => true,
-                        ],
-                    ]
-                );
-
-                $slideshow->categories()->syncWithoutDetaching($category->id);
-
-                return $slideshow;
-            }
+        $slideshow = Slideshow::firstOrCreate(
+            [
+                'artist_id' => $artist->id,
+                'title' => $slideshowName,
+            ],
+            [
+                'slug' => $slug,
+                'robots' => [
+                    'index' => true,
+                    'follow' => true,
+                ],
+            ]
         );
+
+        $slideshow->categories()->syncWithoutDetaching($category->id);
 
         return $slideshow;
     }

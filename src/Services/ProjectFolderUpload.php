@@ -160,20 +160,20 @@ class ProjectFolderUpload
             $newFilename = str_replace('-', '_', $artist->slug).'_'.$newFilename;
         }
 
-        $mediaItem = MediaModel::where('original_name', $filename)->first();
+        $mediaItem = MediaModel::where('original_name', $newFilename)->first();
         
         if (! $mediaItem) {
-            try {
-                
-                $tmpPath = Storage::putFileAs('tmp-uploads', $file, $filename);
-                Log::error($tmpPath);
-                Log::error(config('filesystems.disks.local.root').'/'.$tmpPath);
-                // $mediaItem = API::upload(storage_path('app/'.$tmpPath), null, $newFilename);
-                // $response['status'] = 'success';
-                // $response['reason'] = '';
-            } catch (Exception $e) {
-                Log::error($e);
+            $tmpDir = base_path('storage/tmp');
+            if (!is_dir($tmpDir)) {
+                mkdir($tmpDir);
             }
+
+            $tmpPath = $tmpDir.'/'.$newFilename;
+            move_uploaded_file($file, $tmpPath);
+            
+            $mediaItem = API::upload($tmpPath, null, $newFilename);
+            $response['status'] = 'success';
+            $response['reason'] = '';
         } else {
             $response['reason'] = 'already exists';
         }

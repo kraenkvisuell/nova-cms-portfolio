@@ -87,7 +87,12 @@ class FilteredArtists
                         ->with($worksWith)
                         ->orderByDesc('show_in_overview')
                         ->orderBy('sort_order')
-                        ->orderByDesc('id');
+                        ->orderByDesc('id')
+                        ->whereDoesntHave('slideshow', function (Builder $b) {
+                            $b->whereHas('categories', function (Builder $b) {
+                                    $b->where('title->en', 'Commissions');
+                                });
+                        });
 
                     if ($needle) {
                     } else {

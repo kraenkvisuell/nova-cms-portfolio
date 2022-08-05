@@ -11,7 +11,7 @@ class ArtistService
         int $disciplineId = null,
         int $categoryId = null,
         string $needle = '',
-        int $workLimit = 10,
+        int $workLimit = 8,
         string $sortOrder = 'alphabetical'
     ) {
         return FilteredArtists::get(

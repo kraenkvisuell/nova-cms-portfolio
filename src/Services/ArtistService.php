@@ -8,8 +8,8 @@ use Kraenkvisuell\NovaCmsPortfolio\Objects\ArtistWithFilledCategories;
 class ArtistService
 {
     public static function filteredResults(
-        int $disciplineId = null,
-        int $categoryId = null,
+        int $disciplineId = 0,
+        int $categoryId = 0,
         string $needle = '',
         int $workLimit = 8,
         string $sortOrder = 'alphabetical'

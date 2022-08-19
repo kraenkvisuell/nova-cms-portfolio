@@ -2,8 +2,8 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Observers;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 
 class ArtistObserver
@@ -42,7 +42,6 @@ class ArtistObserver
             $user = $artist->user()->create([
                 'email' => $email,
                 'name' => $artist->name,
-                //'password' => Hash::make(Str::uuid()),
                 'password' => Hash::make('password'),
             ]);
 

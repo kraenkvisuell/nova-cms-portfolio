@@ -63,7 +63,7 @@ class Category extends Model
     public static function getCachedIdBySlug($slug)
     {
         return Cache::tags('categories')->rememberForever(
-            'category.getCachedIdBySlug.'.$slug, 
+            'category.getCachedIdBySlug.'.$slug,
             function () use ($slug) {
                 return static::where('slug->'.app()->getLocale(), $slug)->first()?->id ?: 0;
             });

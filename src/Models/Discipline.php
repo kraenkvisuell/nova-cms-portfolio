@@ -82,7 +82,7 @@ class Discipline extends Model implements Sortable
     public function getCachedCategories()
     {
         return Cache::tags('categories')->rememberForever(
-            'disciplineCategories.'.$this->id.'.'.app()->getLocale(), 
+            'disciplineCategories.'.$this->id.'.'.app()->getLocale(),
             function () {
                 return $this->getCategories();
             });
@@ -109,7 +109,7 @@ class Discipline extends Model implements Sortable
     public static function getCachedIdBySlug($slug)
     {
         return Cache::tags('disciplines')->rememberForever(
-            'discipline.getCachedIdBySlug.'.$slug, 
+            'discipline.getCachedIdBySlug.'.$slug,
             function () use ($slug) {
                 return static::where('slug->'.app()->getLocale(), $slug)->first()?->id ?: 0;
             });

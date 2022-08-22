@@ -30,6 +30,7 @@ class FilteredArtists
         //     function () use ($disciplineId, $categoryId, $needle, $workLimit, $sortOrder) {
         $artistsBuilder = Artist::where('is_published', true)
                     ->with([
+                        'categories',
                         'disciplines' => function ($b) {
                             $b->select([
                                 'id',
@@ -98,11 +99,18 @@ class FilteredArtists
 
             if ($needle) {
             } else {
-                if ($categoryId) {
-                    $worksBuilder->whereHas('slideshow', function (Builder $b) use ($categoryId) {
+                $workCategoryId = $categoryId ?: $artist->categories
+                    ->filter(function ($category) {
+                        return ! stristr($category->slug, 'commission');
+                    })
+                    ->first()
+                    ?->id;
+
+                if ($workCategoryId) {
+                    $worksBuilder->whereHas('slideshow', function (Builder $b) use ($workCategoryId) {
                         $b->where('is_published', true)
-                                    ->whereHas('categories', function (Builder $b) use ($categoryId) {
-                                        $b->where('id', $categoryId);
+                                    ->whereHas('categories', function (Builder $b) use ($workCategoryId) {
+                                        $b->where('id', $workCategoryId);
                                     });
                     });
                 }

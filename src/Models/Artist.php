@@ -131,30 +131,51 @@ class Artist extends Model implements Sortable
                 }
             }
 
-            $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
+            if (config('nova-cms-portfolio.has_portfolio_images_fallback')) {
+                $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
 
-            if ($limit > 0) {
-                foreach (
-                    $this->works->where('show_in_overview', true)->take($limit)
-                    as $work
-                ) {
-                    $images[] = $work->file;
+                if ($limit > 0) {
+                    foreach (
+                        $this->works->where('show_in_overview', true)->take($limit)
+                        as $work
+                    ) {
+                        $images[] = $work->file;
+                    }
                 }
-            }
 
-            $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
+                $limit = config('nova-cms-portfolio.number_of_portfolio_images') - count($images);
 
-            if ($limit > 0) {
-                foreach (
-                    $this->works->take($limit)
-                    as $work
-                ) {
-                    $images[] = $work->file;
+                if ($limit > 0) {
+                    foreach (
+                        $this->works->take($limit)
+                        as $work
+                    ) {
+                        $images[] = $work->file;
+                    }
                 }
             }
         }
 
         return $images;
+    }
+
+    public function startpageImages()
+    {
+        $images = [];
+
+        foreach (
+            $this->works->where('is_startpage_image', true)->take(1)
+            as $work
+        ) {
+            $images[] = $work->file;
+        }
+
+        return $images;
+    }
+
+    public function startpageImage()
+    {
+        return $this->startpageImages()[0] ?? null;
     }
 
     public function slideshowCategories()

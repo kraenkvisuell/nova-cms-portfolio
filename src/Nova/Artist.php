@@ -67,6 +67,9 @@ class Artist extends Resource
         $slideshowSingularLabel = __(config('nova-cms-portfolio.custom_slideshow_label'))
         ?: __('nova-cms-portfolio::slideshows.slideshow');
 
+        $startpageImageLabel = config('nova-cms-portfolio.custom_startpage_image_label')
+            ?: __('Startseiten-Bild');
+
         $tabs = [];
 
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
@@ -169,6 +172,68 @@ class Artist extends Resource
                     return '/'.$this->slug;
                 })->asSmall(),
             ]),
+
+            Text::make('Portfolio-Images', function () {
+                $html = '<div
+                    class="block whitespace-normal"
+                >';
+                foreach (collect($this->portfolioImages())->take(config('nova-cms-portfolio.number_of_portfolio_images') ?: 3) as $portfolioImage) {
+                    $html .= '<a
+                        href="'.nova_cms_file($portfolioImage).'"
+                        download
+                    >';
+
+                    if (nova_cms_mime($portfolioImage) == 'video') {
+                        $html .= '<video
+                            autoplay muted loop playsinline
+                            class="w-auto h-12 mr-1 inline-block"
+                        >
+                            <source src="'.nova_cms_file($portfolioImage).'" type="video/'.nova_cms_extension($portfolioImage).'">
+                        </video>';
+                    } else {
+                        $html .= '<img
+                            class="w-auto h-12 mr-1 inline-block"
+                            src="'.nova_cms_image($portfolioImage, 'thumb').'"
+                        />';
+                    }
+
+                    $html .= '</a>';
+                }
+                $html .= '</div>';
+
+                return $html;
+            })->asHtml(),
+
+            Text::make($startpageImageLabel, function () {
+                $html = '<div
+                    class="block whitespace-normal"
+                >';
+                foreach (collect($this->startpageImages()) as $startpageImage) {
+                    $html .= '<a
+                        href="'.nova_cms_file($startpageImage).'"
+                        download
+                    >';
+
+                    if (nova_cms_mime($startpageImage) == 'video') {
+                        $html .= '<video
+                            autoplay muted loop playsinline
+                            class="w-auto h-12 mr-1 inline-block"
+                        >
+                            <source src="'.nova_cms_file($startpageImage).'" type="video/'.nova_cms_extension($startpageImage).'">
+                        </video>';
+                    } else {
+                        $html .= '<img
+                            class="w-auto h-12 mr-1 inline-block"
+                            src="'.nova_cms_image($startpageImage, 'thumb').'"
+                        />';
+                    }
+
+                    $html .= '</a>';
+                }
+                $html .= '</div>';
+
+                return $html;
+            })->asHtml(),
 
             (new Tabs(static::singularLabel(), $tabs))->withToolbar(),
 

@@ -12,6 +12,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleArtistPortfolioImage;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleRepresentsArtistInCategory;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleShowInOverviewCategory;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleStartpageImage;
 use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BooleanGroup;
@@ -68,6 +69,9 @@ class Work extends Resource
 
         $isArtistPortfolioImageLabel = config('nova-cms-portfolio.custom_is_artist_portfolio_image_label')
             ?: __('Ist Künstler-Portfolio-Bild');
+
+        $isStartpageImageLabel = config('nova-cms-portfolio.custom_is_startpage_image_label')
+            ?: __('Ist Startseiten-Bild');
 
         $overviewCategoriesLabel = config('nova-cms-portfolio.custom_overview_categories_label')
             ?: __('nova-cms-portfolio::works.overview_categories');
@@ -128,6 +132,18 @@ class Work extends Resource
                 if ($this->is_artist_portfolio_image) {
                     return '<span class="text-xs font-bold uppercase">'
                     .$isArtistPortfolioImageLabel
+                    .'</span>';
+                }
+
+                return '';
+            })->asHtml();
+        }
+
+        if (config('nova-cms-portfolio.has_select_startpage_image')) {
+            $settingsStack[] = Line::make('', function () use ($isStartpageImageLabel) {
+                if ($this->is_startpage_image) {
+                    return '<span class="text-xs font-bold uppercase">'
+                    .$isStartpageImageLabel
                     .'</span>';
                 }
 
@@ -226,7 +242,12 @@ class Work extends Resource
         }
 
         if (config('nova-cms-portfolio.has_select_portfolio_image')) {
-            $fields[] = Boolean::make(__('nova-cms-portfolio::works.is_artist_portfolio_image'), 'is_artist_portfolio_image')
+            $fields[] = Boolean::make($isArtistPortfolioImageLabel, 'is_artist_portfolio_image')
+                ->onlyOnForms();
+        }
+
+        if (config('nova-cms-portfolio.has_select_startpage_image')) {
+            $fields[] = Boolean::make($isStartpageImageLabel, 'is_startpage_image')
                 ->onlyOnForms();
         }
 
@@ -306,6 +327,12 @@ class Work extends Resource
 
         if (config('nova-cms-portfolio.has_select_portfolio_image')) {
             $actions[] = ToggleArtistPortfolioImage::make()
+                ->onlyOnTableRow()
+                ->withoutConfirmation();
+        }
+
+        if (config('nova-cms-portfolio.has_select_startpage_image')) {
+            $actions[] = ToggleStartpageImage::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation();
         }

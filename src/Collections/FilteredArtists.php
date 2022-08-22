@@ -71,6 +71,7 @@ class FilteredArtists
                     'id',
                     'slug',
                     'title',
+                    'sort_order',
                 ])
                 ->with([
                     'works' => function ($b) {
@@ -84,13 +85,17 @@ class FilteredArtists
             },
         ];
 
+        $prefix = config('nova-cms-portfolio.db_prefix');
+
         foreach ($artists as $artist) {
             $worksBuilder = $artist->works()
                         ->limit($workLimit)
                         ->with($worksWith)
+                        ->join($prefix.'slideshows as slideshows_alias', 'slideshows_alias.id', '=', $prefix.'works.slideshow_id')
                         ->orderByDesc('show_in_overview')
-                        ->orderBy('sort_order')
-                        ->orderByDesc('id')
+                        ->orderBy($prefix.'works.sort_order')
+                        ->orderBy($prefix.'slideshows_alias.sort_order')
+                        ->orderByDesc($prefix.'works.id')
                         ->whereDoesntHave('slideshow', function (Builder $b) {
                             $b->whereHas('categories', function (Builder $b) {
                                 $b->where('title->en', 'Commissions');

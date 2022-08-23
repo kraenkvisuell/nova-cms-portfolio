@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ChangeCategory;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleSlideshowIsPublished;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Actions\ToggleVisibilityInOverview;
 use Kraenkvisuell\NovaCmsPortfolio\QuickWorksCard;
@@ -264,6 +265,8 @@ class Slideshow extends Resource
             ToggleVisibilityInOverview::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
+
+            ChangeCategory::make(),
         ];
     }
 

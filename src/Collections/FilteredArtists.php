@@ -4,6 +4,7 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Collections;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
@@ -167,7 +168,9 @@ class FilteredArtists
         $results = collect($results);
 
         if ($sortOrder == 'alphabetical') {
-            $results = $results->sortBy('artist.name');
+            $results = $results->sortBy(function ($result) {
+                return Str::of($result['artist']['name'])->afterLast(' ');
+            });
         }
 
         return $results->values()->all();

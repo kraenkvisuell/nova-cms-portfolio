@@ -98,7 +98,7 @@ class FilteredArtists
                         ->orderByDesc($prefix.'works.id')
                         ->whereDoesntHave('slideshow', function (Builder $b) {
                             $b->whereHas('categories', function (Builder $b) {
-                                $b->where('title->en', 'Commissions');
+                                $b->where('title->en', 'like', 'Commission%');
                             });
                         });
 

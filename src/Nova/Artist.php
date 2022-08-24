@@ -70,6 +70,12 @@ class Artist extends Resource
         $startpageImageLabel = config('nova-cms-portfolio.custom_startpage_image_label')
             ?: __('Startseiten-Bild');
 
+        $portfolioImagesLabel = config('nova-cms-portfolio.custom_portfolio_images_label')
+            ?: __('Portfolio-Bilder');
+
+        $overviewImagesLabel = ucfirst(config('nova-cms-portfolio.custom_show_in_overview_label'))
+            ?: __('Übersicht-Bilder');
+
         $tabs = [];
 
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
@@ -173,7 +179,7 @@ class Artist extends Resource
                 })->asSmall(),
             ]),
 
-            Text::make('Portfolio-Images', function () {
+            Text::make($portfolioImagesLabel, function () {
                 $html = '<div
                     class="block whitespace-normal"
                 >';
@@ -236,6 +242,39 @@ class Artist extends Resource
 
                 return $html;
             })->asHtml();
+        }
+
+        if (config('nova-cms-portfolio.artists_have_overview_preview')) {
+            $fields[] = Text::make($overviewImagesLabel, function () {
+                $html = '<div
+                    class="block whitespace-normal"
+                >';
+                foreach (collect($this->overviewImages()) as $overviewImage) {
+                    $html .= '<a
+                        href="'.nova_cms_file($overviewImage).'"
+                        download
+                    >';
+
+                    if (nova_cms_mime($overviewImage) == 'video') {
+                        $html .= '<video
+                            autoplay muted loop playsinline
+                            class="w-auto h-12 mr-1 inline-block"
+                        >
+                            <source src="'.nova_cms_file($overviewImage).'" type="video/'.nova_cms_extension($overviewImage).'">
+                        </video>';
+                    } else {
+                        $html .= '<img
+                            class="w-auto h-12 mr-1 inline-block"
+                            src="'.nova_cms_image($overviewImage, 'thumb').'"
+                        />';
+                    }
+
+                    $html .= '</a>';
+                }
+                $html .= '</div>';
+
+                return $html;
+            })->asHtml()->onlyOnDetail();
         }
 
         $fields[] = (new Tabs(static::singularLabel(), $tabs))->withToolbar();

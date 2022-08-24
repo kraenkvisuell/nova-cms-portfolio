@@ -3,6 +3,7 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kraenkvisuell\NovaCms\Facades\ContentParser;
@@ -165,6 +166,72 @@ class Artist extends Model implements Sortable
 
         foreach (
             $this->works->where('is_startpage_image', true)->take(1)
+            as $work
+        ) {
+            $images[] = $work->file;
+        }
+
+        return $images;
+    }
+
+    public function overviewImages()
+    {
+        $worksWith = [
+            'slideshow' => function ($b) {
+                $b->select([
+                    'id',
+                    'slug',
+                    'title',
+                    'sort_order',
+                ])
+                ->with([
+                    'works' => function ($b) {
+                        $b->select([
+                            'id',
+                            'slideshow_id',
+                        ]);
+                    },
+
+                ]);
+            },
+        ];
+
+        $prefix = config('nova-cms-portfolio.db_prefix');
+
+        $categoryId = $this->categories
+                        ->filter(function ($category) {
+                            return ! stristr($category->slug, 'commission');
+                        })
+                        ->first()
+                        ?->id;
+
+        $worksBuilder = $this->works()
+            ->limit(config('nova-cms-portfolio.max_overview_thumbnails'))
+            ->with($worksWith)
+            ->join($prefix.'slideshows as slideshows_alias', 'slideshows_alias.id', '=', $prefix.'works.slideshow_id')
+            ->orderByDesc('show_in_overview')
+            ->orderBy($prefix.'works.sort_order')
+            ->orderBy($prefix.'slideshows_alias.sort_order')
+            ->orderByDesc($prefix.'works.id')
+            ->whereDoesntHave('slideshow', function (Builder $b) {
+                $b->whereHas('categories', function (Builder $b) {
+                    $b->where('title->en', 'like', 'Commission%');
+                });
+            });
+
+        if ($categoryId) {
+            $worksBuilder->whereHas('slideshow', function (Builder $b) use ($categoryId) {
+                $b->where('is_published', true)
+                    ->whereHas('categories', function (Builder $b) use ($categoryId) {
+                        $b->where('id', $categoryId);
+                    });
+            });
+        }
+
+        $images = [];
+
+        foreach (
+            $worksBuilder->get()
             as $work
         ) {
             $images[] = $work->file;

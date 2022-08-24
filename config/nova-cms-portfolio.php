@@ -3,6 +3,7 @@
 return [
     'artists_are_sortable' => false,
     'artists_have_custom_bg' => true,
+    'artists_have_overview_preview' => false,
     'artists_sortable_dropdown' => false,
     'category_sortable_dropdown' => false,
     'custom_artist_label' => '',
@@ -10,6 +11,7 @@ return [
     'custom_is_artist_portfolio_image_label' => '',
     'custom_is_startpage_image_label' => '',
     'custom_overview_categories_label' => '',
+    'custom_portfolio_images_label' => '',
     'custom_show_in_overview_label' => '',
     'custom_slideshow_label' => '',
     'custom_slideshows_label' => '',
@@ -39,6 +41,7 @@ return [
     'has_visible_in_artist_overview' => true,
     'has_width_in_overview' => true,
     'has_width_in_frame' => true,
+    'max_overview_thumbnails' => 8,
     'max_thumbnails' => 3,
     'number_of_portfolio_images' => 1,
     'projects_zip_starts_with_categories' => false,

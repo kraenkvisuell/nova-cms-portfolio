@@ -203,8 +203,10 @@ class Artist extends Resource
 
                 return $html;
             })->asHtml(),
+        ];
 
-            Text::make($startpageImageLabel, function () {
+        if (config('nova-cms-portfolio.has_select_startpage_image')) {
+            $fields[] = Text::make($startpageImageLabel, function () {
                 $html = '<div
                     class="block whitespace-normal"
                 >';
@@ -233,26 +235,26 @@ class Artist extends Resource
                 $html .= '</div>';
 
                 return $html;
-            })->asHtml(),
+            })->asHtml();
+        }
 
-            (new Tabs(static::singularLabel(), $tabs))->withToolbar(),
+        $fields[] = (new Tabs(static::singularLabel(), $tabs))->withToolbar();
 
-            Stack::make('', [
-                Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
-                    return '<button
+        $fields[] = Stack::make('', [
+            Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
+                return '<button
                         onclick="window.location.href=\'/nova/resources/artists/'.$this->id.'\'"
                         class="btn btn-xs 
                         '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
                         "
                         >'
-                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
-                        .'</button>';
-                })->asHtml(),
-            ])
-            ->onlyOnIndex(),
+                    .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                    .'</button>';
+            })->asHtml(),
+        ])
+        ->onlyOnIndex();
 
-            HasMany::make($slideshowLabel, 'slideshows', Slideshow::class),
-        ];
+        $fields[] = HasMany::make($slideshowLabel, 'slideshows', Slideshow::class);
 
         if (config('nova-cms-portfolio.has_artist_category')) {
             $fields[] = BelongsToMany::make(

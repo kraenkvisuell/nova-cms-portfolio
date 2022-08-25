@@ -12,7 +12,7 @@ class ArtistWithFilledCategories
         // return Cache::tags('artists')->rememberForever(
         //     'ArtistWithFilledCategories.'.$id.'.'.$workLimit.'.'.app()->getLocale(),
         //     function () use ($id, $workLimit) {
-                $artist = Artist::where('id', $id)
+        $artist = Artist::where('id', $id)
                 ->with([
                     'disciplines',
                     'categories',
@@ -33,112 +33,115 @@ class ArtistWithFilledCategories
                 ])
                 ->first();
 
-                if (! $artist) {
-                    return null;
-                }
+        if (! $artist) {
+            return null;
+        }
 
-                $disciplines = [];
+        $disciplines = [];
 
-                foreach ($artist->disciplines as $discipline) {
-                    $disciplines[] = [
-                        'id' => $discipline->id,
-                        'slug' => $discipline->slug,
-                        'title' => $discipline->title,
-                    ];
-                }
+        foreach ($artist->disciplines as $discipline) {
+            $disciplines[] = [
+                'id' => $discipline->id,
+                'slug' => $discipline->slug,
+                'title' => $discipline->title,
+            ];
+        }
 
-                $categories = [];
+        $categories = [];
 
-                foreach ($artist->categories as $category) {
-                    $slideshows = $artist
+        foreach ($artist->categories as $category) {
+            $slideshows = $artist
                         ->slideshows
                         ->filter(function ($slideshow) use ($category) {
                             return $slideshow->categories->where('id', $category->id)
                                 ->count();
                         });
 
-                    if ($slideshows->count()) {
-                        $categorySlideshows = [];
+            if ($slideshows->count()) {
+                $categorySlideshows = [];
 
-                        foreach ($slideshows as $slideshow) {
-                            $works = $slideshow->works
+                foreach ($slideshows as $slideshow) {
+                    $works = $slideshow->works
                                 ->where('show_in_overview', true);
 
-                            if (! $works->count()) {
-                                $works = $slideshow->works
+                    if (! $works->count()) {
+                        $works = $slideshow->works
                                     ->take($workLimit);
-                            }
+                    }
 
-                            $slideshowWorks = [];
+                    $slideshowWorks = [];
 
-                            foreach ($works as $work) {
-                                $imgUrls = [];
-                                foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
-                                    $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
-                                }
+                    foreach ($works as $work) {
+                        $imgUrls = [
+                            'original' => nova_cms_image($work->file),
+                        ];
 
-                                $slideshowWorks[] = [
-                                    'id' => $work->id,
-                                    'imgUrls' => $imgUrls,
-                                    'positionInSlideshow' => $work->actualPosition(),
-                                    'ratio' => $work->fileRatio(),
-                                    'embedUrl' => $work->embedUrl(),
-                                ];
-                            }
-
-                            $categorySlideshows[] = [
-                                'id' => $slideshow->id,
-                                'title' => $slideshow->title,
-                                'slug' => $slideshow->slug,
-                                'works' => $slideshowWorks,
-                            ];
+                        foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
+                            $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
                         }
 
-                        $categories[] = [
-                            'id' => $category->id,
-                            'slug' => $category->slug,
-                            'title' => $category->title,
-                            'slideshows' => $categorySlideshows,
+                        $slideshowWorks[] = [
+                            'id' => $work->id,
+                            'imgUrls' => $imgUrls,
+                            'positionInSlideshow' => $work->actualPosition(),
+                            'ratio' => $work->fileRatio(),
+                            'embedUrl' => $work->embedUrl(),
                         ];
                     }
-                }
 
-                $socialLinks = [];
-
-                foreach ($artist->social_links as $socialLink) {
-                    $socialLinks[] = [
-                        'title' => $socialLink->title,
-                        'url' => @$socialLink->link_url->{app()->getLocale()},
-                        'slug' => $socialLink->slug,
-                        'icon' => $socialLink->link_icon,
-                        'svg' => $socialLink->svg_tag,
+                    $categorySlideshows[] = [
+                        'id' => $slideshow->id,
+                        'title' => $slideshow->title,
+                        'slug' => $slideshow->slug,
+                        'works' => $slideshowWorks,
                     ];
                 }
 
-                $portraitImage = null;
-
-                if ($artist->portrait_image) {
-                    $portraitImage = [
-                        'imgUrls' => [],
-                    ];
-
-                    foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
-                        $portraitImage['imgUrls'][$sizeKey] = nova_cms_image($artist->portrait_image, $sizeKey);
-                    }
-                }
-
-                return [
-                    'id' => $artist->id,
-                    'name' => $artist->name,
-                    'description' => $artist->description,
-                    'email' => $artist->email,
-                    'website' => $artist->website,
-                    'socialLinks' => $socialLinks,
-                    'portraitImage' => $portraitImage,
-                    'disciplines' => $disciplines,
-                    'categories' => $categories,
+                $categories[] = [
+                    'id' => $category->id,
+                    'slug' => $category->slug,
+                    'title' => $category->title,
+                    'slideshows' => $categorySlideshows,
                 ];
-            
-            // });
+            }
+        }
+
+        $socialLinks = [];
+
+        foreach ($artist->social_links as $socialLink) {
+            $socialLinks[] = [
+                'title' => $socialLink->title,
+                'url' => @$socialLink->link_url->{app()->getLocale()},
+                'slug' => $socialLink->slug,
+                'icon' => $socialLink->link_icon,
+                'svg' => $socialLink->svg_tag,
+            ];
+        }
+
+        $portraitImage = null;
+
+        if ($artist->portrait_image) {
+            $portraitImage = [
+                'imgUrls' => [],
+            ];
+
+            foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
+                $portraitImage['imgUrls'][$sizeKey] = nova_cms_image($artist->portrait_image, $sizeKey);
+            }
+        }
+
+        return [
+            'id' => $artist->id,
+            'name' => $artist->name,
+            'description' => $artist->description,
+            'email' => $artist->email,
+            'website' => $artist->website,
+            'socialLinks' => $socialLinks,
+            'portraitImage' => $portraitImage,
+            'disciplines' => $disciplines,
+            'categories' => $categories,
+        ];
+
+        // });
     }
 }

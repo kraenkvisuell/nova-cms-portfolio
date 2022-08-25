@@ -125,7 +125,9 @@ class FilteredArtists
             $works = [];
 
             foreach ($worksBuilder->get() as $work) {
-                $imgUrls = [];
+                $imgUrls = [
+                    'original' => nova_cms_image($work->file),
+                ];
                 foreach (config('nova-cms-media.resize.sizes') ?: [] as $sizeKey => $sizeValue) {
                     $imgUrls[$sizeKey] = nova_cms_image($work->file, $sizeKey);
                 }

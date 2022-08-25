@@ -64,21 +64,29 @@ class Work extends Resource
     {
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
 
-        $showInOverviewLabel = config('nova-cms-portfolio.custom_show_in_overview_label')
-            ?: __('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist');
+        $showInOverviewLabel = ucfirst(
+            config('nova-cms-portfolio.custom_show_in_overview_label')
+            ?: __('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist')
+        );
 
-        $isArtistPortfolioImageLabel = config('nova-cms-portfolio.custom_is_artist_portfolio_image_label')
-            ?: __('Ist Künstler-Portfolio-Bild');
+        $isArtistPortfolioImageLabel = ucfirst(
+            config('nova-cms-portfolio.custom_is_artist_portfolio_image_label')
+            ?: __('Ist Künstler-Portfolio-Bild')
+        );
 
-        $isStartpageImageLabel = config('nova-cms-portfolio.custom_is_startpage_image_label')
-            ?: __('Ist Startseiten-Bild');
+        $isStartpageImageLabel = ucfirst(
+            config('nova-cms-portfolio.custom_is_startpage_image_label')
+            ?: __('Ist Startseiten-Bild')
+        );
 
-        $overviewCategoriesLabel = config('nova-cms-portfolio.custom_overview_categories_label')
-            ?: __('nova-cms-portfolio::works.overview_categories');
+        $overviewCategoriesLabel = ucfirst(
+            config('nova-cms-portfolio.custom_overview_categories_label')
+            ?: __('nova-cms-portfolio::works.overview_categories')
+        );
 
         $fields = [];
 
-        $fields[] = MediaLibrary::make(__('nova-cms::content_blocks.file'), 'file')
+        $fields[] = MediaLibrary::make(ucfirst(__('nova-cms::content_blocks.file')), 'file')
             ->uploadOnly($uploadOnly)
             ->onlyOnForms();
 
@@ -192,27 +200,27 @@ class Work extends Resource
         $fields[] = Stack::make('Settings', $settingsStack);
 
         if (config('nova-cms-portfolio.has_embed_code')) {
-            $fields[] = Textarea::make(__('nova-cms-portfolio::works.embed_code'), 'embed_code')
+            $fields[] = Textarea::make(ucfirst(__('nova-cms-portfolio::works.embed_code')), 'embed_code')
                 ->onlyOnForms();
         }
 
-        $fields[] = Text::make(__('nova-cms-portfolio::works.embed_url'), 'embed_url')
+        $fields[] = Text::make(ucfirst(__('nova-cms-portfolio::works.embed_url')), 'embed_url')
             ->onlyOnForms();
 
-        $fields[] = Text::make(__('nova-cms-portfolio::works.embed_code_ratio'), 'embed_code_ratio')
+        $fields[] = Text::make(ucfirst(__('nova-cms-portfolio::works.embed_code_ratio')), 'embed_code_ratio')
             ->help(__('nova-cms-portfolio::works.embed_code_ratio_help'))
             ->onlyOnForms();
 
-        $fields[] = Text::make(__('nova-cms-portfolio::works.custom_ratio'), 'custom_ratio')
+        $fields[] = Text::make(ucfirst(__('nova-cms-portfolio::works.custom_ratio')), 'custom_ratio')
             ->help(__('nova-cms-portfolio::works.custom_ratio_help'))
             ->onlyOnForms();
 
-        $fields[] = Text::make(__('nova-cms::pages.title'), 'title')
+        $fields[] = Text::make(ucfirst(__('nova-cms::pages.title')), 'title')
             ->translatable()
             ->nullable()
             ->onlyOnForms();
 
-        $fields[] = Textarea::make(__('nova-cms-portfolio::portfolio.description'), 'description')
+        $fields[] = Textarea::make(ucfirst(__('nova-cms-portfolio::portfolio.description')), 'description')
             ->translatable()
             ->nullable()
             ->onlyOnForms();

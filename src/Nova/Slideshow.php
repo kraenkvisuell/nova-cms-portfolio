@@ -70,14 +70,20 @@ class Slideshow extends Resource
 
     public function fields(Request $request)
     {
-        $workLabel = config('nova-cms-portfolio.custom_works_label')
-            ?: __('nova-cms-portfolio::works.works');
+        $workLabel = ucfirst(
+            config('nova-cms-portfolio.custom_works_label')
+            ?: __('nova-cms-portfolio::works.works')
+        );
 
-        $workSingularLabel = config('nova-cms-portfolio.custom_work_label')
-            ?: __('nova-cms-portfolio::works.work');
+        $workSingularLabel = ucfirst(
+            config('nova-cms-portfolio.custom_work_label')
+            ?: __('nova-cms-portfolio::works.work')
+        );
 
-        $visibleInArtistOverviewLabel = config('nova-cms-portfolio.custom_visible_in_artist_overview_label')
-            ?: ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview'));
+        $visibleInArtistOverviewLabel = ucfirst(
+            config('nova-cms-portfolio.custom_visible_in_artist_overview_label')
+            ?: ucfirst(__('nova-cms-portfolio::slideshows.visible_in_artist_overview'))
+        );
 
         $fields = [
             Stack::make('Details', [
@@ -106,7 +112,7 @@ class Slideshow extends Resource
             ])
             ->onlyOnIndex(),
 
-            Text::make(__('nova-cms::pages.title'), 'title')
+            Text::make(ucfirst(__('nova-cms::pages.title')), 'title')
                 ->rules('required')
                 ->hideFromIndex(),
         ];
@@ -130,7 +136,7 @@ class Slideshow extends Resource
                 ->onlyOnForms();
         }
 
-        $fields[] = BelongsToManyField::make('Kategorien', 'categories', Category::class)
+        $fields[] = BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::categories.categories')), 'categories', Category::class)
             ->optionsLabel('title')
             ->required()
             ->rules('required')
@@ -184,7 +190,7 @@ class Slideshow extends Resource
         ])
         ->onlyOnIndex();
 
-        $fields[] = Slug::make(__('nova-cms::pages.slug'), 'slug')->from('title')
+        $fields[] = Slug::make(ucfirst(__('nova-cms::pages.slug')), 'slug')->from('title')
             ->rules('required')
             ->onlyOnForms();
 
@@ -208,7 +214,7 @@ class Slideshow extends Resource
         }
 
         if (config('nova-cms-portfolio.has_title_position')) {
-            $fields[] = Select::make(__('nova-cms-portfolio::works.title_position'), 'title_position')
+            $fields[] = Select::make(ucfirst(__('nova-cms-portfolio::works.title_position')), 'title_position')
                 ->options([
                     'bottom_left' => 'bottom left',
                     'bottom_right' => 'bottom right',
@@ -221,7 +227,7 @@ class Slideshow extends Resource
         }
 
         if (config('nova-cms-portfolio.has_break_after_in_overviews')) {
-            $fields[] = Select::make(__('nova-cms-portfolio::slideshows.break_after_in_overviews'), 'break_after_in_overviews')
+            $fields[] = Select::make(ucfirst(__('nova-cms-portfolio::slideshows.break_after_in_overviews')), 'break_after_in_overviews')
                 ->options(config('nova-cms-portfolio.break_sizes'))
                 ->default('none')
                 ->required()

@@ -80,22 +80,22 @@ class Artist extends Resource
 
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
 
-        $tabs[__('nova-cms::settings.settings')] = [
-            Text::make(__('nova-cms-portfolio::artists.title'), 'name')
+        $tabs[ucfirst(__('nova-cms::settings.settings'))] = [
+            Text::make(ucfirst(__('nova-cms-portfolio::artists.title')), 'name')
                 ->rules('required')
                 ->onlyOnForms(),
 
-            Slug::make(__('nova-cms::pages.slug'), 'slug')->from('name')
+            Slug::make(ucfirst(__('nova-cms::pages.slug')), 'slug')->from('name')
                 ->rules('required')
                 ->creationRules('unique:'.config('nova-cms-portfolio.db_prefix').'artists,slug')
                 ->updateRules('unique:'.config('nova-cms-portfolio.db_prefix').'artists,slug,{{resourceId}}')
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->onlyOnForms(),
 
-            Boolean::make(__('Veröffentlicht'), 'is_published')
+            Boolean::make(ucfirst(__('Veröffentlicht')), 'is_published')
                 ->hideFromDetail(),
 
-            BelongsToManyField::make(__('nova-cms-portfolio::disciplines.disciplines'), 'disciplines', Discipline::class)
+            BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::disciplines.disciplines')), 'disciplines', Discipline::class)
                 ->optionsLabel('title')
                 ->hideFromDetail(),
 
@@ -123,35 +123,35 @@ class Artist extends Resource
                 ->rules('nullable', 'email')
                 ->onlyOnForms(),
 
-            Boolean::make(__('nova-cms-portfolio::artists.can_login'), 'can_login')
+            Boolean::make(ucfirst(__('nova-cms-portfolio::artists.can_login')), 'can_login')
                 ->onlyOnForms(),
         ];
 
-        $tabs[__('nova-cms::pages.content')] = [
-            TipTap::make(__('nova-cms-portfolio::artists.description'), 'description')
+        $tabs[ucfirst(__('nova-cms::pages.content'))] = [
+            TipTap::make(ucfirst(__('nova-cms-portfolio::artists.description')), 'description')
                 ->translatable()
                 ->onlyOnForms(),
         ];
 
-        $tabs[__('nova-cms::pages.content')][] = TipTap::make(__('nova-cms-portfolio::artists.description'), 'description')
+        $tabs[ucfirst(__('nova-cms::pages.content'))][] = TipTap::make(ucfirst(__('nova-cms-portfolio::artists.description')), 'description')
                 ->translatable()
                 ->onlyOnForms();
 
         if (config('nova-cms-portfolio.has_custom_portfolio_image')) {
-            $tabs[__('nova-cms::pages.content')][] = MediaLibrary::make(__('nova-cms-portfolio::artists.portfolio_image'), 'portfolio_image')
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.portfolio_image')), 'portfolio_image')
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms();
         }
 
-        $tabs[__('nova-cms::pages.content')][] = MediaLibrary::make(__('nova-cms-portfolio::artists.portrait_image'), 'portrait_image')
+        $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.portrait_image')), 'portrait_image')
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms();
 
-        $tabs[__('nova-cms::pages.content')][] = MediaLibrary::make(__('nova-cms-portfolio::artists.sedcard_pdf'), 'sedcard_pdf')
+        $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.sedcard_pdf')), 'sedcard_pdf')
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms();
 
-        $tabs[__('nova-cms::pages.content')][] = Blocks::make('Testimonials', 'testimonials')
+        $tabs[ucfirst(__('nova-cms::pages.content'))][] = Blocks::make('Testimonials', 'testimonials')
                 ->addLayout('Testimonial', 'testimonial', [
                     Textarea::make('Text', 'text')
                         ->translatable(),
@@ -164,7 +164,7 @@ class Artist extends Resource
                 ->onlyOnForms();
 
         if (config('nova-cms-portfolio.artists_have_custom_bg')) {
-            $tabs[__('nova-cms::pages.content')][] = Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = Color::make(ucfirst(__('nova-cms-portfolio::portfolio.background_color')), 'bgcolor')
                 ->sketch()
                 ->hideFromDetail();
         }

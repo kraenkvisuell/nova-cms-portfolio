@@ -209,7 +209,7 @@ class Artist extends Model implements Sortable
             ->limit(config('nova-cms-portfolio.max_overview_thumbnails'))
             ->with($worksWith)
             ->join($prefix.'slideshows as slideshows_alias', 'slideshows_alias.id', '=', $prefix.'works.slideshow_id')
-            ->orderByDesc('show_in_overview')
+            ->orderByDesc($prefix.'works.show_in_overview')
             ->orderBy($prefix.'works.sort_order')
             ->orderBy($prefix.'slideshows_alias.sort_order')
             ->orderByDesc($prefix.'works.id')
@@ -219,14 +219,14 @@ class Artist extends Model implements Sortable
                 });
             });
 
-        if ($categoryId) {
-            $worksBuilder->whereHas('slideshow', function (Builder $b) use ($categoryId) {
+        $worksBuilder->where(function (Builder $b) use ($categoryId) {
+            $b->whereHas('slideshow', function (Builder $b) use ($categoryId) {
                 $b->where('is_published', true)
-                    ->whereHas('categories', function (Builder $b) use ($categoryId) {
-                        $b->where('id', $categoryId);
-                    });
-            });
-        }
+                        ->whereHas('categories', function (Builder $b) use ($categoryId) {
+                            $b->where('id', $categoryId);
+                        });
+            })->orWhere('show_in_overview', true);
+        });
 
         $images = [];
 

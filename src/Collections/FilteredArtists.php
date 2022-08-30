@@ -93,7 +93,7 @@ class FilteredArtists
                         ->limit($workLimit)
                         ->with($worksWith)
                         ->join($prefix.'slideshows as slideshows_alias', 'slideshows_alias.id', '=', $prefix.'works.slideshow_id')
-                        ->orderByDesc('show_in_overview')
+                        ->orderByDesc($prefix.'works.show_in_overview')
                         ->orderBy($prefix.'works.sort_order')
                         ->orderBy($prefix.'slideshows_alias.sort_order')
                         ->orderByDesc($prefix.'works.id')
@@ -112,14 +112,14 @@ class FilteredArtists
                     ->first()
                     ?->id;
 
-                if ($workCategoryId) {
-                    $worksBuilder->whereHas('slideshow', function (Builder $b) use ($workCategoryId) {
+                $worksBuilder->where(function (Builder $b) use ($workCategoryId) {
+                    $b->whereHas('slideshow', function (Builder $b) use ($workCategoryId) {
                         $b->where('is_published', true)
-                                    ->whereHas('categories', function (Builder $b) use ($workCategoryId) {
-                                        $b->where('id', $workCategoryId);
-                                    });
-                    });
-                }
+                            ->whereHas('categories', function (Builder $b) use ($workCategoryId) {
+                                $b->where('id', $workCategoryId);
+                            });
+                    })->orWhere('show_in_overview', true);
+                });
             }
 
             $works = [];

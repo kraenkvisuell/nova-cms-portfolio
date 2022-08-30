@@ -61,13 +61,7 @@ class ArtistWithFilledCategories
                 $categorySlideshows = [];
 
                 foreach ($slideshows as $slideshow) {
-                    $works = $slideshow->works
-                                ->where('show_in_overview', true);
-
-                    if (! $works->count()) {
-                        $works = $slideshow->works
-                                    ->take($workLimit);
-                    }
+                    $works = $slideshow->works->take($workLimit);
 
                     $slideshowWorks = [];
 

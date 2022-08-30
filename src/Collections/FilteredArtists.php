@@ -112,13 +112,17 @@ class FilteredArtists
                     ->first()
                     ?->id;
 
-                $worksBuilder->where(function (Builder $b) use ($workCategoryId) {
+                $worksBuilder->where(function (Builder $b) use ($workCategoryId, $categoryId) {
                     $b->whereHas('slideshow', function (Builder $b) use ($workCategoryId) {
                         $b->where('is_published', true)
                             ->whereHas('categories', function (Builder $b) use ($workCategoryId) {
                                 $b->where('id', $workCategoryId);
                             });
-                    })->orWhere('show_in_overview', true);
+                    });
+
+                    if (! $categoryId) {
+                        $b->orWhere('show_in_overview', true);
+                    }
                 });
             }
 

@@ -119,12 +119,12 @@ class Artist extends Resource
             Text::make('Website', 'website')
                 ->onlyOnForms(),
 
-            Text::make('E-Mail', 'email')
-                ->rules('nullable', 'email')
-                ->onlyOnForms(),
+            // Text::make('E-Mail', 'email')
+            //     ->rules('nullable', 'email')
+            //     ->onlyOnForms(),
 
-            Boolean::make(ucfirst(__('nova-cms-portfolio::artists.can_login')), 'can_login')
-                ->onlyOnForms(),
+            // Boolean::make(ucfirst(__('nova-cms-portfolio::artists.can_login')), 'can_login')
+            //     ->onlyOnForms(),
         ];
 
         $tabs[ucfirst(__('nova-cms::pages.content'))] = [

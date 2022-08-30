@@ -25,7 +25,7 @@ class ArtistObserver
         $original = trim(strtolower($artist->getOriginal('email')));
         $email = trim(strtolower($artist->email));
 
-        if ($original == $email) {
+        if (! $email || $original == $email) {
             return;
         }
 

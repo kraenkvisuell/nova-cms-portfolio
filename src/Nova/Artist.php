@@ -133,10 +133,6 @@ class Artist extends Resource
                 ->onlyOnForms(),
         ];
 
-        $tabs[ucfirst(__('nova-cms::pages.content'))][] = TipTap::make(ucfirst(__('nova-cms-portfolio::artists.description')), 'description')
-                ->translatable()
-                ->onlyOnForms();
-
         if (config('nova-cms-portfolio.has_custom_portfolio_image')) {
             $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.portfolio_image')), 'portfolio_image')
                 ->uploadOnly($uploadOnly)

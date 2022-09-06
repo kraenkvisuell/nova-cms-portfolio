@@ -35,18 +35,24 @@ class SlideshowArtistCard extends Card
             ]
         );
 
-        $filters = [
-            [
-                'class' => 'Kraenkvisuell\\NovaCmsPortfolio\\Nova\\Filters\\CategoryFilter',
-                'value' => $slideshow->categories->first()?->id,
-            ],
-        ];
+        $url = config('nova.path').'/resources/artists/'.$slideshow?->artist_id;
 
-        $filters = base64_encode(json_encode($filters));
+        if (config('nova-cms-portfolio.has_single_category_filter')) {
+            $filters = [
+                [
+                    'class' => 'Kraenkvisuell\\NovaCmsPortfolio\\Nova\\Filters\\CategoryFilter',
+                    'value' => $slideshow->categories->first()?->id,
+                ],
+            ];
+
+            $filters = base64_encode(json_encode($filters));
+
+            $url .= '?slideshows_page=1&slideshows_filter='.$filters;
+        }
 
         return $this->withMeta([
             'text' => $text,
-            'url' => config('nova.path').'/resources/artists/'.$slideshow?->artist_id.'?slideshows_page=1&slideshows_filter='.$filters,
+            'url' => $url,
         ]);
     }
 }

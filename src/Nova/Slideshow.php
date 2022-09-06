@@ -196,7 +196,7 @@ class Slideshow extends Resource
 
         $fields[] = Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.published')), 'is_published')
             ->onlyOnForms()
-            ->default(true);
+            ->default(config('nova-cms-portfolio.default_slideshow_published'));
 
         if (config('nova-cms-portfolio.has_visible_in_artist_overview')) {
             $fields[] = Boolean::make($visibleInArtistOverviewLabel, 'is_visible_in_overview')
@@ -263,7 +263,7 @@ class Slideshow extends Resource
 
     public function actions(Request $request)
     {
-        return [
+        $actions = [
             ToggleSlideshowIsPublished::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
@@ -271,15 +271,23 @@ class Slideshow extends Resource
             ToggleVisibilityInOverview::make()
                 ->onlyOnTableRow()
                 ->withoutConfirmation(),
-
-            ChangeCategory::make(),
         ];
+
+        if (config('nova-cms-portfolio.has_batch_change_category')) {
+            $actions[] = ChangeCategory::make();
+        }
+
+        return $actions;
     }
 
     public function filters(Request $request)
     {
-        return [
-            new \Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\CategoryFilter,
-        ];
+        $filters = [];
+
+        if (config('nova-cms-portfolio.has_single_category_filter')) {
+            $filters[] = new \Kraenkvisuell\NovaCmsPortfolio\Nova\Filters\CategoryFilter;
+        }
+
+        return $filters;
     }
 }

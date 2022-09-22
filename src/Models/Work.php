@@ -38,6 +38,7 @@ class Work extends Model implements Sortable
         'title',
         'slug',
         'description',
+        'caption',
     ];
 
     public function slideshow()

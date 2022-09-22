@@ -23,6 +23,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
+use Manogi\Tiptap\Tiptap;
 use Spatie\TagsField\Tags;
 
 class Work extends Resource
@@ -224,6 +225,18 @@ class Work extends Resource
             ->translatable()
             ->nullable()
             ->onlyOnForms();
+
+        if (config('nova-cms-portfolio.has_caption')) {
+            $fields[] = Tiptap::make(ucfirst(__('nova-cms-portfolio::portfolio.caption')), 'caption')
+                ->buttons([
+                    'bold',
+                    'italic',
+                    'link',
+                ])
+                ->translatable()
+                ->nullable()
+                ->onlyOnForms();
+        }
 
         $fields[] = Tags::make('Tags')
             ->onlyOnForms();

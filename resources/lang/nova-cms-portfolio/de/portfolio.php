@@ -3,6 +3,7 @@
 return [
     'afterwards' => 'Danach',
     'background_color' => 'Hintergrund-Farbe',
+    'caption' => 'Bild/Video-Unterschrift',
     'description' => 'Beschreibung',
     'go_where_moved_to' => 'Gehe dorthin, wohin bewegt wurde',
     'published' => 'Veröffentlicht',

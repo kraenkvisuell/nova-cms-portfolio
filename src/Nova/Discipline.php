@@ -62,11 +62,13 @@ class Discipline extends Resource
                 ->translatable()
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->onlyOnForms(),
-
-            Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
-                ->sketch()
-                ->hideFromDetail(),
         ];
+
+        if (config('nova-cms-portfolio.has_select_color')) {
+            $tabs[__('nova-cms::settings.settings')][] = Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
+            ->sketch()
+            ->hideFromDetail();
+        }
 
         $tabs[__('nova-cms::pages.content')] = [
             TipTap::make(__('nova-cms-portfolio::portfolio.description'), 'description')

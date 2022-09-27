@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Kraenkvisuell\NovaCms\Facades\ContentParser;
 use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
+use Kraenkvisuell\NovaCmsPortfolio\Traits\Publishable;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
@@ -16,6 +17,7 @@ use Spatie\Translatable\HasTranslations;
 class Artist extends Model implements Sortable
 {
     use HasFactory;
+    use Publishable;
     use HasTranslations;
     use SortableTrait;
 

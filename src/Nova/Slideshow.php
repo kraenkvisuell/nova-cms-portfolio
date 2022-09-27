@@ -136,11 +136,15 @@ class Slideshow extends Resource
                 ->onlyOnForms();
         }
 
-        $fields[] = BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::categories.categories')), 'categories', Category::class)
+        $categoriesField = BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::categories.categories')), 'categories', Category::class)
             ->optionsLabel('title')
-            ->required()
-            ->rules('required')
             ->onlyOnForms();
+
+        if (config('nova-cms-portfolio.category_is_required')) {
+            $categoriesField->required()
+                ->rules('required');
+        }
+        $fields[] = $categoriesField;
 
         $fields[] = Stack::make('', [
             Text::make('', function () {

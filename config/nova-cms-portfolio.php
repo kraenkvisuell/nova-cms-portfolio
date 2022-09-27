@@ -6,6 +6,7 @@ return [
     'artists_have_overview_preview' => false,
     'artists_sortable_dropdown' => false,
     'category_sortable_dropdown' => false,
+    'category_is_required' => true,
     'custom_artist_label' => '',
     'custom_artists_label' => '',
     'custom_is_artist_portfolio_image_label' => '',

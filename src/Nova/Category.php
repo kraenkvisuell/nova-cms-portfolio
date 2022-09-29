@@ -31,7 +31,7 @@ class Category extends Resource
         ];
     }
 
-    //public static $searchable = false;
+    public static $searchable = false;
 
     public static $perPageOptions = [100, 200];
 

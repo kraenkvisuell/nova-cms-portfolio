@@ -4,6 +4,7 @@ return [
     'artists_are_sortable' => false,
     'artists_have_custom_bg' => true,
     'artists_have_overview_preview' => false,
+    'artists_have_sedcard' => true,
     'artists_sortable_dropdown' => false,
     'category_sortable_dropdown' => false,
     'category_is_required' => true,

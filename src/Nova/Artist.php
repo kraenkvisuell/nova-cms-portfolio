@@ -143,9 +143,11 @@ class Artist extends Resource
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms();
 
-        $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.sedcard_pdf')), 'sedcard_pdf')
-                ->uploadOnly($uploadOnly)
-                ->onlyOnForms();
+        if (config('nova-cms-portfolio.artists_have_sedcard')) {
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.sedcard_pdf')), 'sedcard_pdf')
+                    ->uploadOnly($uploadOnly)
+                    ->onlyOnForms();
+        }
 
         $tabs[ucfirst(__('nova-cms::pages.content'))][] = Blocks::make('Testimonials', 'testimonials')
                 ->addLayout('Testimonial', 'testimonial', [

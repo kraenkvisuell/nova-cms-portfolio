@@ -47,10 +47,16 @@ class Category extends Model
 
     public function slideshows()
     {
-        return $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
-            ->withPivot(['sort_order'])
-            ->with('artist')
-            ->using(CategorySlideshow::class);
+        $builder = $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
+            ->withPivot(['sort_order']);
+
+        if (config('nova-cms-portfolio.category_slideshows_are_filtered')) {
+            $builder->withWhereHas('works', function($b){
+                $b->where('represents_artist_in_discipline_category->1_'.$this->id, true);
+            });
+        }
+
+        return $builder->with('artist')->using(CategorySlideshow::class);
     }
 
     public static function getCached()

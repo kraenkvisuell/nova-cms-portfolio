@@ -28,6 +28,7 @@ return [
     'has_artist_category' => false,
     'has_caption' => false,
     'has_category_slideshows' => true,
+    'category_slideshows_are_filtered' => false,
     'has_custom_portfolio_image' => true,
     'has_embed_code' => true,
     'has_move_to_slideshow' => false,

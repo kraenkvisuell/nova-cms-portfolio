@@ -105,16 +105,16 @@ class Category extends Resource
                     return '<button
                                 onclick="window.location.href=\'/nova/resources/categories/'.$this->id.'\'"
                                 class="btn btn-xs 
-                                '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
+                                '.($this->filtered_slideshows->count() ? 'btn-primary' : 'btn-danger').'
                                 "
                                 >'
-                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        .$this->filtered_slideshows->count().' '.($this->filtered_slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
                         .'</button>';
                 })->asHtml(),
             ])
             ->onlyOnIndex();
 
-            $fields[] = BelongsToMany::make($slideshowLabel, 'slideshows', CategorySlideshow::class);
+            $fields[] = BelongsToMany::make($slideshowLabel, 'filtered_slideshows', CategorySlideshow::class);
         } else {
             $fields[] = Stack::make('', [
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {

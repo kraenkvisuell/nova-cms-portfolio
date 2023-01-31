@@ -67,8 +67,6 @@ class Category extends Model
         return $builder->with('artist')->using(CategorySlideshow::class);
     }
 
-    
-
     public static function getCached()
     {
         return Cache::remember('cachedCategories.'.app()->getLocale(), now()->addSeconds(10), function () {

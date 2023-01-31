@@ -50,6 +50,14 @@ class Category extends Model
         $builder = $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
             ->withPivot(['sort_order']);
 
+        return $builder->with('artist')->using(CategorySlideshow::class);
+    }
+
+    public function filtered_slideshows()
+    {
+        $builder = $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
+            ->withPivot(['sort_order']);
+
         if (config('nova-cms-portfolio.category_slideshows_are_filtered')) {
             $builder->withWhereHas('works', function($b){
                 $b->where('represents_artist_in_discipline_category->1_'.$this->id, true);
@@ -58,6 +66,8 @@ class Category extends Model
 
         return $builder->with('artist')->using(CategorySlideshow::class);
     }
+
+    
 
     public static function getCached()
     {

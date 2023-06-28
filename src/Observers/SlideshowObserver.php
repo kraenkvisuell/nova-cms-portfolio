@@ -3,6 +3,7 @@
 namespace Kraenkvisuell\NovaCmsPortfolio\Observers;
 
 use Illuminate\Support\Facades\Cache;
+use Kraenkvisuell\NovaCmsPortfolio\Models\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
 
 class SlideshowObserver
@@ -14,12 +15,17 @@ class SlideshowObserver
 
     public function saved(Slideshow $slideshow)
     {
+        $artist = $slideshow->artist;
+        if (!$artist && $slideshow['artist_id']) {
+            $artist = Artist::find($slideshow['artist_id']);
+        }
+
         if (
-            $slideshow->artist
+            $artist
             && is_array(json_decode(request()->get('categories')))
         ) {
             $this->syncArtistCategories(
-                $slideshow->artist,
+                $artist,
                 json_decode(request()->get('categories'))
             );
         }

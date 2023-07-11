@@ -57,6 +57,8 @@ return [
     'slideshows_sortable_dropdown' => false,
     'slideshows_sortable' => true,
     'works_sortable_dropdown' => false,
+    'works_can_be_textbox' => false,
+    'works_have_bgcolor' => false,
     'media' => [
         'upload_only' => true,
     ],

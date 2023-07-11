@@ -25,6 +25,7 @@ class Work extends Model implements Sortable
     protected $casts = [
         'represents_artist_in_discipline_category' => 'array',
         'show_in_overview_category' => 'array',
+        'textbox_text' => 'array',
     ];
 
     protected $guarded = [];
@@ -39,6 +40,7 @@ class Work extends Model implements Sortable
         'slug',
         'description',
         'caption',
+        'textbox_text',
     ];
 
     public function slideshow()

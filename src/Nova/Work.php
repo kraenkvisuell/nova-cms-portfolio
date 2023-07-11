@@ -2,6 +2,7 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova;
 
+use Timothyasp\Color\Color;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
@@ -92,28 +93,31 @@ class Work extends Resource
             ->onlyOnForms();
 
         $fields[] = Line::make('', function () {
-            $html = '<a 
-                href="'.nova_cms_file($this->file).'"
-                download
-            >';
+            if($this->file) {
+                $html = '<a 
+                    href="'.nova_cms_file($this->file).'"
+                    download
+                >';
 
-            if (nova_cms_mime($this->file) == 'video') {
-                $html .= '<video
+                if (nova_cms_mime($this->file) == 'video') {
+                    $html .= '<video
                         autoplay muted loop playsinline
                         class="w-auto h-12 mr-1 inline-block"
                     >
                         <source src="'.nova_cms_file($this->file).'" type="video/'.nova_cms_extension($this->file).'">
                     </video>';
-            } else {
-                $html .= '<img 
+                } else {
+                    $html .= '<img 
                         class="w-auto h-12 mr-1 inline-block"
                         src="'.nova_cms_image($this->file, 'thumb').'" 
                     />';
+                }
+
+                $html .= '</a>';
+
+                return $html;
             }
 
-            $html .= '</a>';
-
-            return $html;
         })->asHtml();
 
         $fields[] = Stack::make('Details', [
@@ -319,6 +323,31 @@ class Work extends Resource
                     return $options;
                 })
                 ->onlyOnForms();
+        }
+
+        if (config('nova-cms-portfolio.works_can_be_textbox')) {
+            $fields[] = Boolean::make(
+                __('Ist Text-Box'),
+                'is_textbox'
+            )
+                ->onlyOnForms();
+
+            $fields[] = Tiptap::make(__('Text-Box-Text'), 'textbox_text')
+                ->translatable()
+                ->onlyOnForms();
+
+            $fields[] = Select::make(__('Text-Box Reihenfolge'), 'textbox_order')
+                ->options([
+                    'image_text' => 'Image/Text',
+                    'text_image' => 'Text/Image',
+                ])
+                ->onlyOnForms();
+        }
+
+        if (config('nova-cms-portfolio.works_have_bgcolor')) {
+            $fields[] = Color::make(__('nova-cms-portfolio::portfolio.background_color'), 'bgcolor')
+                ->sketch()
+                ->hideFromDetail();
         }
 
         return $fields;

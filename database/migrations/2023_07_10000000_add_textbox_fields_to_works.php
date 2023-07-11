@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('is_textbox')->default(false)->index();
             $table->json('textbox_text')->nullable();
             $table->string('bgcolor', 50)->nullable();
-            $table->string('textbox_order', 50)->default('image_text');
+            $table->string('textbox_order', 50)->nullable()->default('image_text');
         });
     }
 

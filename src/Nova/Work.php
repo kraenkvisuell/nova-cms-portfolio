@@ -94,7 +94,7 @@ class Work extends Resource
 
         $fields[] = Line::make('', function () {
             if($this->file) {
-                $html = '<a 
+                $html = '<a
                     href="'.nova_cms_file($this->file).'"
                     download
                 >';
@@ -107,9 +107,9 @@ class Work extends Resource
                         <source src="'.nova_cms_file($this->file).'" type="video/'.nova_cms_extension($this->file).'">
                     </video>';
                 } else {
-                    $html .= '<img 
+                    $html .= '<img
                         class="w-auto h-12 mr-1 inline-block"
-                        src="'.nova_cms_image($this->file, 'thumb').'" 
+                        src="'.nova_cms_image($this->file, 'thumb').'"
                     />';
                 }
 
@@ -340,6 +340,14 @@ class Work extends Resource
                 ->options([
                     'image_text' => 'Image/Text',
                     'text_image' => 'Text/Image',
+                ])
+                ->onlyOnForms();
+
+            $fields[] = Select::make(__('Text-Box Schriftgröße'), 'textbox_fontsize')
+                ->options([
+                    'small' => 'Small',
+                    'medium' => 'Medium',
+                    'large' => 'Large',
                 ])
                 ->onlyOnForms();
         }

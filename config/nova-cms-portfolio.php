@@ -36,6 +36,7 @@ return [
     'has_select_color' => true,
     'has_select_portfolio_image' => true,
     'has_select_startpage_image' => false,
+    'has_skills' => false,
     'has_portfolio_images_fallback' => true,
     'has_projects_via_upload' => false,
     'has_projects_zip_upload' => false,

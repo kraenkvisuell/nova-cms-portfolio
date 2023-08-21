@@ -10,5 +10,7 @@ return [
     'portrait_image' => 'portrait image',
     'sedcard_pdf' => 'Sedcard PDF',
     'slug_explanation' => 'is used in the URL',
+    'skill_image' => 'Skills Image',
+    'skill_text' => 'Text for Skills',
     'title' => 'name',
 ];

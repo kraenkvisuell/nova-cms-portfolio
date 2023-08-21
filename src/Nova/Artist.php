@@ -70,6 +70,9 @@ class Artist extends Resource
         $startpageImageLabel = config('nova-cms-portfolio.custom_startpage_image_label')
             ?: __('Startseiten-Bild');
 
+        $skillImageLabel = config('nova-cms-portfolio.custom_startpage_image_label')
+            ?: __('Skills-Bild');
+
         $portfolioImagesLabel = config('nova-cms-portfolio.custom_portfolio_images_label')
             ?: __('Portfolio-Bilder');
 
@@ -99,25 +102,6 @@ class Artist extends Resource
                 ->optionsLabel('title')
                 ->hideFromDetail(),
 
-            Blocks::make(__('nova-cms::content_blocks.social_links'), 'social_links')
-                ->addLayout(__('nova-cms::content_blocks.link'), 'link', [
-                    Text::make(__('nova-cms::content_blocks.link_title'), 'link_title')->translatable(),
-
-                    Text::make(__('nova-cms::content_blocks.link_url'), 'link_url')->translatable(),
-
-                    Text::make(__('nova-cms::content_blocks.id'), 'slug'),
-
-                    MediaLibrary::make(__('nova-cms::content_blocks.link_icon'), 'link_icon')
-                        ->types(['Image']),
-
-                    Code::make(__('nova-cms::content_blocks.svg_tag'), 'svg_tag')->language('xml'),
-                ])
-                ->button(__('nova-cms::content_blocks.add_social_link'))
-                ->stacked()
-                ->onlyOnForms(),
-
-            Text::make('Website', 'website')
-                ->onlyOnForms(),
 
             // Text::make('E-Mail', 'email')
             //     ->rules('nullable', 'email')
@@ -126,6 +110,32 @@ class Artist extends Resource
             // Boolean::make(ucfirst(__('nova-cms-portfolio::artists.can_login')), 'can_login')
             //     ->onlyOnForms(),
         ];
+
+        if (config('nova-cms-portfolio.has_skills')) {
+            $tabs[ucfirst(__('nova-cms::settings.settings'))][] = BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::skills.skills')), 'skills', Skill::class)
+                ->optionsLabel('title')
+                ->hideFromDetail();
+        }
+
+        $tabs[ucfirst(__('nova-cms::settings.settings'))][] = Blocks::make(__('nova-cms::content_blocks.social_links'), 'social_links')
+            ->addLayout(__('nova-cms::content_blocks.link'), 'link', [
+                Text::make(__('nova-cms::content_blocks.link_title'), 'link_title')->translatable(),
+
+                Text::make(__('nova-cms::content_blocks.link_url'), 'link_url')->translatable(),
+
+                Text::make(__('nova-cms::content_blocks.id'), 'slug'),
+
+                MediaLibrary::make(__('nova-cms::content_blocks.link_icon'), 'link_icon')
+                    ->types(['Image']),
+
+                Code::make(__('nova-cms::content_blocks.svg_tag'), 'svg_tag')->language('xml'),
+            ])
+            ->button(__('nova-cms::content_blocks.add_social_link'))
+            ->stacked()
+            ->onlyOnForms();
+
+        $tabs[ucfirst(__('nova-cms::settings.settings'))][] = Text::make('Website', 'website')
+            ->onlyOnForms();
 
         $tabs[ucfirst(__('nova-cms::pages.content'))] = [
             TipTap::make(ucfirst(__('nova-cms-portfolio::artists.description')), 'description')
@@ -142,6 +152,16 @@ class Artist extends Resource
         $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.portrait_image')), 'portrait_image')
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms();
+
+        if (config('nova-cms-portfolio.has_skills')) {
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.skill_image')), 'skill_image')
+                ->uploadOnly($uploadOnly)
+                ->onlyOnForms();
+
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = TipTap::make(ucfirst(__('nova-cms-portfolio::artists.skill_text')), 'skill_text')
+                ->translatable()
+                ->onlyOnForms();
+        }
 
         if (config('nova-cms-portfolio.artists_have_sedcard')) {
             $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.sedcard_pdf')), 'sedcard_pdf')
@@ -281,7 +301,7 @@ class Artist extends Resource
             Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                 return '<button
                         onclick="window.location.href=\'/nova/resources/artists/'.$this->id.'\'"
-                        class="btn btn-xs 
+                        class="btn btn-xs
                         '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
                         "
                         >'

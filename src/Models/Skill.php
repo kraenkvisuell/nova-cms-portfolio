@@ -5,14 +5,14 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Kraenkvisuell\NovaCmsPortfolio\Factories\DisciplineFactory;
+use Kraenkvisuell\NovaCmsPortfolio\Factories\SkillFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\QueryableBySlug;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\QueryableByTranslation;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
 
-class Discipline extends Model implements Sortable
+class Skill extends Model implements Sortable
 {
     use HasFactory;
     use SortableTrait;
@@ -29,12 +29,12 @@ class Discipline extends Model implements Sortable
 
     protected static function newFactory()
     {
-        return DisciplineFactory::new();
+        return SkillFactory::new();
     }
 
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix').'disciplines';
+        return config('nova-cms-portfolio.db_prefix').'skills';
     }
 
     public $translatable = [
@@ -57,35 +57,7 @@ class Discipline extends Model implements Sortable
 
     public function artists()
     {
-        return $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix').'artist_discipline');
-    }
-
-    public function getCategories()
-    {
-        $categories = collect([]);
-
-        $this->artists
-            ->where('is_published', true)
-            ->each(function ($artist) use (&$categories) {
-                $artist->slideshows->each(function ($slideshow) use (&$categories) {
-                    $slideshow->categories->each(function ($category) use (&$categories) {
-                        $categories->push($category);
-                    });
-                });
-            });
-
-        $categories = $categories->unique('title')->sortBy('title')->all();
-
-        return $categories;
-    }
-
-    public function getCachedCategories()
-    {
-        return Cache::tags('categories')->rememberForever(
-            'disciplineCategories.'.$this->id.'.'.app()->getLocale(),
-            function () {
-                return $this->getCategories();
-            });
+        return $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix').'artist_skill');
     }
 
     public static function getWithSortedArtists()
@@ -108,8 +80,8 @@ class Discipline extends Model implements Sortable
 
     public static function getCachedIdBySlug($slug)
     {
-        return Cache::tags('disciplines')->rememberForever(
-            'discipline.getCachedIdBySlug.'.$slug,
+        return Cache::tags('skills')->rememberForever(
+            'skill.getCachedIdBySlug.'.$slug,
             function () use ($slug) {
                 return static::where('slug->'.app()->getLocale(), $slug)->first()?->id ?: 0;
             });
@@ -117,20 +89,9 @@ class Discipline extends Model implements Sortable
 
     public static function getCachedWithSortedArtists()
     {
-        return Cache::remember('disciplinesWithSortedArtists.'.app()->getLocale(), now()->addSeconds(5), function () {
+        return Cache::remember('skillsWithSortedArtists.'.app()->getLocale(), now()->addSeconds(5), function () {
             return static::getWithSortedArtists();
         });
-    }
-
-    public static function getCachedWithSortedArtistsAndCategories()
-    {
-        $disciplines = static::getCachedWithSortedArtists();
-
-        $disciplines->each(function ($discipline) {
-            $discipline->categories = $discipline->getCategories();
-        });
-
-        return $disciplines;
     }
 
     public static function getVisibleFilled()

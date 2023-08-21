@@ -34,6 +34,7 @@ class Artist extends Model implements Sortable
 
     public $translatable = [
         'description',
+        'skill_text',
         'browser_title',
         'meta_description',
         'meta_keywords',
@@ -69,6 +70,11 @@ class Artist extends Model implements Sortable
     public function disciplines()
     {
         return $this->belongsToMany(Discipline::class, config('nova-cms-portfolio.db_prefix').'artist_discipline');
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, config('nova-cms-portfolio.db_prefix').'artist_skill');
     }
 
     public function categories()
@@ -160,6 +166,15 @@ class Artist extends Model implements Sortable
         }
 
         return $images;
+    }
+
+    public function skillImage()
+    {
+        if ($this->skill_image) {
+            return $this->skill_image;
+        }
+
+        return $this->portfolioImage();
     }
 
     public function startpageImages()

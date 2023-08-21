@@ -7,6 +7,7 @@ use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Work;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\Skill;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Artist;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Slideshow;
@@ -47,7 +48,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
             __DIR__.'/../config/nova-cms-portfolio.php' => config_path('nova-cms-portfolio.php'),
         ]);
 
-        Nova::resources([
+        $resources = [
             Work::class,
             Artist::class,
             ArtistCategory::class,
@@ -55,7 +56,13 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
             CategorySlideshow::class,
             Slideshow::class,
             Discipline::class,
-        ]);
+        ];
+
+        if (config('nova-cms-portfolio.has_skills')) {
+            $resources[] = Skill::class;
+        }
+
+        Nova::resources($resources);
 
         // Serve assets
         Nova::serving(function (ServingNova $event) {

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kraenkvisuell\NovaCms\Facades\ContentParser;
+use Kraenkvisuell\NovaCms\Traits\HasContentBlocks;
 use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\Publishable;
@@ -16,6 +17,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Artist extends Model implements Sortable
 {
+    use HasContentBlocks;
     use HasFactory;
     use Publishable;
     use HasTranslations;
@@ -35,6 +37,7 @@ class Artist extends Model implements Sortable
     public $translatable = [
         'description',
         'skill_text',
+        'skill_headline',
         'browser_title',
         'meta_description',
         'meta_keywords',
@@ -44,6 +47,7 @@ class Artist extends Model implements Sortable
         'robots' => 'array',
         'testimonials' => BlocksCast::class,
         'social_links' => BlocksCast::class,
+        'skill_description' => BlocksCast::class,
     ];
 
     protected static function newFactory()

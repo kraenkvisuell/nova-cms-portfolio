@@ -24,6 +24,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Manogi\Tiptap\Tiptap;
 use Timothyasp\Color\Color;
+use Kraenkvisuell\NovaCms\Facades\ContentBlock;
 
 class Artist extends Resource
 {
@@ -161,6 +162,18 @@ class Artist extends Resource
             $tabs[ucfirst(__('nova-cms::pages.content'))][] = TipTap::make(ucfirst(__('nova-cms-portfolio::artists.skill_text')), 'skill_text')
                 ->translatable()
                 ->onlyOnForms();
+
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = Textarea::make(ucfirst(__('nova-cms-portfolio::artists.skill_headline')), 'skill_headline')
+                ->translatable()
+                ->onlyOnForms();
+
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.skill_header_image')), 'skill_header_image')
+                ->uploadOnly($uploadOnly)
+                ->onlyOnForms();
+
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = ContentBlock::field(ucfirst(__('nova-cms-portfolio::artists.skill_description')), 'skill_description');
+
+
         }
 
         if (config('nova-cms-portfolio.artists_have_sedcard')) {

@@ -45,6 +45,7 @@ return [
     'has_show_in_overview_category' => true,
     'has_show_title' => false,
     'has_single_category_filter' => false,
+    'has_skill_artists' => false,
     'has_slideshow_disciplines' => true,
     'has_starts_right' => false,
     'has_title_position' => false,

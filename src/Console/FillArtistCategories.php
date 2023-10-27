@@ -20,7 +20,7 @@ class FillArtistCategories extends Command
             $this->info('filling artist '.$artist->name);
 
             foreach ($artist->slideshowCategories() as $category) {
-                $this->info('snycing '.$category->title);
+                $this->info('syncing '.$category->title);
                 $artist->categories()->syncWithoutDetaching($category->id);
             }
         }

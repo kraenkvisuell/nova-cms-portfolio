@@ -78,7 +78,9 @@ class Artist extends Model implements Sortable
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class, config('nova-cms-portfolio.db_prefix').'artist_skill');
+        return $this->belongsToMany(Skill::class, config('nova-cms-portfolio.db_prefix').'artist_skill')
+            ->withPivot(['sort_order'])
+            ->using(ArtistSkill::class);
     }
 
     public function categories()

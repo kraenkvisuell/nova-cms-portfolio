@@ -12,6 +12,16 @@ class ArtistObserver
     {
         $this->checkUserCreation($artist);
 
+        if (
+            $artist
+            && is_array(json_decode(request()->get('categories')))
+        ) {
+            $this->syncArtistCategories(
+                $artist,
+                json_decode(request()->get('categories'))
+            );
+        }
+
         // Cache::tags('artists')->flush();
     }
 

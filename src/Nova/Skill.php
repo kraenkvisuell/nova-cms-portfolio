@@ -7,6 +7,7 @@ use Eminiarts\Tabs\TabsOnEdit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
+use Laravel\Nova\Fields\BelongsToMany;
 use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Stack;
@@ -64,7 +65,7 @@ class Skill extends Resource
                 ->onlyOnForms(),
         ];
 
-        return [
+        $fields = [
             Stack::make('Details', [
                 Line::make('', 'title')->asBase(),
                 Line::make('', function () {
@@ -74,6 +75,12 @@ class Skill extends Resource
 
             (new Tabs(static::singularLabel(), $tabs))->withToolbar(),
         ];
+
+        if (config('nova-cms-portfolio.has_skill_artists')) {
+            $fields[] = BelongsToMany::make('Artists', 'filtered_artists', SkillArtist::class);
+        }
+
+        return $fields;
     }
 
     public static function redirectAfterUpdate(NovaRequest $request, $resource)

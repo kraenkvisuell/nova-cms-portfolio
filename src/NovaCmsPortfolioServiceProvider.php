@@ -13,6 +13,7 @@ use Kraenkvisuell\NovaCmsPortfolio\Nova\Category;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Slideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Discipline;
 use Kraenkvisuell\NovaCmsPortfolio\Console\DummyData;
+use Kraenkvisuell\NovaCmsPortfolio\Nova\SkillArtist;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\ArtistCategory;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\CategorySlideshow;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\WorkObserver;
@@ -24,10 +25,12 @@ use Kraenkvisuell\NovaCmsPortfolio\Console\FillArtistCategories;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Artist as ArtistModel;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\DisciplineObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Services\ProjectFolderUpload;
+use Kraenkvisuell\NovaCmsPortfolio\Observers\ArtistSkillObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Category as CategoryModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow as SlideshowModel;
 use Kraenkvisuell\NovaCmsPortfolio\Observers\CategorySlideshowObserver;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline as DisciplineModel;
+use Kraenkvisuell\NovaCmsPortfolio\Models\ArtistSkill as ArtistSkillModel;
 use Kraenkvisuell\NovaCmsPortfolio\Models\CategorySlideshow as CategorySlideshowModel;
 
 class NovaCmsPortfolioServiceProvider extends ServiceProvider
@@ -54,6 +57,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
             ArtistCategory::class,
             Category::class,
             CategorySlideshow::class,
+            SkillArtist::class,
             Slideshow::class,
             Discipline::class,
         ];
@@ -86,6 +90,7 @@ class NovaCmsPortfolioServiceProvider extends ServiceProvider
         WorkModel::observe(WorkObserver::class);
         SlideshowModel::observe(SlideshowObserver::class);
         CategorySlideshowModel::observe(CategorySlideshowObserver::class);
+        ArtistSkillModel::observe(ArtistSkillObserver::class);
     }
 
     public function register()

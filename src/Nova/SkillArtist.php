@@ -49,6 +49,23 @@ class SkillArtist extends Resource
             Text::make(ucfirst(__('nova-cms-portfolio::artists.title')), 'name')
                 ->onlyOnIndex(),
 
+
+            Stack::make('', [
+                Line::make('', function () {
+                    $html = '<div>';
+
+                    if ($this->skill_description && $this->skill_description != '[]') {
+                        $html .= '<span class="text-green-500">Voll ausgefüllt.</span>';
+                    } else {
+                        $html .= '<span class="text-red-500">Nicht voll ausgefüllt (auf Website unsichtbar).</span>';
+                    }
+
+                    $html .= '</div>';
+                    return $html;
+                })->asHtml(),
+            ])
+                ->onlyOnIndex(),
+
             Stack::make('', [
                 Line::make('', function () {
                     return '<button

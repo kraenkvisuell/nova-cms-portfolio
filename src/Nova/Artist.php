@@ -173,7 +173,8 @@ class Artist extends Resource
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms();
 
-            $tabs[ucfirst(__('nova-cms::pages.content'))][] = ContentBlock::field(ucfirst(__('nova-cms-portfolio::artists.skill_description')), 'skill_description');
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = ContentBlock::field(ucfirst(__('nova-cms-portfolio::artists.skill_description')), 'skill_description')
+                ->onlyOnForms();
 
 
         }

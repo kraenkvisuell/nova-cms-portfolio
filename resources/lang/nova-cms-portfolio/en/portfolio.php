@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'remove_here' => 'remove here',
     'afterwards' => 'afterwards',
     'background_color' => 'background color',
     'caption' => 'caption',

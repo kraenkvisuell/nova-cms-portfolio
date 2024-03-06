@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'remove_here' => 'Hier entfernen',
     'afterwards' => 'Danach',
     'background_color' => 'Hintergrund-Farbe',
     'caption' => 'Bild/Video-Unterschrift',

@@ -39,9 +39,14 @@ class MoveToNewSlideshow extends Action
         ]);
 
         foreach ($works as $work) {
-            $work->slideshow_id = $newSlideshow->id;
-            $work->sort_order += 1000;
-            $work->save();
+            $newWork = $work->replicate();
+            $newWork->slideshow_id = $newSlideshow->id;
+            $newWork->sort_order += 1000;
+            $newWork->save();
+
+            if ($fields->remove_here) {
+                $work->delete();
+            }
         }
 
         $newSlideshow->categories()->attach($fields->category_id);
@@ -89,6 +94,9 @@ class MoveToNewSlideshow extends Action
 
             Boolean::make($visibleInArtistOverviewLabel, 'is_visible_in_overview')
                 ->default(true),
+
+            Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.remove_here')),
+                'remove_here'),
 
             Select::make(
                     ucfirst(__('nova-cms-portfolio::portfolio.afterwards')),

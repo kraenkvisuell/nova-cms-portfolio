@@ -2,6 +2,7 @@
 
 namespace Kraenkvisuell\NovaCmsPortfolio\Nova\Actions;
 
+use Laravel\Nova\Fields\Boolean;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Slideshow;
@@ -27,9 +28,14 @@ class MoveToSlideshow extends Action
         $oldSlideshowId = $works->first()->slideshow_id;
 
         foreach ($works as $work) {
-            $work->slideshow_id = $fields->slideshow_id;
-            $work->sort_order += 1000;
-            $work->save();
+            $newWork = $work->replicate();
+            $newWork->slideshow_id = $fields->slideshow_id;
+            $newWork->sort_order += 1000;
+            $newWork->save();
+
+            if ($fields->remove_here) {
+                $work->delete();
+            }
         }
 
         Slideshow::find($oldSlideshowId)->refreshWorksOrder();
@@ -55,6 +61,9 @@ class MoveToSlideshow extends Action
                 ->options($slideshows)
                 ->required()
                 ->rules('required'),
+
+            Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.remove_here')),
+                'remove_here'),
 
             Select::make(
                     ucfirst(__('nova-cms-portfolio::portfolio.afterwards')),
@@ -98,6 +107,14 @@ class MoveToSlideshow extends Action
                             && $slideshow->categories->firstWhere('id', $category->id)
                         ) {
                             $slideshows[$slideshow->id] = $category->title.': '.$slideshow->title;
+                        }
+                    }
+                }
+
+                if (!count($slideshows)) {
+                    foreach ($currentSlideshow->artist->slideshows as $slideshow) {
+                        if ($currentSlideshow->id != $slideshow->id) {
+                            $slideshows[$slideshow->id] = $slideshow->title;
                         }
                     }
                 }

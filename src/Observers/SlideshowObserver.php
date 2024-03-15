@@ -47,14 +47,16 @@ class SlideshowObserver
 
     protected function syncArtistCategories($artist, $categories)
     {
-        $artist->categories()->sync([]);
-
         foreach ($artist->slideshowCategories() as $category) {
-            $artist->categories()->syncWithoutDetaching($category->id);
+            if (!$artist->categories()->find($category->id)) {
+                $artist->categories()->attach($category->id);
+            }
         }
 
         foreach ($categories as $category) {
-            $artist->categories()->syncWithoutDetaching($category->id);
+            if (!$artist->categories()->find($category->id)) {
+                $artist->categories()->attach($category->id);
+            }
         }
     }
 }

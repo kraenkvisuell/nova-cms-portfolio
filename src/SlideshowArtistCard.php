@@ -41,7 +41,7 @@ class SlideshowArtistCard extends Card
             $filters = [
                 [
                     'class' => 'Kraenkvisuell\\NovaCmsPortfolio\\Nova\\Filters\\CategoryFilter',
-                    'value' => $slideshow->categories->first()?->id,
+                    'value' => $slideshow->categories?->first()?->id,
                 ],
             ];
 

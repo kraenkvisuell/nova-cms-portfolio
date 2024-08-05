@@ -39,6 +39,8 @@ class Slideshow extends Model implements Sortable
         'description',
         'browser_title',
         'meta_description',
+        'og_title',
+        'og_description',
     ];
 
     protected $casts = [

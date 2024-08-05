@@ -34,6 +34,8 @@ class Category extends Model
         'description',
         'meta_description',
         'meta_keywords',
+        'og_title',
+        'og_description',
     ];
 
     protected $casts = [

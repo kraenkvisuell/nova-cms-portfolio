@@ -43,6 +43,11 @@ class Artist extends Resource
         'name', 'slug',
     ];
 
+    public static function authorizable()
+    {
+        return false;
+    }
+
     public static function sortableHasDropdown()
     {
         return config('nova-cms-portfolio.artists_sortable_dropdown') ?: false;

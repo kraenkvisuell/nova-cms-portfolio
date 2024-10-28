@@ -117,6 +117,11 @@ class Artist extends Resource
             //     ->onlyOnForms(),
         ];
 
+        if (config('nova-cms-portfolio.has_external_artists')) {
+            $tabs[ucfirst(__('nova-cms::settings.settings'))][] = Boolean::make(ucfirst(__('EXTERN - ohne Portfolio')), 'is_external')
+                ->onlyOnForms();
+        }
+
         if (config('nova-cms-portfolio.has_skills')) {
             $tabs[ucfirst(__('nova-cms::settings.settings'))][] = BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::skills.skills')), 'skills', Skill::class)
                 ->optionsLabel('title')
@@ -212,7 +217,9 @@ class Artist extends Resource
 
         $fields = [
             Stack::make('Details', [
-                Line::make('', 'name')->asBase(),
+                Text::make('', function() {
+                    return $this->name.(config('nova-cms-portfolio.has_external_artists') && $this->is_external ? '<br>('.__('EXTERN - ohne Portfolio').')' : '');
+                })->asHtml(),
                 Line::make('', function () {
                     return '/'.$this->slug;
                 })->asSmall(),

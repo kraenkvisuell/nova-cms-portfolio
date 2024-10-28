@@ -41,6 +41,10 @@ class FilteredArtists
                         },
                     ]);
 
+        if (config('nova-cms-portfolio.has_productions')) {
+            $artistsBuilder->where('is_external', false);
+        }
+
         $needle = trim(strtolower($needle));
 
         if ($needle) {

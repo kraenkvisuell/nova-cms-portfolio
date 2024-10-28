@@ -117,6 +117,11 @@ class Slideshow extends Resource
                 ->hideFromIndex(),
         ];
 
+        if (config('nova-cms-portfolio.has_productions')) {
+            $fields[] = Boolean::make(ucfirst(__('Ist Produktion')), 'is_production')
+                ->onlyOnForms();
+        }
+
         if (config('nova-cms-portfolio.has_slideshow_disciplines')) {
             $fields[] = Select::make(ucfirst(__('nova-cms-portfolio::disciplines.discipline')), 'discipline_id')
                 ->nullable()

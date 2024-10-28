@@ -5,23 +5,30 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Collections;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Kraenkvisuell\NovaCmsPortfolio\Models\Discipline;
+use Laravel\Nova\Fields\Boolean;
 
 class DisciplinesWithArtists
 {
     public static function get()
     {
         //return Cache::tags('artists')->rememberForever('DisciplinesWithArtists.'.app()->getLocale(), function () {
+
         $disciplines = Discipline::ordered()
                 ->has('artists')
                 ->with(['artists' => function ($b) {
-                    $b->where('is_published', true)
-                    ->with(['works'])
-                    ->select([
-                        'id',
-                        'name',
-                        'slug',
-                        'is_published',
-                    ]);
+                    $b->where('is_published', true);
+
+                    if (config('nova-cms-portfolio.has_productions')) {
+                        $b->where('is_external', false);
+                    }
+
+                    $b->with(['works'])
+                        ->select([
+                            'id',
+                            'name',
+                            'slug',
+                            'is_published',
+                        ]);
                 }])
                 ->get();
 

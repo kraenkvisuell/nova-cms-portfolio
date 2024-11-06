@@ -149,7 +149,7 @@ class Artist extends Resource
             ->onlyOnForms();
 
         $tabs[ucfirst(__('nova-cms::pages.content'))] = [
-            TipTap::make(ucfirst(__('nova-cms-portfolio::artists.description')), 'description')
+            Tiptap::make(ucfirst(__('nova-cms-portfolio::artists.description')), 'description')
                 ->buttons(['bold', 'italic', '|', 'link'])
                 ->translatable()
                 ->onlyOnForms(),
@@ -170,7 +170,7 @@ class Artist extends Resource
                 ->uploadOnly($uploadOnly)
                 ->onlyOnForms();
 
-            $tabs[ucfirst(__('nova-cms::pages.content'))][] = TipTap::make(ucfirst(__('nova-cms-portfolio::artists.skill_text')), 'skill_text')
+            $tabs[ucfirst(__('nova-cms::pages.content'))][] = Tiptap::make(ucfirst(__('nova-cms-portfolio::artists.skill_text')), 'skill_text')
                 ->buttons(['bold', 'italic', '|', 'link'])
                 ->translatable()
                 ->onlyOnForms();

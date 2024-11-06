@@ -88,7 +88,8 @@ class Category extends Resource
                 ->uploadOnly($uploadOnly)
                 ->hideFromDetail(),
 
-            TipTap::make(__('nova-cms-portfolio::categories.description'), 'description')
+            Tiptap::make(__('nova-cms-portfolio::categories.description'), 'description')
+                ->buttons(['bold', 'italic', '|', 'link'])
                 ->translatable()
                 ->onlyOnForms(),
         ];

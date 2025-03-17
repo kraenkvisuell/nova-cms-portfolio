@@ -20,12 +20,12 @@ class ToggleShowInOverviewCategory extends Action
     {
         $category = Category::find($this->categoryId);
 
-        return __('AN/AUS').': '
-        .(
-            config('nova-cms-portfolio.custom_overview_categories_label')
-            ?: __('nova-cms-portfolio::works.overview_categories')
-        )
-        .': '.$category->title;
+        return __('AN/AUS') . ': '
+            . (
+                config('nova-cms-portfolio.custom_overview_categories_label')
+                ?: __('nova-cms-portfolio::works.overview_categories')
+            )
+            . ': ' . $category->title;
     }
 
     public function handle(ActionFields $fields, Collection $models)

@@ -68,22 +68,22 @@ class Work extends Resource
 
         $showInOverviewLabel = ucfirst(
             config('nova-cms-portfolio.custom_show_in_overview_label')
-            ?: __('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist')
+                ?: __('In Künstler-Übersicht zeigen, wenn ALLE KATEGORIEN ausgewählt ist')
         );
 
         $isArtistPortfolioImageLabel = ucfirst(
             config('nova-cms-portfolio.custom_is_artist_portfolio_image_label')
-            ?: __('Ist Künstler-Portfolio-Bild')
+                ?: __('Ist Künstler-Portfolio-Bild')
         );
 
         $isStartpageImageLabel = ucfirst(
             config('nova-cms-portfolio.custom_is_startpage_image_label')
-            ?: __('Ist Startseiten-Bild')
+                ?: __('Ist Startseiten-Bild')
         );
 
         $overviewCategoriesLabel = ucfirst(
             config('nova-cms-portfolio.custom_overview_categories_label')
-            ?: __('nova-cms-portfolio::works.overview_categories')
+                ?: __('nova-cms-portfolio::works.overview_categories')
         );
 
         $fields = [];
@@ -93,9 +93,9 @@ class Work extends Resource
             ->onlyOnForms();
 
         $fields[] = Line::make('', function () {
-            if($this->file) {
+            if ($this->file) {
                 $html = '<a
-                    href="'.nova_cms_file($this->file).'"
+                    href="' . nova_cms_file($this->file) . '"
                     download
                 >';
 
@@ -104,12 +104,12 @@ class Work extends Resource
                         autoplay muted loop playsinline
                         class="w-auto h-12 mr-1 inline-block"
                     >
-                        <source src="'.nova_cms_file($this->file).'" type="video/'.nova_cms_extension($this->file).'">
+                        <source src="' . nova_cms_file($this->file) . '" type="video/' . nova_cms_extension($this->file) . '">
                     </video>';
                 } else {
                     $html .= '<img
                         class="w-auto h-12 mr-1 inline-block"
-                        src="'.nova_cms_image($this->file, 'thumb').'"
+                        src="' . nova_cms_image($this->file, 'thumb') . '"
                     />';
                 }
 
@@ -117,14 +117,13 @@ class Work extends Resource
 
                 return $html;
             }
-
         })->asHtml();
 
         $fields[] = Stack::make('Details', [
             Line::make('', function () {
                 return '
-                <div class="text-xs whitespace-normal">'.($this->title ?: '-').'</div>
-                <div class="text-xs whitespace-normal">'.$this->media_file?->original_name.'</div>
+                <div class="text-xs whitespace-normal">' . ($this->title ?: '-') . '</div>
+                <div class="text-xs whitespace-normal">' . $this->media_file?->original_name . '</div>
                 ';
             })->asHtml(),
         ]);
@@ -133,8 +132,8 @@ class Work extends Resource
         $settingsStack[] = Line::make('', function () use ($showInOverviewLabel) {
             if ($this->show_in_overview) {
                 return '<span class="text-xs font-bold uppercase">'
-                .$showInOverviewLabel
-                .'</span>';
+                    . $showInOverviewLabel
+                    . '</span>';
             }
 
             return '';
@@ -144,8 +143,8 @@ class Work extends Resource
             $settingsStack[] = Line::make('', function () use ($isArtistPortfolioImageLabel) {
                 if ($this->is_artist_portfolio_image) {
                     return '<span class="text-xs font-bold uppercase">'
-                    .$isArtistPortfolioImageLabel
-                    .'</span>';
+                        . $isArtistPortfolioImageLabel
+                        . '</span>';
                 }
 
                 return '';
@@ -156,8 +155,8 @@ class Work extends Resource
             $settingsStack[] = Line::make('', function () use ($isStartpageImageLabel) {
                 if ($this->is_startpage_image) {
                     return '<span class="text-xs font-bold uppercase">'
-                    .$isStartpageImageLabel
-                    .'</span>';
+                        . $isStartpageImageLabel
+                        . '</span>';
                 }
 
                 return '';
@@ -168,10 +167,10 @@ class Work extends Resource
             $settingsStack[] = Line::make('', function () use ($overviewCategoriesLabel) {
                 if (is_array($this->overviewCategoryTitles()) && $this->overviewCategoryTitles()) {
                     return '<span class="text-xs uppercase">'
-                    .$overviewCategoriesLabel
-                    .': <span class="font-bold">'
-                    .implode(', ', $this->overviewCategoryTitles())
-                    .'</span></span>';
+                        . $overviewCategoriesLabel
+                        . ': <span class="font-bold">'
+                        . implode(', ', $this->overviewCategoryTitles())
+                        . '</span></span>';
                 }
 
                 return '';
@@ -182,10 +181,10 @@ class Work extends Resource
             $settingsStack[] = Line::make('', function () {
                 if (is_array($this->representationCategorySlugs()) && $this->representationCategorySlugs()) {
                     return '<span class="text-xs uppercase">'
-                    .__('In allgemeiner Kategorie-Übersicht zeigen')
-                    .': <span class="font-bold">'
-                    .implode(', ', $this->representationCategorySlugs())
-                    .'</span></span>';
+                        . __('In allgemeiner Kategorie-Übersicht zeigen')
+                        . ': <span class="font-bold">'
+                        . implode(', ', $this->representationCategorySlugs())
+                        . '</span></span>';
                 }
 
                 return '';
@@ -195,8 +194,8 @@ class Work extends Resource
         $settingsStack[] = Line::make('', function () {
             if ($this->is_artist_discipline_image) {
                 return '<span class="text-xs font-bold uppercase">'
-                .__('nova-cms-portfolio::works.is_artist_discipline_image')
-                .'</span>';
+                    . __('nova-cms-portfolio::works.is_artist_discipline_image')
+                    . '</span>';
             }
 
             return '';
@@ -250,9 +249,9 @@ class Work extends Resource
 
         if (config('nova-cms-portfolio.has_show_in_overview_category')) {
             $fields[] = BooleanGroup::make(
-                    __('In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist'),
-                    'show_in_overview_category'
-                )
+                __('In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist'),
+                'show_in_overview_category'
+            )
                 ->options(function () use ($request) {
                     $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
                     $options = [];
@@ -306,9 +305,9 @@ class Work extends Resource
 
         if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
             $fields[] = BooleanGroup::make(
-                    __('In allgemeiner Kategorie-Übersicht zeigen'),
-                    'represents_artist_in_discipline_category'
-                )
+                __('In allgemeiner Kategorie-Übersicht zeigen'),
+                'represents_artist_in_discipline_category'
+            )
                 ->options(function () use ($request) {
                     $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
 
@@ -317,7 +316,7 @@ class Work extends Resource
                     $options = [];
 
                     foreach (optional($slideshow)->categories ?: [] as $category) {
-                        $options[$disciplineId.'_'.$category->id] = $category->title;
+                        $options[$disciplineId . '_' . $category->id] = $category->title;
                     }
 
                     return $options;
@@ -363,12 +362,12 @@ class Work extends Resource
 
     public static function redirectAfterUpdate(NovaRequest $request, $resource)
     {
-        return '/resources/slideshows/'.$resource->slideshow_id;
+        return '/resources/slideshows/' . $resource->slideshow_id;
     }
 
     public static function redirectAfterCreate(NovaRequest $request, $resource)
     {
-        return '/resources/slideshows/'.$resource->slideshow_id;
+        return '/resources/slideshows/' . $resource->slideshow_id;
     }
 
     public function actions(Request $request)
@@ -400,25 +399,23 @@ class Work extends Resource
             ->withoutConfirmation();
 
         if ($request->viaResourceId) {
-            $categoryIds = Cache::remember('novaSlideshowCategoryIds.'.$request->viaResourceId, now()->addSeconds(15), function () use ($request) {
-                return Slideshow::find($request->viaResourceId)->categories->pluck('id');
-            });
+            $categoryIds = Slideshow::find($request->viaResourceId)->categories->pluck('id');
             session(['lastNovaSlideshowCategoryIds' => $categoryIds]);
         }
 
         if (config('nova-cms-portfolio.has_show_in_overview_category')) {
             foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
                 $actions[] = ToggleShowInOverviewCategory::make($categoryId)
-                ->onlyOnTableRow()
-                ->withoutConfirmation();
+                    ->onlyOnTableRow()
+                    ->withoutConfirmation();
             }
         }
 
         if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
             foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
                 $actions[] = ToggleRepresentsArtistInCategory::make($categoryId)
-                ->onlyOnTableRow()
-                ->withoutConfirmation();
+                    ->onlyOnTableRow()
+                    ->withoutConfirmation();
             }
         }
 

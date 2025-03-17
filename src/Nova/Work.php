@@ -92,6 +92,54 @@ class Work extends Resource
             ->uploadOnly($uploadOnly)
             ->onlyOnForms();
 
+        $fields[] = Boolean::make($showInOverviewLabel, 'show_in_overview')
+            ->onlyOnForms();
+
+        if (config('nova-cms-portfolio.has_show_in_overview_category')) {
+            $fields[] = BooleanGroup::make(
+                __('In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist'),
+                'show_in_overview_category'
+            )
+                ->options(function () use ($request) {
+                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
+                    $options = [];
+
+                    foreach (optional($slideshow)->categories ?: [] as $category) {
+                        $options[$category->id] = $category->title;
+                    }
+
+                    return $options;
+                })
+                ->onlyOnForms();
+        }
+
+
+        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
+            $fields[] = BooleanGroup::make(
+                __('In allgemeiner Kategorie-Übersicht zeigen'),
+                'represents_artist_in_discipline_category'
+            )
+                ->options(function () use ($request) {
+                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
+
+                    $disciplineId = optional(optional($slideshow)->getDiscipline())->id;
+
+                    $options = [];
+
+                    foreach (optional($slideshow)->categories ?: [] as $category) {
+                        $options[$disciplineId . '_' . $category->id] = $category->title;
+                    }
+
+                    return $options;
+                })
+                ->onlyOnForms();
+        }
+
+        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
+            $fields[] = Boolean::make(__('nova-cms-portfolio::works.is_artist_discipline_image'), 'is_artist_discipline_image')
+                ->onlyOnForms();
+        }
+
         $fields[] = Line::make('', function () {
             if ($this->file) {
                 $html = '<a
@@ -244,26 +292,7 @@ class Work extends Resource
         $fields[] = Tags::make('Tags')
             ->onlyOnForms();
 
-        $fields[] = Boolean::make($showInOverviewLabel, 'show_in_overview')
-            ->onlyOnForms();
 
-        if (config('nova-cms-portfolio.has_show_in_overview_category')) {
-            $fields[] = BooleanGroup::make(
-                __('In Künstler-Übersicht zeigen, wenn eine einzelne Kategorie ausgewählt ist'),
-                'show_in_overview_category'
-            )
-                ->options(function () use ($request) {
-                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
-                    $options = [];
-
-                    foreach (optional($slideshow)->categories ?: [] as $category) {
-                        $options[$category->id] = $category->title;
-                    }
-
-                    return $options;
-                })
-                ->onlyOnForms();
-        }
 
         if (config('nova-cms-portfolio.has_select_portfolio_image')) {
             $fields[] = Boolean::make($isArtistPortfolioImageLabel, 'is_artist_portfolio_image')
@@ -275,10 +304,7 @@ class Work extends Resource
                 ->onlyOnForms();
         }
 
-        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
-            $fields[] = Boolean::make(__('nova-cms-portfolio::works.is_artist_discipline_image'), 'is_artist_discipline_image')
-                ->onlyOnForms();
-        }
+
 
         if (config('nova-cms-portfolio.has_width_in_overview')) {
             $fields[] = Select::make(__('nova-cms-portfolio::works.width_in_overview'), 'width_in_overview')
@@ -303,26 +329,7 @@ class Work extends Resource
                 ->required();
         }
 
-        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
-            $fields[] = BooleanGroup::make(
-                __('In allgemeiner Kategorie-Übersicht zeigen'),
-                'represents_artist_in_discipline_category'
-            )
-                ->options(function () use ($request) {
-                    $slideshow = $this->slideshow ?: Slideshow::find($request->viaResourceId);
 
-                    $disciplineId = optional(optional($slideshow)->getDiscipline())->id;
-
-                    $options = [];
-
-                    foreach (optional($slideshow)->categories ?: [] as $category) {
-                        $options[$disciplineId . '_' . $category->id] = $category->title;
-                    }
-
-                    return $options;
-                })
-                ->onlyOnForms();
-        }
 
         if (config('nova-cms-portfolio.works_can_be_textbox')) {
             $fields[] = Boolean::make(
@@ -403,21 +410,21 @@ class Work extends Resource
             session(['lastNovaSlideshowCategoryIds' => $categoryIds]);
         }
 
-        if (config('nova-cms-portfolio.has_show_in_overview_category')) {
-            foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
-                $actions[] = ToggleShowInOverviewCategory::make($categoryId)
-                    ->onlyOnTableRow()
-                    ->withoutConfirmation();
-            }
-        }
+        // if (config('nova-cms-portfolio.has_show_in_overview_category')) {
+        //     foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
+        //         $actions[] = ToggleShowInOverviewCategory::make($categoryId)
+        //             ->onlyOnTableRow()
+        //             ->withoutConfirmation();
+        //     }
+        // }
 
-        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
-            foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
-                $actions[] = ToggleRepresentsArtistInCategory::make($categoryId)
-                    ->onlyOnTableRow()
-                    ->withoutConfirmation();
-            }
-        }
+        // if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
+        //     foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
+        //         $actions[] = ToggleRepresentsArtistInCategory::make($categoryId)
+        //             ->onlyOnTableRow()
+        //             ->withoutConfirmation();
+        //     }
+        // }
 
         return $actions;
     }

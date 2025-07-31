@@ -18,7 +18,7 @@ class MoveToSlideshow extends Action
             'nova-cms-portfolio::works.move_to_different_slideshow',
             [
                 'attribute' => config('nova-cms-portfolio.custom_slideshow_label')
-                               ?: ucfirst(__('nova-cms-portfolio::slideshows.slideshow')),
+                    ?: ucfirst(__('nova-cms-portfolio::slideshows.slideshow')),
             ]
         ));
     }
@@ -42,7 +42,7 @@ class MoveToSlideshow extends Action
         Slideshow::find($fields->slideshow_id)->refreshWorksOrder();
 
         if ($fields->afterwards == 'go_to_other_slideshow') {
-            return Action::push('/resources/slideshows/'.$fields->slideshow_id);
+            return Action::push('/resources/slideshows/' . $fields->slideshow_id);
         }
     }
 
@@ -52,23 +52,25 @@ class MoveToSlideshow extends Action
 
         return [
             Select::make(
-                    (
-                        config('nova-cms-portfolio.custom_slideshow_label')
-                        ?: ucfirst(__('nova-cms-portfolio::slideshows.slideshow'))
-                    ),
-                    'slideshow_id'
-                )
+                (
+                    config('nova-cms-portfolio.custom_slideshow_label')
+                    ?: ucfirst(__('nova-cms-portfolio::slideshows.slideshow'))
+                ),
+                'slideshow_id'
+            )
                 ->options($slideshows)
                 ->required()
                 ->rules('required'),
 
-            Boolean::make(ucfirst(__('nova-cms-portfolio::portfolio.remove_here')),
-                'remove_here'),
+            Boolean::make(
+                ucfirst(__('nova-cms-portfolio::portfolio.remove_here')),
+                'remove_here'
+            ),
 
             Select::make(
-                    ucfirst(__('nova-cms-portfolio::portfolio.afterwards')),
-                    'afterwards'
-                )
+                ucfirst(__('nova-cms-portfolio::portfolio.afterwards')),
+                'afterwards'
+            )
                 ->required()
                 ->rules('required')
                 ->options([
@@ -87,7 +89,7 @@ class MoveToSlideshow extends Action
     protected function getSlideshows()
     {
         return Cache::remember(
-            'nova.artist.projects.'.request()->input('viaResourceId'),
+            'nova.artist.projects.' . request()->input('viaResourceId'),
             now()->addSeconds(5),
             function () {
                 $currentSlideshow = Slideshow::where('id', request()->input('viaResourceId'))
@@ -100,19 +102,19 @@ class MoveToSlideshow extends Action
 
                 $slideshows = [];
 
-                foreach ($currentSlideshow->artist->categories as $category) {
-                    foreach ($currentSlideshow->artist->slideshows as $slideshow) {
+                foreach ($currentSlideshow?->artist->categories as $category) {
+                    foreach ($currentSlideshow?->artist->slideshows as $slideshow) {
                         if (
                             $currentSlideshow->id != $slideshow->id
                             && $slideshow->categories->firstWhere('id', $category->id)
                         ) {
-                            $slideshows[$slideshow->id] = $category->title.': '.$slideshow->title;
+                            $slideshows[$slideshow->id] = $category->title . ': ' . $slideshow->title;
                         }
                     }
                 }
 
                 if (!count($slideshows)) {
-                    foreach ($currentSlideshow->artist->slideshows as $slideshow) {
+                    foreach ($currentSlideshow?->artist->slideshows as $slideshow) {
                         if ($currentSlideshow->id != $slideshow->id) {
                             $slideshows[$slideshow->id] = $slideshow->title;
                         }

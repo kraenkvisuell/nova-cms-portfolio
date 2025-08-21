@@ -129,20 +129,20 @@
         },
         {
             "name": "cakephp/chronos",
-            "version": "2.5.1",
+            "version": "2.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/chronos.git",
-                "reference": "9e7372952e358c9b562460f6a1d08eafe1e1df64"
+                "reference": "b0321ab7658af9e7abcb3dd876f226e6f3dbb81f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/chronos/zipball/9e7372952e358c9b562460f6a1d08eafe1e1df64",
-                "reference": "9e7372952e358c9b562460f6a1d08eafe1e1df64",
+                "url": "https://api.github.com/repos/cakephp/chronos/zipball/b0321ab7658af9e7abcb3dd876f226e6f3dbb81f",
+                "reference": "b0321ab7658af9e7abcb3dd876f226e6f3dbb81f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.4"
+                "php": ">=7.2"
             },
             "require-dev": {
                 "cakephp/cakephp-codesniffer": "^4.5",
@@ -183,7 +183,7 @@
                 "issues": "https://github.com/cakephp/chronos/issues",
                 "source": "https://github.com/cakephp/chronos"
             },
-            "time": "2025-06-18T08:23:08+00:00"
+            "time": "2024-07-30T22:26:11+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",

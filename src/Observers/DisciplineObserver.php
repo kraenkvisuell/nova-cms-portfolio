@@ -9,13 +9,13 @@ class DisciplineObserver
 {
     public function saved(Discipline $discipline)
     {
-        // Cache::tags('artists')->flush();
-        // Cache::tags('disciplines')->flush();
+        Cache::tags('artists')->flush();
+        Cache::tags('disciplines')->flush();
     }
 
     public function deleted(Discipline $discipline)
     {
-        // Cache::tags('artists')->flush();
-        // Cache::tags('disciplines')->flush();
+        Cache::tags('artists')->flush();
+        Cache::tags('disciplines')->flush();
     }
 }

@@ -29,7 +29,7 @@ class WorkObserver
     public function saved(Work $work)
     {
         // Slideshow::find($work->slideshow_id)->refreshWorksOrder();
-        // Cache::tags('artists')->flush();
+        Cache::tags('artists')->flush();
     }
 
     protected function ensureOnlyOneArtistPortfolioImage($work)

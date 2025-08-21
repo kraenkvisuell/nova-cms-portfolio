@@ -9,13 +9,13 @@ class CategoryObserver
 {
     public function saved(Category $category)
     {
-        // Cache::tags('artists')->flush();
-        // Cache::tags('categories')->flush();
+        Cache::tags('artists')->flush();
+        Cache::tags('categories')->flush();
     }
 
     public function deleted(Category $category)
     {
-        // Cache::tags('artists')->flush();
-        // Cache::tags('categories')->flush();
+        Cache::tags('artists')->flush();
+        Cache::tags('categories')->flush();
     }
 }

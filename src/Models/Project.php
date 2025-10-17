@@ -4,40 +4,32 @@ namespace Kraenkvisuell\NovaCmsPortfolio\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kraenkvisuell\NovaCms\Facades\ContentParser;
 use Kraenkvisuell\NovaCms\Traits\HasContentBlocks;
 use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
-use Kraenkvisuell\NovaCmsPortfolio\Factories\ArtistFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\Publishable;
-use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
 
-class Artist extends Model implements Sortable
+class Project extends Model
 {
     use HasContentBlocks;
-    use HasFactory;
     use Publishable;
     use HasTranslations;
-    use SortableTrait;
 
     protected $guarded = [];
 
-    public $sortable = [
-        'order_column_name' => 'sort_order',
-    ];
-
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix') . 'artists';
+        return config('nova-cms-portfolio.db_prefix') . 'projects';
     }
 
     public $translatable = [
-        'description',
-        'skill_text',
-        'skill_headline',
+        'title',
+        'slug',
+        'abstract',
+        'industry',
+        'format',
         'browser_title',
         'meta_description',
         'meta_keywords',
@@ -47,15 +39,12 @@ class Artist extends Model implements Sortable
 
     protected $casts = [
         'robots' => 'array',
-        'testimonials' => BlocksCast::class,
-        'social_links' => BlocksCast::class,
-        'skill_description' => BlocksCast::class,
+        'main_content' => BlocksCast::class,
     ];
 
-    protected static function newFactory()
-    {
-        return ArtistFactory::new();
-    }
+    public $contentBlockFields = [
+        'main_content',
+    ];
 
     public function user()
     {
@@ -75,27 +64,25 @@ class Artist extends Model implements Sortable
 
     public function disciplines()
     {
-        return $this->belongsToMany(Discipline::class, config('nova-cms-portfolio.db_prefix') . 'artist_discipline');
+        return $this->belongsToMany(Discipline::class, config('nova-cms-portfolio.db_prefix') . 'project_discipline');
     }
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class, config('nova-cms-portfolio.db_prefix') . 'artist_skill')
-            ->withPivot(['sort_order'])
-            ->using(ArtistSkill::class);
+        return $this->belongsToMany(Skill::class, config('nova-cms-portfolio.db_prefix') . 'project_skill');
     }
 
-    public function projects()
+    public function artists()
     {
-        return $this->belongsToMany(Project::class, config('nova-cms-portfolio.db_prefix') . 'artist_project');
+        return $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix') . 'artist_project');
     }
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix') . 'artist_category')
+        return $this->belongsToMany(Category::class, config('nova-cms-portfolio.db_prefix') . 'project_category')
             ->withPivot(['sort_order'])
-            ->orderBy(config('nova-cms-portfolio.db_prefix') . 'artist_category.sort_order')
-            ->using(ArtistCategory::class);
+            ->orderBy(config('nova-cms-portfolio.db_prefix') . 'project_category.sort_order')
+            ->using(ProjectCategory::class);
     }
 
     public function url()
@@ -105,10 +92,10 @@ class Artist extends Model implements Sortable
 
         // Multi-language
         if (is_array($locales) and count($locales) > 1) {
-            return route('nova-artist-multi', ['locale' => $locale, 'artist' => $this->slug]);
+            return route('nova-project-multi', ['locale' => $locale, 'project' => $this->slug]);
         }
 
-        return route('nova-artist-single', ['artist' => $this->slug]);
+        return route('nova-project-single', ['project' => $this->slug]);
     }
 
     public function portfolioImage()
@@ -118,7 +105,7 @@ class Artist extends Model implements Sortable
         }
 
         if ($this->works->count()) {
-            $markedWork = $this->works->where('is_artist_portfolio_image', true)->first();
+            $markedWork = $this->works->where('is_project_portfolio_image', true)->first();
 
             if (! $markedWork) {
                 $markedWork = $this->works->where('show_in_overview', true)->first();
@@ -146,7 +133,7 @@ class Artist extends Model implements Sortable
 
             if ($limit > 0) {
                 foreach (
-                    $this->works->where('is_artist_portfolio_image', true)->take($limit)
+                    $this->works->where('is_project_portfolio_image', true)->take($limit)
                     as $work
                 ) {
                     $images[] = $work->file;
@@ -319,7 +306,7 @@ class Artist extends Model implements Sortable
     public function workForDiscipline($disciplineId)
     {
         $markedWork = $this->works()
-            ->where('is_artist_discipline_image', true)
+            ->where('is_project_discipline_image', true)
             ->first();
 
         if ($markedWork) {
@@ -370,7 +357,7 @@ class Artist extends Model implements Sortable
                     $q->where('id', $categoryId);
                 });
         })
-            ->where('represents_artist_in_discipline_category->' . $disciplineId . '_' . $categoryId, true)
+            ->where('represents_project_in_discipline_category->' . $disciplineId . '_' . $categoryId, true)
             ->get();
 
         if ($works->count()) {

@@ -34,7 +34,7 @@ class Skill extends Model implements Sortable
 
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix').'skills';
+        return config('nova-cms-portfolio.db_prefix') . 'skills';
     }
 
     public $translatable = [
@@ -59,16 +59,21 @@ class Skill extends Model implements Sortable
 
     public function artists()
     {
-        $builder = $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix').'artist_skill')
+        $builder = $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix') . 'artist_skill')
             ->withPivot(['sort_order']);
 
 
         return $builder->using(ArtistSkill::class);
     }
 
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, config('nova-cms-portfolio.db_prefix') . 'project_skill');
+    }
+
     public function filtered_artists()
     {
-        $builder = $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix').'artist_skill')
+        $builder = $this->belongsToMany(Artist::class, config('nova-cms-portfolio.db_prefix') . 'artist_skill')
             ->withPivot(['sort_order']);
 
 
@@ -88,7 +93,7 @@ class Skill extends Model implements Sortable
             })
             ->whereHas('artists', function ($q) {
                 $q->where('is_published', true)
-                ->has('slideshows');
+                    ->has('slideshows');
             })
             ->get();
     }
@@ -96,15 +101,16 @@ class Skill extends Model implements Sortable
     public static function getCachedIdBySlug($slug)
     {
         return Cache::tags('skills')->rememberForever(
-            'skill.getCachedIdBySlug.'.$slug,
+            'skill.getCachedIdBySlug.' . $slug,
             function () use ($slug) {
-                return static::where('slug->'.app()->getLocale(), $slug)->first()?->id ?: 0;
-            });
+                return static::where('slug->' . app()->getLocale(), $slug)->first()?->id ?: 0;
+            }
+        );
     }
 
     public static function getCachedWithSortedArtists()
     {
-        return Cache::remember('skillsWithSortedArtists.'.app()->getLocale(), now()->addSeconds(5), function () {
+        return Cache::remember('skillsWithSortedArtists.' . app()->getLocale(), now()->addSeconds(5), function () {
             return static::getWithSortedArtists();
         });
     }
@@ -114,7 +120,7 @@ class Skill extends Model implements Sortable
         return static::ordered()
             ->whereHas('artists', function ($q) {
                 $q->where('is_published', true)
-                ->has('slideshows');
+                    ->has('slideshows');
             })
             ->select('title', 'slug')
             ->get();

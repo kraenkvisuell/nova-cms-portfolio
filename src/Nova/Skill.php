@@ -69,7 +69,7 @@ class Skill extends Resource
             Stack::make('Details', [
                 Line::make('', 'title')->asBase(),
                 Line::make('', function () {
-                    return '/'.$this->slug;
+                    return '/' . $this->slug;
                 })->asSmall(),
             ]),
 
@@ -78,15 +78,15 @@ class Skill extends Resource
 
         if (config('nova-cms-portfolio.has_skill_artists')) {
             $fields[] = Stack::make('', [
-                Line::make('Artists', function ()  {
+                Line::make('Artists', function () {
                     return '<button
-                                onclick="window.location.href=\'/nova/resources/skills/'.$this->id.'\'"
+                                onclick="window.location.href=\'/nova/resources/skills/' . $this->id . '\'"
                                 class="btn btn-xs 
-                                '.($this->filtered_artists->count() ? 'btn-primary' : 'btn-danger').'
+                                ' . ($this->filtered_artists->count() ? 'btn-primary' : 'btn-danger') . '
                                 "
                                 >'
-                        .$this->filtered_artists->count().' Artist'.($this->filtered_artists->count() != 1 ? 's' : '')
-                        .'</button>';
+                        . $this->filtered_artists->count() . ' Artist' . ($this->filtered_artists->count() != 1 ? 's' : '')
+                        . '</button>';
                 })->asHtml(),
             ])
                 ->onlyOnIndex();

@@ -40,7 +40,8 @@ class Artist extends Resource
     public static $perPageOptions = [200, 400];
 
     public static $search = [
-        'name', 'slug',
+        'name',
+        'slug',
     ];
 
     public static function authorizable()
@@ -56,22 +57,22 @@ class Artist extends Resource
     public static function label()
     {
         return __(config('nova-cms-portfolio.custom_artists_label'))
-        ?: ucfirst(__('nova-cms-portfolio::artists.artists'));
+            ?: ucfirst(__('nova-cms-portfolio::artists.artists'));
     }
 
     public static function singularLabel()
     {
         return __(config('nova-cms-portfolio.custom_artist_label'))
-        ?: ucfirst(__('nova-cms-portfolio::artists.artist'));
+            ?: ucfirst(__('nova-cms-portfolio::artists.artist'));
     }
 
     public function fields(Request $request)
     {
         $slideshowLabel = __(config('nova-cms-portfolio.custom_slideshows_label'))
-                       ?: __('nova-cms-portfolio::slideshows.slideshows');
+            ?: __('nova-cms-portfolio::slideshows.slideshows');
 
         $slideshowSingularLabel = __(config('nova-cms-portfolio.custom_slideshow_label'))
-        ?: __('nova-cms-portfolio::slideshows.slideshow');
+            ?: __('nova-cms-portfolio::slideshows.slideshow');
 
         $startpageImageLabel = config('nova-cms-portfolio.custom_startpage_image_label')
             ?: __('Startseiten-Bild');
@@ -96,8 +97,8 @@ class Artist extends Resource
 
             Slug::make(ucfirst(__('nova-cms::pages.slug')), 'slug')->from('name')
                 ->rules('required')
-                ->creationRules('unique:'.config('nova-cms-portfolio.db_prefix').'artists,slug')
-                ->updateRules('unique:'.config('nova-cms-portfolio.db_prefix').'artists,slug,{{resourceId}}')
+                ->creationRules('unique:' . config('nova-cms-portfolio.db_prefix') . 'artists,slug')
+                ->updateRules('unique:' . config('nova-cms-portfolio.db_prefix') . 'artists,slug,{{resourceId}}')
                 ->help(__('nova-cms-portfolio::artists.slug_explanation'))
                 ->onlyOnForms(),
 
@@ -120,12 +121,6 @@ class Artist extends Resource
         if (config('nova-cms-portfolio.has_external_artists')) {
             $tabs[ucfirst(__('nova-cms::settings.settings'))][] = Boolean::make(ucfirst(__('EXTERN - ohne Portfolio')), 'is_external')
                 ->onlyOnForms();
-        }
-
-        if (config('nova-cms-portfolio.has_skills')) {
-            $tabs[ucfirst(__('nova-cms::settings.settings'))][] = BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::skills.skills')), 'skills', Skill::class)
-                ->optionsLabel('title')
-                ->hideFromDetail();
         }
 
         $tabs[ucfirst(__('nova-cms::settings.settings'))][] = Blocks::make(__('nova-cms::content_blocks.social_links'), 'social_links')
@@ -162,8 +157,8 @@ class Artist extends Resource
         }
 
         $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.portrait_image')), 'portrait_image')
-                ->uploadOnly($uploadOnly)
-                ->onlyOnForms();
+            ->uploadOnly($uploadOnly)
+            ->onlyOnForms();
 
         if (config('nova-cms-portfolio.has_skills')) {
             $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.skill_image')), 'skill_image')
@@ -185,27 +180,25 @@ class Artist extends Resource
 
             $tabs[ucfirst(__('nova-cms::pages.content'))][] = ContentBlock::field(ucfirst(__('nova-cms-portfolio::artists.skill_description')), 'skill_description')
                 ->onlyOnForms();
-
-
         }
 
         if (config('nova-cms-portfolio.artists_have_sedcard')) {
             $tabs[ucfirst(__('nova-cms::pages.content'))][] = MediaLibrary::make(ucfirst(__('nova-cms-portfolio::artists.sedcard_pdf')), 'sedcard_pdf')
-                    ->uploadOnly($uploadOnly)
-                    ->onlyOnForms();
+                ->uploadOnly($uploadOnly)
+                ->onlyOnForms();
         }
 
         $tabs[ucfirst(__('nova-cms::pages.content'))][] = Blocks::make('Testimonials', 'testimonials')
-                ->addLayout('Testimonial', 'testimonial', [
-                    Textarea::make('Text', 'text')
-                        ->translatable(),
-                    Text::make('Kunde', 'client'),
-                ])
-                ->useAsTitle(['testimonial' => 'client'])
-                ->button('Testimonial hinzufügen')
-                ->collapsed()
-                ->stacked()
-                ->onlyOnForms();
+            ->addLayout('Testimonial', 'testimonial', [
+                Textarea::make('Text', 'text')
+                    ->translatable(),
+                Text::make('Kunde', 'client'),
+            ])
+            ->useAsTitle(['testimonial' => 'client'])
+            ->button('Testimonial hinzufügen')
+            ->collapsed()
+            ->stacked()
+            ->onlyOnForms();
 
         if (config('nova-cms-portfolio.artists_have_custom_bg')) {
             $tabs[ucfirst(__('nova-cms::pages.content'))][] = Color::make(ucfirst(__('nova-cms-portfolio::portfolio.background_color')), 'bgcolor')
@@ -217,11 +210,11 @@ class Artist extends Resource
 
         $fields = [
             Stack::make('Details', [
-                Text::make('', function() {
-                    return $this->name.(config('nova-cms-portfolio.has_external_artists') && $this->is_external ? '<br>('.__('EXTERN - ohne Portfolio').')' : '');
+                Text::make('', function () {
+                    return $this->name . (config('nova-cms-portfolio.has_external_artists') && $this->is_external ? '<br>(' . __('EXTERN - ohne Portfolio') . ')' : '');
                 })->asHtml(),
                 Line::make('', function () {
-                    return '/'.$this->slug;
+                    return '/' . $this->slug;
                 })->asSmall(),
             ]),
 
@@ -231,7 +224,7 @@ class Artist extends Resource
                 >';
                 foreach (collect($this->portfolioImages())->take(config('nova-cms-portfolio.number_of_portfolio_images') ?: 3) as $portfolioImage) {
                     $html .= '<a
-                        href="'.nova_cms_file($portfolioImage).'"
+                        href="' . nova_cms_file($portfolioImage) . '"
                         download
                     >';
 
@@ -240,12 +233,12 @@ class Artist extends Resource
                             autoplay muted loop playsinline
                             class="w-auto h-12 mr-1 inline-block"
                         >
-                            <source src="'.nova_cms_file($portfolioImage).'" type="video/'.nova_cms_extension($portfolioImage).'">
+                            <source src="' . nova_cms_file($portfolioImage) . '" type="video/' . nova_cms_extension($portfolioImage) . '">
                         </video>';
                     } else {
                         $html .= '<img
                             class="w-auto h-12 mr-1 inline-block"
-                            src="'.nova_cms_image($portfolioImage, 'thumb').'"
+                            src="' . nova_cms_image($portfolioImage, 'thumb') . '"
                         />';
                     }
 
@@ -264,7 +257,7 @@ class Artist extends Resource
                 >';
                 foreach (collect($this->startpageImages()) as $startpageImage) {
                     $html .= '<a
-                        href="'.nova_cms_file($startpageImage).'"
+                        href="' . nova_cms_file($startpageImage) . '"
                         download
                     >';
 
@@ -273,12 +266,12 @@ class Artist extends Resource
                             autoplay muted loop playsinline
                             class="w-auto h-12 mr-1 inline-block"
                         >
-                            <source src="'.nova_cms_file($startpageImage).'" type="video/'.nova_cms_extension($startpageImage).'">
+                            <source src="' . nova_cms_file($startpageImage) . '" type="video/' . nova_cms_extension($startpageImage) . '">
                         </video>';
                     } else {
                         $html .= '<img
                             class="w-auto h-12 mr-1 inline-block"
-                            src="'.nova_cms_image($startpageImage, 'thumb').'"
+                            src="' . nova_cms_image($startpageImage, 'thumb') . '"
                         />';
                     }
 
@@ -297,7 +290,7 @@ class Artist extends Resource
                 >';
                 foreach (collect($this->overviewImages()) as $overviewImage) {
                     $html .= '<a
-                        href="'.nova_cms_file($overviewImage).'"
+                        href="' . nova_cms_file($overviewImage) . '"
                         download
                     >';
 
@@ -306,12 +299,12 @@ class Artist extends Resource
                             autoplay muted loop playsinline
                             class="w-auto h-12 mr-1 inline-block"
                         >
-                            <source src="'.nova_cms_file($overviewImage).'" type="video/'.nova_cms_extension($overviewImage).'">
+                            <source src="' . nova_cms_file($overviewImage) . '" type="video/' . nova_cms_extension($overviewImage) . '">
                         </video>';
                     } else {
                         $html .= '<img
                             class="w-auto h-12 mr-1 inline-block"
-                            src="'.nova_cms_image($overviewImage, 'thumb').'"
+                            src="' . nova_cms_image($overviewImage, 'thumb') . '"
                         />';
                     }
 
@@ -328,16 +321,16 @@ class Artist extends Resource
         $fields[] = Stack::make('', [
             Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                 return '<button
-                        onclick="window.location.href=\'/nova/resources/artists/'.$this->id.'\'"
+                        onclick="window.location.href=\'/nova/resources/artists/' . $this->id . '\'"
                         class="btn btn-xs
-                        '.($this->slideshows->count() ? 'btn-primary' : 'btn-danger').'
+                        ' . ($this->slideshows->count() ? 'btn-primary' : 'btn-danger') . '
                         "
                         >'
-                    .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
-                    .'</button>';
+                    . $this->slideshows->count() . ' ' . ($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                    . '</button>';
             })->asHtml(),
         ])
-        ->onlyOnIndex();
+            ->onlyOnIndex();
 
         $fields[] = HasMany::make($slideshowLabel, 'slideshows', Slideshow::class);
 

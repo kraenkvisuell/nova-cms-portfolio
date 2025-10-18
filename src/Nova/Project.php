@@ -8,7 +8,6 @@ use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\TabsOnEdit;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Skill;
@@ -61,10 +60,10 @@ class Project extends Resource
                 ->translatable()
                 ->onlyOnForms(),
 
-            Text::make(__('nova-cms::projects.industry'), 'industry')
+            Text::make(__('nova-cms-portfolio::projects.industry'), 'industry')
                 ->translatable(),
 
-            Text::make(__('nova-cms::projects.industry'), 'format')
+            Text::make(__('nova-cms-portfolio::projects.format'), 'format')
                 ->translatable(),
 
             BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::skills.skills')), 'skills', Skill::class)

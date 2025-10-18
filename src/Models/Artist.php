@@ -87,7 +87,7 @@ class Artist extends Model implements Sortable
 
     public function projects()
     {
-        return $this->belongsToMany(Project::class, config('nova-cms-portfolio.db_prefix') . 'artist_project');
+        return $this->belongsToMany(Project::class, config('nova-cms-portfolio.db_prefix') . 'artist_project')->orderByDesc('created_at');
     }
 
     public function categories()

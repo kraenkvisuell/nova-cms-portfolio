@@ -10,7 +10,6 @@ use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\TabsOnEdit;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
-use Kraenkvisuell\NovaCmsPortfolio\Nova\Skill;
 use Kraenkvisuell\NovaCms\Facades\ContentBlock;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Artist;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
@@ -66,11 +65,8 @@ class Project extends Resource
             Text::make(__('nova-cms-portfolio::projects.format'), 'format')
                 ->translatable(),
 
-            BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::skills.skills')), 'skills', Skill::class)
-                ->optionsLabel('title')
-                ->required()
-                ->rules('required')
-                ->hideFromDetail(),
+            Text::make(__('nova-cms-portfolio::skills.skills'), 'skills')
+                ->translatable(),
 
             BelongsToManyField::make(ucfirst(__('nova-cms-portfolio::artists.artists')), 'artists', Artist::class)
                 ->optionsLabel('name')

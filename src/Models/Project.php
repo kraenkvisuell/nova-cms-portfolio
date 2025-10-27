@@ -30,6 +30,7 @@ class Project extends Model
         'abstract',
         'industry',
         'format',
+        'skills',
         'browser_title',
         'meta_description',
         'meta_keywords',
@@ -65,11 +66,6 @@ class Project extends Model
     public function disciplines()
     {
         return $this->belongsToMany(Discipline::class, config('nova-cms-portfolio.db_prefix') . 'project_discipline');
-    }
-
-    public function skills()
-    {
-        return $this->belongsToMany(Skill::class, config('nova-cms-portfolio.db_prefix') . 'project_skill');
     }
 
     public function artists()

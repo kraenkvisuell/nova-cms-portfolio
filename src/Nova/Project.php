@@ -8,6 +8,7 @@ use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\TabsOnEdit;
+use Kraenkvisuell\NovaCms\Tabs\Seo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCms\Facades\ContentBlock;
@@ -79,6 +80,8 @@ class Project extends Resource
 
             ContentBlock::field(),
         ];
+
+        $tabs[__('nova-cms::seo.seo')] = Seo::make();
 
         $fields = [
             (new Tabs(static::singularLabel(), $tabs))->withToolbar(),

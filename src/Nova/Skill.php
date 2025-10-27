@@ -77,21 +77,21 @@ class Skill extends Resource
         ];
 
         if (config('nova-cms-portfolio.has_skill_artists')) {
-            $fields[] = Stack::make('', [
-                Line::make('Artists', function () {
-                    return '<button
-                                onclick="window.location.href=\'/nova/resources/skills/' . $this->id . '\'"
-                                class="btn btn-xs 
-                                ' . ($this->filtered_artists->count() ? 'btn-primary' : 'btn-danger') . '
-                                "
-                                >'
-                        . $this->filtered_artists->count() . ' Artist' . ($this->filtered_artists->count() != 1 ? 's' : '')
-                        . '</button>';
-                })->asHtml(),
-            ])
-                ->onlyOnIndex();
+            // $fields[] = Stack::make('', [
+            //     Line::make('Artists', function () {
+            //         return '<button
+            //                     onclick="window.location.href=\'/nova/resources/skills/' . $this->id . '\'"
+            //                     class="btn btn-xs 
+            //                     ' . ($this->filtered_artists->count() ? 'btn-primary' : 'btn-danger') . '
+            //                     "
+            //                     >'
+            //             . $this->filtered_artists->count() . ' Artist' . ($this->filtered_artists->count() != 1 ? 's' : '')
+            //             . '</button>';
+            //     })->asHtml(),
+            // ])
+            //     ->onlyOnIndex();
 
-            $fields[] = BelongsToMany::make('Artists', 'filtered_artists', SkillArtist::class);
+            // $fields[] = BelongsToMany::make('Artists', 'filtered_artists', SkillArtist::class);
         }
 
         return $fields;

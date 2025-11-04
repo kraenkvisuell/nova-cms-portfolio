@@ -102,8 +102,8 @@ class MoveToSlideshow extends Action
 
                 $slideshows = [];
 
-                foreach ($currentSlideshow?->artist->categories as $category) {
-                    foreach ($currentSlideshow?->artist->slideshows as $slideshow) {
+                foreach ($currentSlideshow?->artist->categories ?: [] as $category) {
+                    foreach ($currentSlideshow?->artist->slideshows ?: [] as $slideshow) {
                         if (
                             $currentSlideshow->id != $slideshow->id
                             && $slideshow->categories->firstWhere('id', $category->id)
@@ -114,7 +114,7 @@ class MoveToSlideshow extends Action
                 }
 
                 if (!count($slideshows)) {
-                    foreach ($currentSlideshow?->artist->slideshows as $slideshow) {
+                    foreach ($currentSlideshow?->artist->slideshows ?: [] as $slideshow) {
                         if ($currentSlideshow->id != $slideshow->id) {
                             $slideshows[$slideshow->id] = $slideshow->title;
                         }

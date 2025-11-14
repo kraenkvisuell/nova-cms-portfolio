@@ -14,10 +14,12 @@ use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
 use Kraenkvisuell\NovaCms\Facades\ContentBlock;
 use Kraenkvisuell\NovaCmsPortfolio\Nova\Artist;
 use Kraenkvisuell\BelongsToManyField\BelongsToManyField;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 
 class Project extends Resource
 {
     use TabsOnEdit;
+    use HasSortableRows;
 
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Project::class;
 
@@ -38,6 +40,10 @@ class Project extends Resource
         return ucfirst(__('nova-cms-portfolio::projects.project'));
     }
 
+    public static function sortableHasDropdown()
+    {
+        return true;
+    }
 
     public function fields(Request $request)
     {

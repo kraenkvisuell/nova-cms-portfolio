@@ -10,14 +10,21 @@ use Kraenkvisuell\NovaCms\Traits\HasContentBlocks;
 use Kraenkvisuell\NovaCmsBlocks\Value\BlocksCast;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\Publishable;
 use Spatie\Translatable\HasTranslations;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Project extends Model
+class Project extends Model implements Sortable
 {
     use HasContentBlocks;
     use Publishable;
+    use SortableTrait;
     use HasTranslations;
 
     protected $guarded = [];
+
+    public $sortable = [
+        'order_column_name' => 'sort_order',
+    ];
 
     public function getTable()
     {

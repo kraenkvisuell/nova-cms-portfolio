@@ -410,21 +410,21 @@ class Work extends Resource
             session(['lastNovaSlideshowCategoryIds' => $categoryIds]);
         }
 
-        // if (config('nova-cms-portfolio.has_show_in_overview_category')) {
-        //     foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
-        //         $actions[] = ToggleShowInOverviewCategory::make($categoryId)
-        //             ->onlyOnTableRow()
-        //             ->withoutConfirmation();
-        //     }
-        // }
+        if (config('nova-cms-portfolio.has_show_in_overview_category')) {
+            foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
+                $actions[] = ToggleShowInOverviewCategory::make($categoryId)
+                    ->onlyOnTableRow()
+                    ->withoutConfirmation();
+            }
+        }
 
-        // if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
-        //     foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
-        //         $actions[] = ToggleRepresentsArtistInCategory::make($categoryId)
-        //             ->onlyOnTableRow()
-        //             ->withoutConfirmation();
-        //     }
-        // }
+        if (config('nova-cms-portfolio.has_represents_artist_in_discipline_category')) {
+            foreach (session('lastNovaSlideshowCategoryIds') ?: [] as $categoryId) {
+                $actions[] = ToggleRepresentsArtistInCategory::make($categoryId)
+                    ->onlyOnTableRow()
+                    ->withoutConfirmation();
+            }
+        }
 
         return $actions;
     }

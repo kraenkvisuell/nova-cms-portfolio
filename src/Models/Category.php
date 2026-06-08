@@ -7,15 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Kraenkvisuell\NovaCmsPortfolio\Factories\CategoryFactory;
 use Kraenkvisuell\NovaCmsPortfolio\Traits\QueryableByTranslation;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
 
-class Category extends Model
+class Category extends Model implements Sortable
 {
     use HasFactory;
     use HasTranslations;
     use QueryableByTranslation;
+    use SortableTrait;
 
     protected $guarded = [];
+
+    public $sortable = [
+        'order_column_name' => 'sort_order',
+    ];
 
     protected static function newFactory()
     {
@@ -24,7 +31,7 @@ class Category extends Model
 
     public function getTable()
     {
-        return config('nova-cms-portfolio.db_prefix').'categories';
+        return config('nova-cms-portfolio.db_prefix') . 'categories';
     }
 
     public $translatable = [
@@ -49,7 +56,7 @@ class Category extends Model
 
     public function slideshows()
     {
-        $builder = $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
+        $builder = $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix') . 'category_slideshow')
             ->withPivot(['sort_order']);
 
         return $builder->with('artist')->using(CategorySlideshow::class);
@@ -57,12 +64,12 @@ class Category extends Model
 
     public function filtered_slideshows()
     {
-        $builder = $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix').'category_slideshow')
+        $builder = $this->belongsToMany(Slideshow::class, config('nova-cms-portfolio.db_prefix') . 'category_slideshow')
             ->withPivot(['sort_order']);
 
         if (config('nova-cms-portfolio.category_slideshows_are_filtered')) {
-            $builder->withWhereHas('works', function($b){
-                $b->where('represents_artist_in_discipline_category->1_'.$this->id, true);
+            $builder->withWhereHas('works', function ($b) {
+                $b->where('represents_artist_in_discipline_category->1_' . $this->id, true);
             });
         }
 
@@ -71,7 +78,7 @@ class Category extends Model
 
     public static function getCached()
     {
-        return Cache::remember('cachedCategories.'.app()->getLocale(), now()->addSeconds(10), function () {
+        return Cache::remember('cachedCategories.' . app()->getLocale(), now()->addSeconds(10), function () {
             return static::all()->sortBy('title')->all();
         });
     }
@@ -79,9 +86,10 @@ class Category extends Model
     public static function getCachedIdBySlug($slug)
     {
         return Cache::tags('categories')->rememberForever(
-            'category.getCachedIdBySlug.'.$slug,
+            'category.getCachedIdBySlug.' . $slug,
             function () use ($slug) {
-                return static::where('slug->'.app()->getLocale(), $slug)->first()?->id ?: 0;
-            });
+                return static::where('slug->' . app()->getLocale(), $slug)->first()?->id ?: 0;
+            }
+        );
     }
 }

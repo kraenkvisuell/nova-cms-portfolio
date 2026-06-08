@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Kraenkvisuell\NovaCms\Tabs\Seo;
 use Kraenkvisuell\NovaCmsMedia\MediaLibrary;
+use KraenkVisuell\NovaSortable\Traits\HasSortableRows;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Line;
@@ -19,16 +20,15 @@ use Manogi\Tiptap\Tiptap;
 class Category extends Resource
 {
     use TabsOnEdit;
+    use HasSortableRows;
 
     public static $model = \Kraenkvisuell\NovaCmsPortfolio\Models\Category::class;
 
-    // public static $sortable = false;
+    public static $sortable = false;
 
-    public static function orderBy()
+    public static function sortableHasDropdown()
     {
-        return [
-            'title->'.app()->getLocale() => 'asc',
-        ];
+        return config('nova-cms-portfolio.artists_sortable_dropdown') ?: false;
     }
 
     public static $searchable = false;
@@ -60,10 +60,10 @@ class Category extends Resource
         $uploadOnly = config('nova-cms-portfolio.media.upload_only') ?: false;
 
         $slideshowLabel = __(config('nova-cms-portfolio.custom_slideshows_label'))
-                       ?: __('nova-cms-portfolio::slideshows.slideshows');
+            ?: __('nova-cms-portfolio::slideshows.slideshows');
 
         $slideshowSingularLabel = __(config('nova-cms-portfolio.custom_slideshow_label'))
-        ?: __('nova-cms-portfolio::slideshows.slideshow');
+            ?: __('nova-cms-portfolio::slideshows.slideshow');
 
         $tabs = [];
 
@@ -104,16 +104,16 @@ class Category extends Resource
             $fields[] = Stack::make('', [
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                     return '<button
-                                onclick="window.location.href=\'/nova/resources/categories/'.$this->id.'\'"
+                                onclick="window.location.href=\'/nova/resources/categories/' . $this->id . '\'"
                                 class="btn btn-xs 
-                                '.($this->filtered_slideshows->count() ? 'btn-primary' : 'btn-danger').'
+                                ' . ($this->filtered_slideshows->count() ? 'btn-primary' : 'btn-danger') . '
                                 "
                                 >'
-                        .$this->filtered_slideshows->count().' '.($this->filtered_slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
-                        .'</button>';
+                        . $this->filtered_slideshows->count() . ' ' . ($this->filtered_slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        . '</button>';
                 })->asHtml(),
             ])
-            ->onlyOnIndex();
+                ->onlyOnIndex();
 
             $fields[] = BelongsToMany::make($slideshowLabel, 'filtered_slideshows', CategorySlideshow::class);
         } else {
@@ -121,14 +121,14 @@ class Category extends Resource
                 Line::make($slideshowLabel, function () use ($slideshowLabel, $slideshowSingularLabel) {
                     return '<div
                                 class="
-                                '.(! $this->slideshows->count() ? 'text-60' : '').'
+                                ' . (! $this->slideshows->count() ? 'text-60' : '') . '
                                 "
                         >'
-                        .$this->slideshows->count().' '.($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
-                        .'</div>';
+                        . $this->slideshows->count() . ' ' . ($this->slideshows->count() != 1 ? $slideshowLabel : $slideshowSingularLabel)
+                        . '</div>';
                 })->asHtml(),
             ])
-            ->onlyOnIndex();
+                ->onlyOnIndex();
         }
 
         return $fields;

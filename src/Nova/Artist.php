@@ -77,9 +77,6 @@ class Artist extends Resource
         $startpageImageLabel = config('nova-cms-portfolio.custom_startpage_image_label')
             ?: __('Startseiten-Bild');
 
-        $skillImageLabel = config('nova-cms-portfolio.custom_startpage_image_label')
-            ?: __('Skills-Bild');
-
         $portfolioImagesLabel = config('nova-cms-portfolio.custom_portfolio_images_label')
             ?: __('Portfolio-Bilder');
 
@@ -217,6 +214,20 @@ class Artist extends Resource
                     return '/' . $this->slug;
                 })->asSmall(),
             ]),
+
+            Stack::make('', [
+                Line::make('', function () {
+                    return 'a:' . $this->id;
+                })->asSmall(),
+
+                Line::make('', function () {
+                    return '<button
+                        onclick="navigator.clipboard.writeText(\'a:' . $this->id . '\')"
+                        class="btn btn-xsbtn-primary"
+                        >Copy Link</button>';
+                })->asHtml(),
+            ])
+                ->onlyOnIndex(),
 
             Text::make($portfolioImagesLabel, function () {
                 $html = '<div

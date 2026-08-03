@@ -223,7 +223,7 @@ class Artist extends Resource
                 Line::make('', function () {
                     return '<button
                         onclick="navigator.clipboard.writeText(\'a:' . $this->id . '\')"
-                        class="btn btn-xsbtn-primary"
+                        class="btn btn-xs btn-primary"
                         >Copy Link</button>';
                 })->asHtml(),
             ])

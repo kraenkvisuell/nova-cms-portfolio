@@ -217,14 +217,17 @@ class Artist extends Resource
 
             Stack::make('', [
                 Line::make('', function () {
-                    return 'a:' . $this->id;
-                })->asSmall(),
-
-                Line::make('', function () {
                     return '<button
                         onclick="navigator.clipboard.writeText(\'a:' . $this->id . '\')"
                         class="btn btn-xs btn-primary"
                         >Copy Link</button>';
+                })->asHtml(),
+
+                Line::make('', function () {
+                    return '<button
+                        onclick="navigator.clipboard.writeText(\'b:' . $this->id . '\')"
+                        class="btn btn-xs btn-primary"
+                        >Copy Link 2</button>';
                 })->asHtml(),
             ])
                 ->onlyOnIndex(),
